@@ -17,17 +17,17 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build Docker Compose
-      run: docker-compose -f path/to/your/docker-compose.yml build
+      run: docker-compose build
 
     - name: Run Docker Compose
-      run: docker-compose -f path/to/your/docker-compose.yml up -d
+      run: docker-compose up -d
 
     - name: Lint with flake8
-      run: docker-compose -f path/to/your/docker-compose.yml run backend pdm lint
+      run: docker-compose run backend pdm lint
 
     - name: Run tests
-      run: docker-compose -f path/to/your/docker-compose.yml exec backend pdm test
+      run: docker-compose exec backend pdm test
 
     - name: Stop and remove containers
       if: always()
-      run: docker-compose -f path/to/your/docker-compose.yml down
+      run: docker-compose down
