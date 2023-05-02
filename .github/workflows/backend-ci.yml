@@ -15,7 +15,9 @@ jobs:
       - name: Check Postgres Env variables
         run: |
           echo "POSTGRES_USER: ${{ secrets.POSTGRES_USER }}"
-          echo ${POSTGRES_USER}
+          echo "POSTGRES_USER: ${{ vars.POSTGRES_USER }}"
+          echo "POSTGRES_USER: ${{ env.POSTGRES_USER }}" 
+          echo $POSTGRES_USER
           if [ -z "${POSTGRES_USER}" ]; then
             echo "POSTGRES_USER is not set"
             exit 1
