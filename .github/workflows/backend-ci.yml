@@ -2,12 +2,11 @@ name: Backend CI
 
 on:
   push:
-  pull_request:
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: dev_backend
 
     steps:
       - name: Check out repository
@@ -16,12 +15,12 @@ jobs:
       - name: Check Postgres Env variables
         run: |
           if [ -z "${POSTGRES_USER}" ]; then
-            echo "ENV_VARIABLE_1 is not set"
+            echo "POSTGRES_USER is not set"
             exit 1
           fi
           
           if [ -z "${POSTGRES_HOSTNAME}" ]; then
-            echo "ENV_VARIABLE_2 is not set"
+            echo "POSTGRES_USER is not set"
             exit 1
           fi
       - name: Build Docker Compose
