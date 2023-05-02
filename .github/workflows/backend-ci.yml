@@ -13,6 +13,17 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
 
+      - name: Check Postgres Env variables
+        run: |
+          if [ -z "${POSTGRES_USER}" ]; then
+            echo "ENV_VARIABLE_1 is not set"
+            exit 1
+          fi
+          
+          if [ -z "${POSTGRES_HOSTNAME}" ]; then
+            echo "ENV_VARIABLE_2 is not set"
+            exit 1
+          fi
       - name: Build Docker Compose
         run: docker compose build
 
