@@ -36,7 +36,8 @@ jobs:
       - name: Save Docker layers
         run: |
           mkdir -p /tmp/docker-cache
-          image_id=$(docker-compose images -q backend)
+          container_id=$(docker-compose ps -q backend)
+          image_id=$(docker inspect $container_id -f '{{.Image}}')
           docker save -o /tmp/docker-cache/backend.tar $image_id
 
       - name: Run Docker Compose
