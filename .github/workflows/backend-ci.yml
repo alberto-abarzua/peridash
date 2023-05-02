@@ -3,50 +3,51 @@ name: Backend CI
 on:
   push:
     paths:
-      - 'backend/**'
+      - "backend/**"
   pull_request:
     paths:
-      - 'backend/**'
+      - "backend/**"
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v2
+      - name: Check out repository
+        uses: actions/checkout@v2
 
-    - name: Cache Docker layers
-      uses: actions/cache@v2
-      with:
-        path: /tmp/docker-cache
-        key: ${{ runner.os }}-docker-backend-${{ hashFiles('backend/Dockerfile', 'backend/pyproject.toml', 'backend/pdm.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-docker-backend-
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/docker-cache
+          key: ${{ runner.os }}-docker-backend-${{ hashFiles('backend/Dockerfile', 'backend/pyproject.toml', 'backend/pdm.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-docker-backend-
 
-    - name: Load cached Docker layers
-      run: |
-        if [ -d /tmp/docker-cache ]; then
-          docker load < /tmp/docker-cache/backend.tar
-        fi
+      - name: Load cached Docker layers
+        run: |
+          if [ -d /tmp/docker-cache ]; then
+            docker load < /tmp/docker-cache/backend.tar
+          fi
 
-    - name: Build Docker Compose
-      run: docker-compose build
+      - name: Build Docker Compose
+        run: docker-compose build
 
-    - name: Save Docker layers
-      run: |
-        mkdir -p /tmp/docker-cache
-        docker save -o /tmp/docker-cache/backend.tar backend
+      - name: Save Docker layers
+        run: |
+          mkdir -p /tmp/docker-cache
+          image_id=$(docker-compose images -q backend)
+          docker save -o /tmp/docker-cache/backend.tar $image_id
 
-    - name: Run Docker Compose
-      run: docker-compose up -d
+      - name: Run Docker Compose
+        run: docker-compose up -d
 
-    - name: Lint with flake8
-      run: docker-compose run backend pdm lint
+      - name: Lint with flake8
+        run: docker-compose run backend pdm lint
 
-    - name: Run tests
-      run: docker-compose exec backend pdm test
+      - name: Run tests
+        run: docker-compose exec backend pdm test
 
-    - name: Stop and remove containers
-      if: always()
-      run: docker-compose down
+      - name: Stop and remove containers
+        if: always()
+        run: docker-compose down
