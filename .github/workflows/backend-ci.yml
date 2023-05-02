@@ -20,7 +20,10 @@ jobs:
         run: docker compose build
 
       - name: Run Docker Compose
-        run: docker compose up -d
+        run: |
+          docker-compose up -d
+          sleep 5
+          docker-compose down
 
       - name: Lint with flake8
         run: docker compose run backend pdm lint
