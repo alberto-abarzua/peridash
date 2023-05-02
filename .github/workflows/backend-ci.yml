@@ -16,29 +16,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
 
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/docker-cache
-          key: ${{ runner.os }}-docker-backend-${{ hashFiles('backend/Dockerfile', 'backend/pyproject.toml', 'backend/pdm.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-docker-backend-
-
-      - name: Load cached Docker layers
-        run: |
-          if [ -d /tmp/docker-cache ]; then
-            docker load < /tmp/docker-cache/backend.tar
-          fi
-
       - name: Build Docker Compose
         run: docker-compose build
-
-      - name: Save Docker layers
-        run: |
-          mkdir -p /tmp/docker-cache
-          container_id=$(docker-compose ps -q backend)
-          image_id=$(docker inspect $container_id -f '{{.Image}}')
-          docker save -o /tmp/docker-cache/backend.tar $image_id
 
       - name: Run Docker Compose
         run: docker-compose up -d
