@@ -10,6 +10,7 @@ RUN python -m pip install pdm==2.4.9
 
 COPY pyproject.toml /app/.
 COPY pdm.lock /app/.
+COPY .flake8 /app/.
 
 RUN pdm install
 
