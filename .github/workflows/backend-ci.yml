@@ -1,0 +1,33 @@
+name: Backend CI
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+  pull_request:
+    paths:
+      - 'backend/**'
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Build Docker Compose
+      run: docker-compose -f path/to/your/docker-compose.yml build
+
+    - name: Run Docker Compose
+      run: docker-compose -f path/to/your/docker-compose.yml up -d
+
+    - name: Lint with flake8
+      run: docker-compose -f path/to/your/docker-compose.yml run backend pdm lint
+
+    - name: Run tests
+      run: docker-compose -f path/to/your/docker-compose.yml exec backend pdm test
+
+    - name: Stop and remove containers
+      if: always()
+      run: docker-compose -f path/to/your/docker-compose.yml down
