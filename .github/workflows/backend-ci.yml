@@ -2,19 +2,32 @@ name: Backend CI
 
 on:
   push:
-    paths:
-      - "backend/**"
-  pull_request:
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
-    environment: dev
-
+    environment: dev_backend
+    env:
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
+      POSTGRES_HOSTNAME: ${{ vars.POSTGRES_HOSTNAME }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
 
+      - name: Check Postgres Env variables
+        run: |
+          if [ -z "${POSTGRES_USER}" ]; then
+            echo "POSTGRES_USER is not set"
+            exit 1
+          fi
+          
+          if [ -z "${POSTGRES_HOSTNAME}" ]; then
+            echo "POSTGRES_USER is not set"
+            exit 1
+          fi
       - name: Build Docker Compose
         run: docker compose build
 
