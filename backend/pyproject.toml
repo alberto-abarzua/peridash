@@ -14,6 +14,10 @@ dependencies = [
     "black>=23.3.0",
     "isort>=5.12.0",
     "flake8>=6.0.0",
+    "pandas>=2.0.1",
+    "twelvedata>=1.2.11",
+    "setuptools>=67.7.2",
+    "pymemcache>=4.0.0",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}
