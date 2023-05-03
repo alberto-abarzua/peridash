@@ -25,6 +25,7 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - memcached
     environment:
       - DB_NAME
       - POSTGRES_USER
@@ -32,6 +33,13 @@ services:
       - POSTGRES_DB
       - POSTGRES_HOSTNAME
       - POSTGRES_PORT
+      - TWELVE_DATA_API_KEY
+      - CACHE_HOSTNAME
+      - CACHE_PORT
+  memcached:
+    image: memcached:1.6.19-bullseye
+    command: memcached -m 128
+
   # frontend:
   #   build: ./frontend
   #   command: sh -c "npm install && npm start"
