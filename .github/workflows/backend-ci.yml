@@ -8,14 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev_backend
     env:
+      # Secrets
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+      # Vars
       POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
       POSTGRES_HOSTNAME: ${{ vars.POSTGRES_HOSTNAME }}
-      TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
-      CACHE_HOSTNAME: ${{ secrets.CACHE_HOSTNAME }}
-      CACHE_PORT: ${{ secrets.CACHE_PORT }}
+      CACHE_HOSTNAME: ${{ vars.CACHE_HOSTNAME }}
+      CACHE_PORT: ${{ vars.CACHE_PORT }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
