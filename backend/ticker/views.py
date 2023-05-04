@@ -31,7 +31,7 @@ class TimeSeries(views.APIView):
         stock_client = TwelveDataCore()
 
         # create form instance and validate input
-        form = TimeSeriesForm(request.query_params)
+        form = TimeSeriesForm(request.query_params, request=request)
         if not form.is_valid():
             return Response({"detail": f"Invalid input: {form.errors}"}, status=400)
 
@@ -40,16 +40,9 @@ class TimeSeries(views.APIView):
         start = form.cleaned_data.get("start", None)
         end = form.cleaned_data.get("end", None)
         days = form.cleaned_data.get("days", 30)
-        db_symbols = []
-        for symbol, exchange in symbols:
-            cur_sym, _ = Symbol.objects.get_or_create(
-                symbol=symbol,
-                exchange=exchange,
-                defaults={"symbol": symbol, "exchange": exchange},
-            )
-            db_symbols.append(cur_sym)
+        
         serializer = TimeSeriesSerializer(
-            stock_client(db_symbols, start=start, end=end, days=days), many=True
+            stock_client(symbols, start=start, end=end, days=days), many=True
         )
         return Response(serializer.data)
 
