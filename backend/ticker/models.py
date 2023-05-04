@@ -24,19 +24,34 @@ class Symbol(models.Model):
 
 
 class Ticker(models.Model):
-    id = models.CharField(primary_key=True, max_length=64, default=get_token)
+    id = models.CharField(primary_key=True, max_length=100, default=get_token)
     is_favorite = models.BooleanField(default=False)
-    symbol = models.OneToOneField(Symbol, unique=True, on_delete=models.CASCADE)
+    symbol = models.OneToOneField(Symbol, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return str(self.symbol)
+
+    @classmethod
+    def create_using_str(cls, symbol, exchange):
+        symbol_obj, _ = Symbol.objects.get_or_create(symbol=symbol, exchange=exchange)
+        ticker_obj = cls.objects.create(symbol=symbol_obj)
+        return ticker_obj
+
+    @classmethod
+    def get_or_create_using_str(cls, ticker_set, symbol, exchange):
+        try:
+            ticker_obj = ticker_set.get(symbol__symbol=symbol, symbol__exchange=exchange)
+        except cls.DoesNotExist:
+            symbol_obj, _ = Symbol.objects.get_or_create(symbol=symbol, exchange=exchange)
+            ticker_obj = cls.objects.create(symbol=symbol_obj)
+        return ticker_obj
 
 
 class TickerSettings(models.Model):
     """Settings for the display of tickers"""
 
-    id = models.CharField(primary_key=True, max_length=64, default=get_token)
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    id = models.CharField(primary_key=True, max_length=100, default=get_token)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     user_tickers = models.ManyToManyField(Ticker, blank=True)
     plot_range = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(30)], default=5
