@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from ticker.api_utils import TwelveDataCore
 from ticker.forms import TimeSeriesForm
-from ticker.models import Symbol, Ticker, TickerSettings
+from ticker.models import Ticker, TickerSettings
 from ticker.serializers import (
     DictSerializer,
     TickerSerializer,
@@ -40,7 +40,7 @@ class TimeSeries(views.APIView):
         start = form.cleaned_data.get("start", None)
         end = form.cleaned_data.get("end", None)
         days = form.cleaned_data.get("days", 30)
-        
+
         serializer = TimeSeriesSerializer(
             stock_client(symbols, start=start, end=end, days=days), many=True
         )

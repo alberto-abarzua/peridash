@@ -1,11 +1,14 @@
 from django import forms
-from ticker.models import Symbol,TickerSettings
+
+from ticker.models import Symbol, TickerSettings
+
 
 class TimeSeriesForm(forms.Form):
     symbols = forms.CharField()
     start = forms.DateTimeField(required=False)
     end = forms.DateTimeField(required=False)
     days = forms.IntegerField(required=False)
+
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")
         super(TimeSeriesForm, self).__init__(*args, **kwargs)
@@ -31,6 +34,6 @@ class TimeSeriesForm(forms.Form):
                 symbol=symbol,
                 exchange=exchange,
                 defaults={"symbol": symbol, "exchange": exchange},
-            )  
+            )
             db_symbols.append(cur_sym)
         return db_symbols

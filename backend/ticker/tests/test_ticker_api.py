@@ -41,7 +41,8 @@ class TickerApiTests(APITestCase):
         self.assertEqual(first_elem["eod_price"], 169.56)
         self.assertEqual(first_elem["price_dif"], -1.009999999999991)
         self.assertEqual(first_elem["price_dif_percent"], -0.5956593536211318)
-    def test_time_series(self):
+
+    def test_time_series_no_date(self):
         res = self.client.get(
             reverse("ticker:time_series"),
             {
@@ -71,8 +72,8 @@ class TickerApiTests(APITestCase):
             },
         )
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        expected_data = TickerSerializer([ticker1, ticker2], many=True).data
         self.assertTrue(len(res.data) == 2)
+
     def test_time_series_two_syms(self):
         self.ticker_settings.save()
 
@@ -86,6 +87,7 @@ class TickerApiTests(APITestCase):
         )
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 2)
+
     def test_time_series_no_exchange(self):
         res = self.client.get(
             reverse("ticker:time_series"),
