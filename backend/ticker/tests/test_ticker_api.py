@@ -41,7 +41,51 @@ class TickerApiTests(APITestCase):
         self.assertEqual(first_elem["eod_price"], 169.56)
         self.assertEqual(first_elem["price_dif"], -1.009999999999991)
         self.assertEqual(first_elem["price_dif_percent"], -0.5956593536211318)
+    def test_time_series(self):
+        res = self.client.get(
+            reverse("ticker:time_series"),
+            {
+                "symbols": "AAPL:NASDAQ",
+            },
+        )
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        first_elem = res.data[0]
+        self.assertEqual(first_elem["symbol"]["symbol"], "AAPL")
+        self.assertEqual(first_elem["symbol"]["exchange"], "NASDAQ")
+        self.assertTrue("df" in first_elem.keys())
+        self.assertEqual(len(first_elem["df"].keys()), 6)
 
+    def test_time_series_user(self):
+        ticker1 = Ticker.create_using_str(symbol="AAPL", exchange="NASDAQ")
+        ticker2 = Ticker.create_using_str(symbol="MSFT", exchange="NASDAQ")
+        self.ticker_settings.user_tickers.add(ticker1)
+        self.ticker_settings.user_tickers.add(ticker2)
+        self.ticker_settings.save()
+
+        res = self.client.get(
+            reverse("ticker:time_series"),
+            {
+                "symbols": "__ALL_USER__",
+                "start": "2023-05-01",
+                "end": "2023-05-02",
+            },
+        )
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        expected_data = TickerSerializer([ticker1, ticker2], many=True).data
+        self.assertTrue(len(res.data) == 2)
+    def test_time_series_two_syms(self):
+        self.ticker_settings.save()
+
+        res = self.client.get(
+            reverse("ticker:time_series"),
+            {
+                "symbols": "AAPL:NASDAQ,MSFT:NASDAQ",
+                "start": "2023-05-01",
+                "end": "2023-05-02",
+            },
+        )
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 2)
     def test_time_series_no_exchange(self):
         res = self.client.get(
             reverse("ticker:time_series"),
