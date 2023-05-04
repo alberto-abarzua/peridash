@@ -54,6 +54,7 @@ class TwelveDataCore:
     DATE_STR_FORMAT = "%Y-%m-%d %H:%M:%S"
     DAY_RANGE_ALWAYS = 30
     TIME_SERIES_CACHE_INTERVAL = 60
+    DATE_FORMATS = ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d")
 
     def __init__(self) -> None:
         self.api_key = os.environ.get("TWELVE_DATA_API_KEY")
@@ -67,8 +68,7 @@ class TwelveDataCore:
             elem["global"] = access["global"]
             if elem["plan"] in self.PLANS or elem["global"] in self.LEVELS:
                 in_current_plan = True
-        except Exception as e:
-            print(e.__str__())
+        except KeyError:
             elem["plan"] = "undefined"
             elem["global"] = "undefined"
         elem["in_cur_plan"] = in_current_plan
@@ -92,7 +92,9 @@ class TwelveDataCore:
                 end_date=end.strftime(self.DATE_STR_FORMAT),
             ).as_json()
             time_series = (
-                {symbols[0]: time_series} if type(time_series) is tuple else time_series
+                {f"{symbols[0].symbol}:{symbols[0].exchange}": time_series}
+                if type(time_series) is tuple
+                else time_series
             )
 
             result = []
@@ -114,8 +116,8 @@ class TwelveDataCore:
         return date
 
     def get_start_end(self, end, days):
-        end_start_of_day = end.replace(hour=0, minute=0, second=0)
-        start = self.prev_weekday(end_start_of_day) - timedelta(days=days)
+        end = end.replace(hour=23, minute=59, second=59)
+        start = self.prev_weekday(end) - timedelta(days=days)
         return start, end
 
     def join(self, dfs, name, num, tp):
@@ -170,12 +172,14 @@ class TwelveDataCore:
             site_cache.get(self.get_key_time_series(sym, start, end)) for sym in symbols
         ]
 
-    def __call__(self, symbols, start=None, end=None):
+    def __call__(self, symbols, start=None, end=None, days=None):
+        if days is None:
+            days = self.DAY_RANGE_ALWAYS
         if end is None:
             end = datetime.datetime.now()
         if start is None:
             start = end - datetime.timedelta(days=self.DAY_RANGE_ALWAYS)
         if len(symbols) == 0:
             return {}
-        start, end = self.get_start_end(datetime.datetime.now(), self.DAY_RANGE_ALWAYS)
+        start, end = self.get_start_end(end, self.DAY_RANGE_ALWAYS)
         return self.cache_symbols(symbols, start, end)

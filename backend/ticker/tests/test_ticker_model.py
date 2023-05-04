@@ -1,7 +1,8 @@
 import datetime
 
-from django.test import TestCase
 from django.core.cache import cache as site_cache
+from django.test import TestCase
+
 from ticker.api_utils import TwelveDataCore
 from ticker.models import Symbol
 
@@ -20,6 +21,15 @@ class TickerModels(TestCase):
         symbols = self.stock_client.search_symbol("AAPL")
         self.assertTrue(len(symbols) > 0)
         self.assertEqual(symbols[0]["symbol"], "AAPL")
+
+    def test_query_one_symbol(self):
+        datetime_end = datetime.datetime.strptime("2023-05-02", "%Y-%m-%d")
+        res = self.stock_client([self.appl], end=datetime_end)
+        self.assertEqual(len(res), 1)
+        self.assertEqual(res[0].cur_price, 168.55)
+        self.assertEqual(res[0].eod_price, 169.56)
+        self.assertEqual(res[0].price_dif, -1.009999999999991)
+        self.assertEqual(res[0].price_dif_percent, -0.5956593536211318)
 
     def test_query_symbol_data(self):
         datetime_end = datetime.datetime.strptime("2023-05-02", "%Y-%m-%d")
