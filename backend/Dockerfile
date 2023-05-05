@@ -6,12 +6,12 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-RUN python -m pip install pdm==2.4.9
+RUN python -m pip install pdm==2.5.5
 
 COPY pyproject.toml /app/.
 COPY pdm.lock /app/.
 COPY .flake8 /app/.
 
-RUN pdm install
+RUN pdm install -v
 
 COPY . .
