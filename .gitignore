@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,python,django,react
 ### NextJS ###
 # dependencies
-/node_modules
+node_modules
 /.pnp
 .pnp.js
 
@@ -10,11 +10,11 @@
 /coverage
 
 # next.js
-/.next/
+.next/
 /out/
 
 # production
-/build
+build
 
 # misc
 .DS_Store

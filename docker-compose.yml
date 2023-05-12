@@ -40,15 +40,15 @@ services:
     image: memcached:1.6.19-bullseye
     command: memcached -m 128
 
-  # frontend:
-  #   build: ./frontend
-  #   command: sh -c "npm install && npm start"
-  #   volumes:
-  #     - ./frontend:/app
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - backend
+  frontend:
+    build: ./frontend
+    command: npm run dev
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - API_BASE_URL=http://your-django-api-url:port
 
 volumes:
   postgres_data:
