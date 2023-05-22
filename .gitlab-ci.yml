@@ -1,0 +1,33 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+
+stages:
+  - build
+  - lint
+  - test
+
+build:
+  stage: build
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker compose build
+  cache:
+    paths:
+      - ./docker
+
+lint:
+  stage: lint
+  script:
+    - docker-compose run --rm backend pdm run lint
+  allow_failure: true
+
+test:
+  stage: test
+  script:
+    - docker compose run --rm backend pdm run test
