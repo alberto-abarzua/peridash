@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "core",
     "user",
-    "caltodo",
     "ticker",
 ]
 
