@@ -33,10 +33,10 @@ test:
   script:
     - docker compose run --rm backend pdm run test
 
-deploy:
-  stage: deploy
-  environment:
-    name: dev
-    url: https://dev.example.com
-  script:
-    - echo "Deploying to the dev environment"
+# deploy:
+#   stage: deploy
+#   environment:
+#     name: dev
+#     url: https://dev.example.com
+#   script:
+#     - echo "Deploying to the dev environment"
