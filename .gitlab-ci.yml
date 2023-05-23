@@ -15,6 +15,8 @@ stages:
 
 build:
   stage: build
+  environment:
+    name: dev
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker compose build
@@ -24,19 +26,17 @@ build:
 
 lint:
   stage: lint
+  environment:
+    name: dev
   script:
     - docker-compose run --rm backend pdm run lint
   allow_failure: true
 
 test:
   stage: test
+  environment:
+    name: dev
   script:
     - docker compose run --rm backend pdm run test
 
-# deploy:
-#   stage: deploy
-#   environment:
-#     name: dev
-#     url: https://dev.example.com
-#   script:
-#     - echo "Deploying to the dev environment"
+
