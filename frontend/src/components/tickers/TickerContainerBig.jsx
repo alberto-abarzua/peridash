@@ -1,36 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardContent, Typography, Grid , Box,Container} from "@mui/material";
-import { Line } from "react-chartjs-2";
-import styles from "./TickerContainerBig.module.css";
+import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
 
-import { Chart, registerables } from "chart.js";
+import { Chart, registerables } from 'chart.js';
+import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+import { Line } from 'react-chartjs-2';
+
+import styles from './TickerContainerBig.module.css';
 
 Chart.register(...registerables);
 
-const TickerContainerBig = () => {
-    // Dummy data
-    const [data, setData] = useState({
-        labels: ["January", "February", "March", "April", "May", "June"],
-        datasets: [
-            {
-                label: "Stock Price",
-                data: [12, 19, 3, 5, 2, 3],
-                fill: false,
-                pointRadius: 0, // This line removes the dots
-                backgroundColor: "rgb(75, 192, 192)",
-                borderColor: "#E63832",
-            },
-        ],
-    });
+const TickerContainerBig = props => {
+    useEffect(() => {}, [props]);
+    let data = props.ticker_data;
 
-    const [currentPrice, setCurrentPrice] = useState(0);
-    const [priceVariation, setPriceVariation] = useState(0);
-    const [percentageVariation, setPercentageVariation] = useState(0);
-
-    useEffect(() => {
-        // Fetch data from API and update state here
-    }, []);
-
+    let currentPrice = data.cur_price;
+    let priceVariation = data.price_dif;
+    let percentageVariation = data.price_dif_percent;
+    useEffect(() => {}, [props]);
+    // let df = data.df; // django df
     const options = {
         scales: {
             y: {
@@ -41,7 +28,7 @@ const TickerContainerBig = () => {
                     display: false,
                 },
                 ticks: {
-                    color: "white",
+                    color: 'white',
                 },
             },
             x: {
@@ -51,7 +38,7 @@ const TickerContainerBig = () => {
                     display: false,
                 },
                 ticks: {
-                    color: "white",
+                    color: 'white',
                 },
             },
         },
@@ -59,17 +46,14 @@ const TickerContainerBig = () => {
             legend: {
                 display: false,
                 labels: {
-                    color: "white",
+                    color: 'white',
                 },
             },
         },
     };
 
     return (
-        // <Box sx={{  mt: "1rem", p: "5rem", borderRadius: '16px', display: "grid" }}>
-        // <Box xs={12} sm={6} md={4} lg={3}>
-        <Box width={1/2} p={2} >
-        
+        <Box width={1 / 2} p={2}>
             <Card className={styles.container}>
                 <CardContent>
                     <Grid container spacing={2}>
@@ -85,7 +69,7 @@ const TickerContainerBig = () => {
                             <Typography variant="body2">
                                 {priceVariation}
                             </Typography>
-                            <Typography >
+                            <Typography>
                                 Percentage Variation: {percentageVariation}%
                             </Typography>
                         </Grid>
@@ -96,6 +80,15 @@ const TickerContainerBig = () => {
             </Card>
         </Box>
     );
+};
+
+TickerContainerBig.propTypes = {
+    ticker_data: PropTypes.shape({
+        cur_price: PropTypes.number.isRequired,
+        price_dif: PropTypes.number.isRequired,
+        price_dif_percent: PropTypes.number.isRequired,
+        df: PropTypes.object.isRequired,
+    }),
 };
 
 export default TickerContainerBig;

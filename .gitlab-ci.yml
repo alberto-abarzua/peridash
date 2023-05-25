@@ -9,7 +9,7 @@ variables:
 
 stages:
   - build
-  - lint
+  - lint_backend
   - test
   - deploy
 
@@ -24,12 +24,20 @@ build:
     paths:
       - ./docker
 
-lint:
-  stage: lint
+lint_backend:
+  stage: lint_backend
   environment:
     name: dev
   script:
-    - docker-compose run --rm backend pdm run lint
+    - docker-compose run --rm backend pdm run lint_no_fix
+  allow_failure: true
+
+lint_frontend:
+  stage: lint_frontend
+  environment:
+    name: dev
+  script:
+    - docker-compose run --rm frontend npm lint
   allow_failure: true
 
 test:

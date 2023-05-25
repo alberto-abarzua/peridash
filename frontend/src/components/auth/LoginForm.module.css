@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: center;
     height: 75vh; /* Set the desired height for the container */
-  }
+}
 
 .loginForm {
     display: block;
@@ -36,7 +36,6 @@
     margin-bottom: 20px;
     font-size: 40px;
     color: whitesmoke;
-
 }
 
 .loginForm input::placeholder {
@@ -62,5 +61,5 @@
 }
 
 .loginForm button:hover {
-    background-color: #29CE58; /* Darken the button color on hover */
+    background-color: #29ce58; /* Darken the button color on hover */
 }

@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Button, Box, Grid } from "@mui/material";
-import styles from "./LoginForm.module.css";
-const LoginForm = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+import { Box } from '@mui/material';
 
-    const handleSubmit = async (event) => {
+import axios from 'axios';
+import React, { useState } from 'react';
+
+import styles from './LoginForm.module.css';
+const LoginForm = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSubmit = async event => {
         event.preventDefault();
 
         const response = await axios.post(
-            process.env.NEXT_PUBLIC_BACKEND_URL + "/user/token/",
+            process.env.NEXT_PUBLIC_BACKEND_URL + '/user/token/',
             {
                 email: email,
                 password: password,
@@ -18,7 +20,7 @@ const LoginForm = () => {
         );
 
         if (response.data && response.data.token) {
-            localStorage.setItem("authToken", response.data.token);
+            localStorage.setItem('authToken', response.data.token);
             // go to home page
 
             window.location.reload();
@@ -33,14 +35,14 @@ const LoginForm = () => {
                         type="input"
                         placeholder="email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={e => setEmail(e.target.value)}
                         required={true}
                     />
                     <input
                         type="password"
                         placeholder="Password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={e => setPassword(e.target.value)}
                         required={true}
                     />
                     <button type="submit">Login</button>
