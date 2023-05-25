@@ -52,4 +52,4 @@ test_frontend:
   environment:
     name: dev
   script:
-    - docker compose run --rm fronted npm run test_no_watch
+    - docker compose run --rm frontend npm run test_no_watch
