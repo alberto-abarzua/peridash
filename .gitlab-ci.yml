@@ -30,14 +30,14 @@ lint_backend:
   environment:
     name: dev
   script:
-    - docker-compose run --rm backend pdm run lint_no_fix
+    - docker-compose run --rm backend pdm run lint
 
 lint_frontend:
   stage: lint_frontend
   environment:
     name: dev
   script:
-    - docker-compose run --rm frontend npm lint
+    - docker-compose run --rm frontend npm lint_no_fix
 
 test_backend:
   stage: test_backend
