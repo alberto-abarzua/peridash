@@ -100,6 +100,7 @@ class TickerApiTests(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_list_user_tickers(self):
+        print("test_list_user_tickers")
         ticker1 = Ticker.create_using_str(symbol="AAPL", exchange="NASDAQ")
         ticker2 = Ticker.create_using_str(symbol="MSFT", exchange="NASDAQ")
 

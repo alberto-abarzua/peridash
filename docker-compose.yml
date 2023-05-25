@@ -45,10 +45,12 @@ services:
     command: npm run dev
     volumes:
       - ./frontend/src:/app/src
+      - ./frontend/package.json:/app/package.json
+      - ./frontend/package-lock.json:/app/package-lock.json
     ports:
       - "3000:3000"
     environment:
-      - API_BASE_URL=http://your-django-api-url:port
+      - NEXT_PUBLIC_BACKEND_URL
 
 volumes:
   postgres_data:

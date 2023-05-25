@@ -1,0 +1,65 @@
+/* CSS Module: styles.css */
+.outerGrid {
+    display: flex;
+    flex-direction: column; /* Update to column direction */
+    align-items: center;
+    justify-content: center;
+    height: 75vh; /* Set the desired height for the container */
+  }
+
+.loginForm {
+    display: block;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    padding: 20px;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background-color: whitesmoke;
+}
+
+.loginForm input {
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+.title {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 40px;
+    color: whitesmoke;
+
+}
+
+.loginForm input::placeholder {
+    color: #999;
+}
+
+.loginForm input:focus {
+    outline: none;
+    border-color: #109937; /* Change this color to match your theme */
+}
+
+.loginForm button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1fc54e; /* Change this color to match your theme */
+    color: #b3b1b1;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.loginForm button:hover {
+    background-color: #29CE58; /* Darken the button color on hover */
+}

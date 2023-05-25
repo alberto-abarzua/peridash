@@ -77,7 +77,7 @@ class TickerSettingsViewSet(viewsets.ModelViewSet):
 
 class UserTickerViewSet(viewsets.ModelViewSet):
     serializer_class = TickerSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (authentication.TokenAuthentication,)
     queryset = Ticker.objects.all()
 
