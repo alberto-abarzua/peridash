@@ -10,6 +10,7 @@ variables:
 stages:
   - build
   - lint_backend
+  - lint_frontend
   - test
   - deploy
 
