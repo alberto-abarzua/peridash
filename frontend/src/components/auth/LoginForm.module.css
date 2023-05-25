@@ -54,8 +54,9 @@
     border: none;
     border-radius: 5px;
     background-color: #1fc54e; /* Change this color to match your theme */
-    color: #b3b1b1;
+    color: #ffffff;
     font-size: 18px;
+    font-weight: 700;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
