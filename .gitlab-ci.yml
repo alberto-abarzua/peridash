@@ -11,8 +11,8 @@ stages:
   - build
   - lint_backend
   - lint_frontend
-  - test
-  - deploy
+  - test_backend
+  - test_frontend
 
 build:
   stage: build
@@ -31,7 +31,6 @@ lint_backend:
     name: dev
   script:
     - docker-compose run --rm backend pdm run lint_no_fix
-  allow_failure: true
 
 lint_frontend:
   stage: lint_frontend
@@ -39,13 +38,18 @@ lint_frontend:
     name: dev
   script:
     - docker-compose run --rm frontend npm lint
-  allow_failure: true
 
-test:
-  stage: test
+test_backend:
+  stage: test_backend
   environment:
     name: dev
   script:
     - docker compose run --rm backend pdm run test
 
 
+test_frontend:
+  stage: test_frontend
+  environment:
+    name: dev
+  script:
+    - docker compose run --rm fronted npm run test_no_watch
