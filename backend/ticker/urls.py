@@ -4,7 +4,6 @@ from rest_framework import routers
 from ticker import views
 
 router = routers.DefaultRouter()
-# router.register(r"user-settings", views.TickerSettingsViewSet, basename="user-settings")
 router.register(r"user-tickers", views.UserTickerViewSet, basename="user-tickers")
 
 app_name = "ticker"
@@ -17,6 +16,4 @@ urlpatterns = [
         views.TickerSettingsViewSet.as_view({"get": "retrieve", "put": "update"}),
         name="user-settings",
     ),
-    # path("user_tickers/", views.value.as_view(), name="user_tickers"),
-    # path("tickers_settings/", views.value.as_view(), name="user_tickers_settings"),
 ]

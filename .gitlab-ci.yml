@@ -9,9 +9,10 @@ variables:
 
 stages:
   - build
-  - lint
-  - test
-  - deploy
+  - lint_backend
+  - lint_frontend
+  - test_backend
+  - test_frontend
 
 build:
   stage: build
@@ -24,19 +25,31 @@ build:
     paths:
       - ./docker
 
-lint:
-  stage: lint
+lint_backend:
+  stage: lint_backend
   environment:
     name: dev
   script:
     - docker-compose run --rm backend pdm run lint
-  allow_failure: true
 
-test:
-  stage: test
+lint_frontend:
+  stage: lint_frontend
+  environment:
+    name: dev
+  script:
+    - docker-compose run --rm frontend npm lint_no_fix
+
+test_backend:
+  stage: test_backend
   environment:
     name: dev
   script:
     - docker compose run --rm backend pdm run test
 
 
+test_frontend:
+  stage: test_frontend
+  environment:
+    name: dev
+  script:
+    - docker compose run --rm frontend npm run test_no_watch
