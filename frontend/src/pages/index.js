@@ -14,13 +14,13 @@ const DashPage = () => {
     //call server on indicators/user-ticker-list
     //get list of tickers
 
-    let response = axios
-        .get(
-            process.env.NEXT_PUBLIC_BACKEND_URL + "/indicators/user-ticker-list"
-        )
-        .then((response) => {
-            console.log(response.data);
-        });
+    // let response = axios
+    //     .get(
+    //         process.env.NEXT_PUBLIC_BACKEND_URL + "/indicators/user-ticker-list"
+    //     )
+    //     .then((response) => {
+    //         console.log(response.data);
+    //     });
     return (
         <div>
             <h1>Test home</h1>
