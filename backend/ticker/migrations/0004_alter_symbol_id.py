@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 
-import core.gen_utils
+import peridash.gen_utils
 
 
 class Migration(migrations.Migration):
@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             model_name="symbol",
             name="id",
             field=models.CharField(
-                default=core.gen_utils.get_token,
+                default=peridash.gen_utils.get_token,
                 max_length=65,
                 primary_key=True,
                 serialize=False,

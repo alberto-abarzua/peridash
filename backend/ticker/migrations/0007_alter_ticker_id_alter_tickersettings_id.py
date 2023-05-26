@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 
-import core.gen_utils
+import peridash.gen_utils
 
 
 class Migration(migrations.Migration):
@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             model_name="ticker",
             name="id",
             field=models.CharField(
-                default=core.gen_utils.get_token,
+                default=peridash.gen_utils.get_token,
                 max_length=100,
                 primary_key=True,
                 serialize=False,
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             model_name="tickersettings",
             name="id",
             field=models.CharField(
-                default=core.gen_utils.get_token,
+                default=peridash.gen_utils.get_token,
                 max_length=100,
                 primary_key=True,
                 serialize=False,

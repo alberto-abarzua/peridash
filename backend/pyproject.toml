@@ -20,6 +20,7 @@ dependencies = [
     "pymemcache>=4.0.0",
     "flake8-print>=5.0.0",
     "django-cors-headers>=4.0.0",
+    "coverage>=7.2.6",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}
@@ -37,6 +38,10 @@ lint = "flake8 ."
 format = {composite = ["isort", "black"]}
 fixtures = "pdm run python manage.py loaddata fixtures/*.jsonpdm run py"
 test = "pdm run python manage.py test --pattern=\"test_*.py\""
+coverage = "coverage run --source='.' manage.py test --pattern=\"test_*.py\""
+report = "coverage report"
+html_report = "coverage html --directory=htmlcov"
 makemigrations = "pdm run python manage.py makemigrations --noinput"
 migrate = "pdm run python manage.py migrate --noinput"
 mm = {composite = ["makemigrations", "migrate"]}
+test_full = {composite = ["coverage", "report", "html_report"]}
