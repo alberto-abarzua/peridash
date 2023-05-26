@@ -8,9 +8,8 @@ const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   coverageDirectory: "<rootDir>/coverage",
   collectCoverageFrom: [
-    'pages/**/*.{js,jsx}',
-    'components/**/*.{js,jsx}',
-    'utils/**/*.{js,jsx}',
+    'src/components/**/*.{js,jsx}',
+    'src/utils/**/*.{js,jsx}',
   ],
 };
 module.exports = createJestConfig(customJestConfig);
