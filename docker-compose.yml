@@ -15,12 +15,11 @@ services:
     command: sh -c "pdm run python manage.py migrate && pdm run python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend/user:/app/user
-      - ./backend/core:/app/core
       - ./backend/ticker:/app/ticker
       - ./backend/peridash:/app/peridash
-      - ./backend/caltodo:/app/caltodo
       - ./backend/pyproject.toml:/app/pyproject.toml
       - ./backend/pdm.lock:/app/pdm.lock
+      - ./backend/coverage:/app/htmlcov
     ports:
       - "8000:8000"
     depends_on:
@@ -47,6 +46,7 @@ services:
       - ./frontend/src:/app/src
       - ./frontend/package.json:/app/package.json
       - ./frontend/package-lock.json:/app/package-lock.json
+      - ./frontend/coverage:/app/coverage
     ports:
       - "3000:3000"
     environment:

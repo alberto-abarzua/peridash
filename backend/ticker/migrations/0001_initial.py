@@ -3,7 +3,7 @@
 import django.core.validators
 from django.db import migrations, models
 
-import core.gen_utils
+import peridash.gen_utils
 
 
 class Migration(migrations.Migration):
@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 (
                     "id",
                     models.CharField(
-                        default=core.gen_utils.get_token,
+                        default=peridash.gen_utils.get_token,
                         max_length=64,
                         primary_key=True,
                         serialize=False,
@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 (
                     "id",
                     models.CharField(
-                        default=core.gen_utils.get_token,
+                        default=peridash.gen_utils.get_token,
                         max_length=64,
                         primary_key=True,
                         serialize=False,
@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
                 (
                     "id",
                     models.CharField(
-                        default=core.gen_utils.get_token,
+                        default=peridash.gen_utils.get_token,
                         max_length=64,
                         primary_key=True,
                         serialize=False,

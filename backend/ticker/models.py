@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from core.gen_utils import get_token
+from peridash.gen_utils import get_token
 
 
 class Symbol(models.Model):

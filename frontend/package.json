@@ -10,7 +10,9 @@
         "lint_no_fix": "next lint",
         "format": "prettier --write .",
         "test": "jest --watchAll",
-        "test_no_watch": "jest" 
+        "test_no_watch": "jest" ,
+        "coverage": "jest --coverage",
+        "test_full": "npm run test_no_watch && npm run coverage"
     },
     "dependencies": {
         "@emotion/react": "^11.11.0",
