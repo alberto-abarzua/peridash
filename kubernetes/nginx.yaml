@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: [nginx-image]
+        image: uintuser/dev-peridash-backend:latest
         ports:
         - containerPort: 80
         - containerPort: 443

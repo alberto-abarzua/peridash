@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: [frontend-image]
+          image: uintuser/dev-peridash-frontend:latest
           ports:
             - containerPort: 3000
           envFrom:

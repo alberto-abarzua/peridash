@@ -29,7 +29,9 @@ spec:
     spec:
       containers:
       - name: backend
-        image: [backend-image]
+        image: uintuser/dev-peridash-backend:latest
+        imagePullSecrets:
+      - name: regcred
         ports:
         - containerPort: 8000
     envFrom:
