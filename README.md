@@ -1,11 +1,13 @@
-# peridash
+# Peridash - Stocks Dashboard
+
 ---
+
 ## Getting started
 
 1. Clonar la repo
 
 2. Copiar y cambiar el nombre de `.env.template` a `.env`
-    Para poder usar todos los features se debe tener una api key de openai.
+   Para poder usar todos los features se debe tener una api key de openai.
 
 3. Correr `docker compose build --no-cache`
 
@@ -14,10 +16,21 @@
 ## Comandos utiles
 
 ```python
-docker compose run web pdm run python manage.py --help # esto para correr cosas de django
-docker compose run web pdm lint # para correr flake8 y lintear
-docker compose run web pdm format # para formatiar el codigo que se puede auto formatear
-docker compose run web pdm test # para  correr los tests
+
+# Comandos para el backend
+docker compose run backend pdm run python manage.py --help # esto para correr cosas de django
+docker compose run backend pdm lint # para correr flake8 y lintear
+docker compose run backend pdm format # para formatiar el codigo que se puede auto formatear
+docker compose run backend pdm test # para  correr los tests
+docker compese run backend pdm test_full # Corre tests y genera reporte de coverage
+
+# Comandos para el fronted
+
+docker compose run backend npm lint
+docker compose run backend npm format
+docker compose run backend npm test
+docker compese run backend npm test_full
+
 ```
 
 ## Como hacer cambios
