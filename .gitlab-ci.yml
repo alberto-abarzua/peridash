@@ -75,7 +75,7 @@ backend:
   script:
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
     - docker build -t $DOCKER_HUB_USER/dev-peridash-backend:latest ./backend
-    - docker push $DOCKER_HUB_USER/backend:latest
+    - docker push $DOCKER_HUB_USER/dev-peridash-backend:latest
   # only:
     # - main
 
@@ -86,7 +86,7 @@ nginx:
   script:
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
     - docker build -t $DOCKER_HUB_USER/dev-peridash-nginx:latest ./nginx
-    - docker push $DOCKER_HUB_USER/nginx:latest
+    - docker push $DOCKER_HUB_USER/dev-peridash-nginx:latest
   # only:
     # - main
 
@@ -97,6 +97,6 @@ db:
   script:
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
     - docker build -t $DOCKER_HUB_USER/dev-peridash-db:latest ./db
-    - docker push $DOCKER_HUB_USER/db:latest
+    - docker push $DOCKER_HUB_USER/dev-peridash-db:latest
   # only:
     # - main
