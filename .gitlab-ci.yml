@@ -59,6 +59,8 @@ test_frontend:
 
 frontend:
   stage: build_and_push
+  environment:
+    name: dev
   script:
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
     - docker build -t $DOCKER_HUB_USER/dev-peridash-frontend:latest ./frontend
@@ -68,6 +70,8 @@ frontend:
 
 backend:
   stage: build_and_push
+  environment:
+    name: dev
   script:
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
     - docker build -t $DOCKER_HUB_USER/dev-peridash-backend:latest ./backend
@@ -77,6 +81,8 @@ backend:
 
 nginx:
   stage: build_and_push
+  environment:
+    name: dev
   script:
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
     - docker build -t $DOCKER_HUB_USER/dev-peridash-nginx:latest ./nginx
@@ -86,6 +92,8 @@ nginx:
 
 db:
   stage: build_and_push
+  environment:
+    name: dev
   script:
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
     - docker build -t $DOCKER_HUB_USER/dev-peridash-db:latest ./db
