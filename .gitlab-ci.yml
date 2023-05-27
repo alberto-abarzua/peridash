@@ -13,6 +13,7 @@ stages:
   - lint_frontend
   - test_backend
   - test_frontend
+  - build_and_push
 
 build:
   stage: build
@@ -53,3 +54,41 @@ test_frontend:
     name: dev
   script:
     - docker compose run --rm frontend npm run test_no_watch
+
+# upload to docker hub
+
+frontend:
+  stage: build_and_push
+  script:
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+    - docker build -t $DOCKER_HUB_USER/dev-peridash-frontend:latest ./frontend
+    - docker push $DOCKER_HUB_USER/dev-peridash-frontend:latest
+  # only:
+  #   - main
+
+backend:
+  stage: build_and_push
+  script:
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+    - docker build -t $DOCKER_HUB_USER/backend:latest ./backend
+    - docker push $DOCKER_HUB_USER/backend:latest
+  # only:
+    # - main
+
+nginx:
+  stage: build_and_push
+  script:
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+    - docker build -t $DOCKER_HUB_USER/nginx:latest ./nginx
+    - docker push $DOCKER_HUB_USER/nginx:latest
+  # only:
+    # - main
+
+db:
+  stage: build_and_push
+  script:
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+    - docker build -t $DOCKER_HUB_USER/db:latest ./db
+    - docker push $DOCKER_HUB_USER/db:latest
+  # only:
+    # - main

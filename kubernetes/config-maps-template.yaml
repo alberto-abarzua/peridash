@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-env
+  namespace: dev-peridash
+data:
+  DB_NAME: ""
+  POSTGRES_USER: ""
+  POSTGRES_PASSWORD: ""
+  POSTGRES_DB: ""
+  POSTGRES_HOSTNAME: ""
+  POSTGRES_PORT: ""
+  TWELVE_DATA_API_KEY: ""
+  CACHE_HOSTNAME: ""
+  CACHE_PORT: ""
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-env
+data:
+  SERVER_NAME: "localhost"
+  FRONTEND_URL: "http://frontend:3000"
+  BACKEND_URL: "http://backend:8000"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-env
+  namespace: dev-peridash
+
+data:
+  POSTGRES_DB: ""
+  POSTGRES_USER: ""
+  POSTGRES_PASSWORD: ""
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-env
+data:
+  NEXT_PUBLIC_BACKEND_URL: ""
+

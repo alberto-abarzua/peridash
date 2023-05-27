@@ -51,6 +51,16 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_BACKEND_URL
+  nginx:
+    build: ./nginx
 
+    environment:
+      - SERVER_NAME=localhost
+      - FRONTEND_URL="http://frontend:3000"
+      - BACKEND_URL="http://backend:8000"
+    ports:
+      - "80:80"
+      - "443:443"
+    
 volumes:
   postgres_data:
