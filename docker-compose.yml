@@ -26,7 +26,6 @@ services:
       - db
       - memcached
     environment:
-      - DB_NAME
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB

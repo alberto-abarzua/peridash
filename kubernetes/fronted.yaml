@@ -28,6 +28,9 @@ spec:
       containers:
         - name: frontend
           image: uintuser/dev-peridash-frontend:latest
+          imagePullSecrets:
+            - name: regcred
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           envFrom:

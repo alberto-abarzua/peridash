@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: memcached
+  namespace: dev-peridash
+spec:
+  ports:
+    - port: 11211
+      targetPort: 11211
+      protocol: TCP
+      name: memcached
+  selector:
+    app: memcached
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memcached
+  namespace: dev-peridash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: memcached
+  template:
+    metadata:
+      labels:
+        app: memcached
+    spec:
+      containers:
+      - name: memcached
+        image: memcached:latest
+        command:
+          - memcached
+          - -m=64
+        ports:
+        - containerPort: 11211
+          name: memcached

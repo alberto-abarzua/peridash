@@ -31,7 +31,9 @@ spec:
       - name: backend
         image: uintuser/dev-peridash-backend:latest
         imagePullSecrets:
-      - name: regcred
+          - name: regcred
+        imagePullPolicy: Always
+        
         ports:
         - containerPort: 8000
     envFrom:
