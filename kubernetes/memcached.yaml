@@ -2,7 +2,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: memcached
-  namespace: dev-peridash
 spec:
   type: ClusterIP
   ports:
@@ -18,7 +17,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: memcached
-  namespace: dev-peridash
 spec:
   replicas: 1
   selector:
@@ -38,3 +36,10 @@ spec:
         ports:
         - containerPort: 11211
           name: memcached
+        resources:  
+            requests:
+              cpu: "100m"
+              memory: "100Mi"
+            limits:
+              cpu: "500m"
+              memory: "500Mi"

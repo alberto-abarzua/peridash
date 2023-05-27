@@ -7,10 +7,12 @@ spec:
   selector:
     app: nginx
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
       targetPort: 80
-    - protocol: TCP
+    - name: https
+      protocol: TCP
       port: 443
       targetPort: 443
 ---
@@ -31,13 +33,19 @@ spec:
       containers:
       - name: nginx
         image: uintuser/dev-peridash-backend:latest
-        imagePullSecrets:
-            - name: regcred
         imagePullPolicy: Always
-          
         ports:
         - containerPort: 80
         - containerPort: 443
         envFrom:
         - configMapRef:
             name: nginx-env
+        resources:  
+                requests:
+                  cpu: "100m"
+                  memory: "100Mi"
+                limits:
+                  cpu: "500m"
+                  memory: "500Mi"
+      imagePullSecrets:
+        - name: regcred

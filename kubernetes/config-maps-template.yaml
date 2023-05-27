@@ -2,7 +2,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: backend-env
-  namespace: dev-peridash
 data:
   POSTGRES_USER: "postgres"
   POSTGRES_PASSWORD: "password"
@@ -26,7 +25,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: db-env
-  namespace: dev-peridash
 
 data:
   POSTGRES_DB: "postgres"
