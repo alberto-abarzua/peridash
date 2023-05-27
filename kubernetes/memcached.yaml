@@ -32,7 +32,6 @@ spec:
         image: memcached:latest
         command:
           - memcached
-          - -m=100
         ports:
         - containerPort: 11211
           name: memcached

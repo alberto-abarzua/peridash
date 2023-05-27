@@ -31,21 +31,21 @@ spec:
         app: nginx
     spec:
       containers:
-      - name: nginx
-        image: uintuser/dev-peridash-backend:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-        - containerPort: 443
-        envFrom:
-        - configMapRef:
-            name: nginx-env
-        resources:  
-                requests:
-                  cpu: "100m"
-                  memory: "100Mi"
-                limits:
-                  cpu: "500m"
-                  memory: "500Mi"
+        - name: nginx
+          image: uintuser/dev-peridash-backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          envFrom:
+            - configMapRef:
+                name: nginx-env
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "100Mi"
+            limits:
+              cpu: "500m"
+              memory: "500Mi"
       imagePullSecrets:
         - name: regcred
