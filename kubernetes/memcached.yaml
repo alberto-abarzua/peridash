@@ -4,6 +4,7 @@ metadata:
   name: memcached
   namespace: dev-peridash
 spec:
+  type: ClusterIP
   ports:
     - port: 11211
       targetPort: 11211
