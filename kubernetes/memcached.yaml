@@ -32,14 +32,14 @@ spec:
         image: memcached:latest
         command:
           - memcached
-          - -m=64
+          - -m=100
         ports:
         - containerPort: 11211
           name: memcached
         resources:  
             requests:
               cpu: "100m"
-              memory: "100Mi"
+              memory: "250Mi"
             limits:
               cpu: "500m"
               memory: "500Mi"

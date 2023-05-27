@@ -3,13 +3,13 @@ kind: ConfigMap
 metadata:
   name: backend-env
 data:
-  POSTGRES_USER: "postgres"
-  POSTGRES_PASSWORD: "password"
-  POSTGRES_DB: "postgres"
-  POSTGRES_HOSTNAME: "db.dev-peridash"
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: password
+  POSTGRES_DB: postgres
+  POSTGRES_HOSTNAME: db.dev-peridash
   POSTGRES_PORT: "5432"
-  TWELVE_DATA_API_KEY: "6cc71c5c23a8491ab6e87389c3cc9f8a"
-  CACHE_HOSTNAME: "memcached.dev-peridash"
+  TWELVE_DATA_API_KEY: api_key
+  CACHE_HOSTNAME: memcached.dev-peridash
   CACHE_PORT: "11211"
 ---
 apiVersion: v1
@@ -17,9 +17,9 @@ kind: ConfigMap
 metadata:
   name: nginx-env
 data:
-  SERVER_NAME: "dev.peridash.com"
-  FRONTEND_URL: "frontend:3000.dev-peridash"
-  BACKEND_URL: "backend:8000.dev-peridash"
+  SERVER_NAME: dev.peridash.com
+  FRONTEND_URL: frontend:3000.dev-peridash
+  BACKEND_URL: backend:8000.dev-peridash
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -27,9 +27,9 @@ metadata:
   name: db-env
 
 data:
-  POSTGRES_DB: "postgres"
-  POSTGRES_USER: "postgres"
-  POSTGRES_PASSWORD: "password"
+  POSTGRES_DB: postgres
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: password
 ---
 apiVersion: v1
 kind: ConfigMap

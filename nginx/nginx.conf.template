@@ -12,7 +12,7 @@ server {
     # for now
         location / {
         # limit_req zone=one burst=5 nodelay;
-        proxy_pass $FRONTEND_URL;
+        proxy_pass http://$FRONTEND_URL;
         # proxy_http_version 1.1;
         # proxy_set_header Upgrade $http_upgrade;
         # proxy_set_header Connection 'upgrade';
@@ -21,7 +21,7 @@ server {
     }
         location /api/ {
         # limit_req zone=one burst=5 nodelay;
-        proxy_pass $BACKEND_URL;
+        proxy_pass http://$BACKEND_URL;
         # proxy_http_version 1.1;
         # proxy_set_header Upgrade $http_upgrade;
         # proxy_set_header Connection 'upgrade';

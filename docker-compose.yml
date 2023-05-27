@@ -55,8 +55,8 @@ services:
 
     environment:
       - SERVER_NAME=localhost
-      - FRONTEND_URL="http://frontend:3000"
-      - BACKEND_URL="http://backend:8000"
+      - FRONTEND_URL=frontend:3000
+      - BACKEND_URL=backend:8000
     ports:
       - "80:80"
       - "443:443"
