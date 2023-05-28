@@ -47,7 +47,7 @@ spec:
             - configMapRef:
                 name: db-env
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
+            - mountPath: /var/lib/postgresql
               name: postgres-data
           resources:  
                 requests:
