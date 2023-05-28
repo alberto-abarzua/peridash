@@ -32,7 +32,9 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
 CORS_ALLOW_ALL_ORIGINS = os.environ.get("DJANGO_DEBUG", "False").upper() == "TRUE"
 
 if not CORS_ALLOW_ALL_ORIGINS:
-    CORS_ORIGIN_WHITELIST = os.environ.get("DJANGO_CORS_WHITELIST", "*").split(",")
+    cors_origin_whitelist = os.environ.get("DJANGO_CORS_WHITELIST", None)
+    if cors_origin_whitelist:
+        CORS_ALLOWED_ORIGINS = cors_origin_whitelist.split(",")
 
 # Application definition
 
