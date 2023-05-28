@@ -26,6 +26,7 @@ services:
       - db
       - memcached
     environment:
+      - RUN_ENV
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB
@@ -50,6 +51,7 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_BACKEND_URL
+      - RUN_ENV
   nginx:
     build: ./nginx
 
