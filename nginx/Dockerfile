@@ -5,7 +5,7 @@ FROM nginx:latest
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy the configuration file template
-COPY nginx.conf.template /etc/nginx/conf.d/nginx.conf.template
+COPY nginx.conf /etc/nginx/conf.d/nginx.conf.template
 
 # Copy the entrypoint script into the image
 COPY entrypoint.sh /entrypoint.sh

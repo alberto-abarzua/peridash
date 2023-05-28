@@ -1,15 +1,13 @@
-# Dockerfile
-FROM nginx:latest
+#!/bin/bash
 
-# Remove the default nginx.conf
-RUN rm /etc/nginx/conf.d/default.conf
+# Substitute environment variables and create nginx.conf
+envsubst '\$SERVER_NAME \$FRONTEND_URL \$BACKEND_URL' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/nginx.conf && nginx -t
 
-# Copy the configuration file template
-COPY nginx.conf /etc/nginx/conf.d/nginx.conf.template
+#show nginx.conf
+cat /etc/nginx/conf.d/nginx.conf
 
-# Copy the entrypoint script into the image
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Start nginx in the foreground
+exec nginx -g 'daemon off;'
 
+echo "Starting nginx"
 
-CMD ["/entrypoint.sh"]
