@@ -10,7 +10,7 @@
         "lint_no_fix": "next lint",
         "format": "prettier --write .",
         "test": "jest --watchAll",
-        "test_no_watch": "jest" ,
+        "test_no_watch": "jest",
         "coverage": "jest --coverage",
         "test_full": "npm run test_no_watch && npm run coverage"
     },
@@ -23,6 +23,7 @@
         "chart.js": "^4.3.0",
         "eslint-config-next": "13.4.2",
         "next": "^13.4.2",
+        "pm2": "^5.3.0",
         "postcss": "8.4.23",
         "react": "18.2.0",
         "react-chartjs-2": "^5.2.0",

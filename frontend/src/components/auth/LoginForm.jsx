@@ -10,14 +10,16 @@ const LoginForm = () => {
 
     const handleSubmit = async event => {
         event.preventDefault();
-
+        let url = process.env.NEXT_PUBLIC_BACKEND_URL + '/user/token/';
+        console.log(url);
         const response = await axios.post(
-            process.env.NEXT_PUBLIC_BACKEND_URL + '/user/token/',
+           url,
             {
                 email: email,
                 password: password,
             }
         );
+        console.log(response);
 
         if (response.data && response.data.token) {
             localStorage.setItem('authToken', response.data.token);

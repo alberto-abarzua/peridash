@@ -11,6 +11,10 @@ data:
   TWELVE_DATA_API_KEY: api_key
   CACHE_HOSTNAME: memcached.dev-peridash
   CACHE_PORT: "11211"
+  DJANGO_SECRET_KEY: secret_key 
+  DJANGO_DEBUG: False
+  DJANGO_ALLOWED_HOSTS: nginx.dev-peridash
+  RUN_ENV: prod
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -18,8 +22,8 @@ metadata:
   name: nginx-env
 data:
   SERVER_NAME: dev.peridash.com
-  FRONTEND_URL: frontend:3000.dev-peridash
-  BACKEND_URL: backend:8000.dev-peridash
+  FRONTEND_URL: frontend.dev-peridash:3000
+  BACKEND_URL: backend.dev-peridash:8000
 ---
 apiVersion: v1
 kind: ConfigMap

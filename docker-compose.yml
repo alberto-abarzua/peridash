@@ -12,7 +12,6 @@ services:
 
   backend:
     build: ./backend
-    command: sh -c "pdm run python manage.py migrate && pdm run python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend/user:/app/user
       - ./backend/ticker:/app/ticker
@@ -41,7 +40,6 @@ services:
 
   frontend:
     build: ./frontend
-    command: npm run dev
     volumes:
       - ./frontend/src:/app/src
       - ./frontend/package.json:/app/package.json
@@ -52,16 +50,6 @@ services:
     environment:
       - NEXT_PUBLIC_BACKEND_URL
       - RUN_ENV
-  nginx:
-    build: ./nginx
-
-    environment:
-      - SERVER_NAME=localhost
-      - FRONTEND_URL=frontend:3000
-      - BACKEND_URL=backend:8000
-    ports:
-      - "80:80"
-      - "443:443"
     
 volumes:
   postgres_data:
