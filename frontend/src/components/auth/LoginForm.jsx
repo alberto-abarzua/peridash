@@ -1,12 +1,18 @@
 import { Box } from '@mui/material';
 
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 import styles from './LoginForm.module.css';
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+
+    useEffect(() => {
+        console.log("this is next_PUBLIC_BACKEND_URL",process.env.NEXT_PUBLIC_BACKEND_URL);
+    }, [])
+
 
     const handleSubmit = async event => {
         event.preventDefault();
