@@ -50,6 +50,5 @@ services:
     environment:
       - NEXT_PUBLIC_BACKEND_URL
       - RUN_ENV
-    
 volumes:
   postgres_data:
