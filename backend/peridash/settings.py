@@ -29,7 +29,7 @@ DEBUG = os.environ.get("DJANGO_DEBUG", "False").upper() == "TRUE"
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
 
-CORS_ALLOW_ALL_ORIGINS =  os.environ.get("DJANGO_DEBUG", "False").upper() == "TRUE"
+CORS_ALLOW_ALL_ORIGINS = os.environ.get("DJANGO_DEBUG", "False").upper() == "TRUE"
 
 if not CORS_ALLOW_ALL_ORIGINS:
     CORS_ORIGIN_WHITELIST = os.environ.get("DJANGO_CORS_WHITELIST", "*").split(",")
@@ -150,7 +150,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
