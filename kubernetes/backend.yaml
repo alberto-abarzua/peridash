@@ -29,6 +29,7 @@ spec:
         - name: backend
           image: uintuser/dev-peridash-backend:latest
           imagePullPolicy: Always
+          command: ["/bin/sh", "-c", "sleep infinity"]
           ports:
             - containerPort: 8000
           envFrom:
