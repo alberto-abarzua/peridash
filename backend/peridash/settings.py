@@ -24,16 +24,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "secret")
 
 # SECURITY WARNING: don't run with debug turned on in production.
-DEBUG = bool(os.environ.get("DJANGO_DEBUG", "False"))
+DEBUG = os.environ.get("DJANGO_DEBUG", "False").upper() == "TRUE"
 
-ALLOWED_HOSTS = [os.environ.get("DJANGO_ALLOWED_HOSTS", "*")]
 
-CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
 
-# CORS_ORIGIN_WHITELIST = [
-#     'http://localhost:3000',
-#     'http://your-other-domain.com',
-# ]
+CORS_ALLOW_ALL_ORIGINS =  os.environ.get("DJANGO_DEBUG", "False").upper() == "TRUE"
+
+if not CORS_ALLOW_ALL_ORIGINS:
+    CORS_ORIGIN_WHITELIST = os.environ.get("DJANGO_CORS_WHITELIST", "*").split(",")
 
 # Application definition
 

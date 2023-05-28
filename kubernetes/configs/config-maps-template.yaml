@@ -13,7 +13,8 @@ data:
   CACHE_PORT: "11211"
   DJANGO_SECRET_KEY: secret_key 
   DJANGO_DEBUG: "False"
-  DJANGO_ALLOWED_HOSTS: nginx.dev-peridash
+  DJANGO_ALLOWED_HOSTS: api.dev-peridash
+  DJANGO_CORS_WHITELIST:  api.dev-peridash
   RUN_ENV: prod
 ---
 apiVersion: v1
