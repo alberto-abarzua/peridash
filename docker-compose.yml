@@ -34,6 +34,7 @@ services:
       - TWELVE_DATA_API_KEY
       - CACHE_HOSTNAME
       - CACHE_PORT
+      - DJANGO_DEBUG
   memcached:
     image: memcached:1.6.19-bullseye
     command: memcached -m 128

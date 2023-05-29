@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 
-import axios from 'axios';
+import api from '@/utils/api';
+import {createToken} from '@/utils/auth';
 import React, { useState,useEffect } from 'react';
 
 import styles from './LoginForm.module.css';
@@ -9,23 +10,11 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
 
 
-    useEffect(() => {
-        console.log("this is next_PUBLIC_BACKEND_URL",process.env.NEXT_PUBLIC_BACKEND_URL);
-    }, [])
-
-
     const handleSubmit = async event => {
         event.preventDefault();
-        let url = process.env.NEXT_PUBLIC_BACKEND_URL + '/user/token/';
-        console.log(url);
-        const response = await axios.post(
-           url,
-            {
-                email: email,
-                password: password,
-            }
-        );
-        console.log(response);
+       
+        createToken(email, password)
+
 
         if (response.data && response.data.token) {
             localStorage.setItem('authToken', response.data.token);
