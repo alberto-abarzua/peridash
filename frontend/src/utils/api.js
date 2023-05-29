@@ -1,3 +1,5 @@
+import { getToken } from '@/utils/auth';
+
 import axios from 'axios';
 // Create an instance of axios
 const api = axios.create({
@@ -7,7 +9,7 @@ const api = axios.create({
 // Modify the request before it is sent to always include a token and ensure trailing slash
 api.interceptors.request.use(
     config => {
-        const token = localStorage.getItem('authToken'); // Change this to use your method of storing tokens
+        const token = getToken(); // Change this to use your method of storing tokens
         if (token) {
             config.headers.Authorization = `Token ${token}`;
         }

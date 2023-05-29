@@ -25,16 +25,20 @@ services:
       - db
       - memcached
     environment:
-      - RUN_ENV
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
-      - POSTGRES_HOSTNAME
-      - POSTGRES_PORT
-      - TWELVE_DATA_API_KEY
-      - CACHE_HOSTNAME
-      - CACHE_PORT
-      - DJANGO_DEBUG
+      - BACKEND_DJANGO_DEUBG
+      - BACKEND_DJANGO_SECRET_KEY
+      - BACKEND_DJANGO_ALLOWED_HOSTS
+      - BACKEND_DJANGO_CORS_WHITELIST
+      - BACKEND_POSTGRES_USER
+      - BACKEND_POSTGRES_PASSWORD
+      - BACKEND_POSTGRES_DB
+      - BACKEND_POSTGRES_HOSTNAME
+      - BACKEND_POSTGRES_PORT
+      - BACKEND_CACHE_HOSTNAME
+      - BACKEND_CACHE_PORT
+      - BACKEND_TWELVE_DATA_API_KEY
+      - GLOBAL_RUN_ENV
+
   memcached:
     image: memcached:1.6.19-bullseye
     command: memcached -m 128
@@ -50,7 +54,7 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_BACKEND_URL
-      - RUN_ENV
-      - PRIVATE_BACKEND_URL
+      - NEXT_PRIVATE_BACKEND_URL
+      - GLOBAL_RUN_ENV
 volumes:
   postgres_data:
