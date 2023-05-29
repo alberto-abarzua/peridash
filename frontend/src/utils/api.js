@@ -2,8 +2,14 @@ import { getToken } from '@/utils/auth';
 
 import axios from 'axios';
 // Create an instance of axios
+
+let backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+if (backendUrl.startsWith('"') && backendUrl.endsWith('"')) {
+    backendUrl = backendUrl.slice(1, -1); // Remove the quotation marks
+}
+
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL, // Base domain
+    baseURL: backendUrl, // Base domain
 });
 
 // Modify the request before it is sent to always include a token and ensure trailing slash
