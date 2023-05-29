@@ -17,7 +17,7 @@ stages:
 build:
   stage: build
   script:
-    - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
+    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker compose build
   environment:
@@ -30,7 +30,7 @@ build:
 lint_backend:
   stage: lint
   script:
-    - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
+    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker-compose run --rm backend pdm run lint
   environment:
     name: $ENV_NAME
@@ -40,7 +40,7 @@ lint_backend:
 lint_frontend:
   stage: lint
   script:
-    - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
+    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker-compose run --rm frontend npm lint_no_fix
   environment:
     name: $ENV_NAME
@@ -50,7 +50,7 @@ lint_frontend:
 test_backend:
   stage: test
   script:
-    - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
+    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker compose run --rm backend pdm run test
   environment:
     name: $ENV_NAME
@@ -60,7 +60,7 @@ test_backend:
 test_frontend:
   stage: test
   script:
-    - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
+    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker compose run --rm frontend npm run test_no_watch
   environment:
     name: $ENV_NAME
@@ -72,7 +72,7 @@ frontend:
   stage: build_and_push
 
   script:
-    - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
+    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
     - docker build -t $DOCKER_HUB_USER/peridash-frontend:$ENV_NAME ./frontend
     - docker push $DOCKER_HUB_USER/peridash-frontend:$ENV_NAME
@@ -92,7 +92,7 @@ frontend:
 backend:
   stage: build_and_push
   script:
-    - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
+    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
     - docker build -t $DOCKER_HUB_USER/peridash-backend:$ENV_NAME ./backend
     - docker push $DOCKER_HUB_USER/peridash-backend:$ENV_NAME
@@ -111,7 +111,7 @@ backend:
 nginx:
   stage: build_and_push
   script:
-    - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
+    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
     - docker build -t $DOCKER_HUB_USER/peridash-nginx:$ENV_NAME ./nginx
     - docker push $DOCKER_HUB_USER/peridash-nginx:$ENV_NAME
