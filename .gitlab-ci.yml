@@ -51,11 +51,10 @@ frontend:
   rules:
     - changes:
         - frontend/**/*
-      when: manual
-    - changes:
-        - frontend/**/*
       when: on_success
       if: '$CI_COMMIT_REF_NAME == "main"'
+    -  when: manual
+
 
 backend:
   stage: build_and_push
@@ -66,11 +65,10 @@ backend:
   rules:
     - changes:
         - backend/**/*
-      when: manual
-    - changes:
-        - backend/**/*
       when: on_success
       if: '$CI_COMMIT_REF_NAME == "main"'
+    -  when: manual
+
 
 nginx:
   stage: build_and_push
@@ -81,8 +79,6 @@ nginx:
   rules:
     - changes:
         - nginx/**/*
-      when: manual
-    - changes:
-        - nginx/**/*
       when: on_success
       if: '$CI_COMMIT_REF_NAME == "main"'
+    -  when: manual
