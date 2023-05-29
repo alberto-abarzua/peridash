@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Substitute environment variables and create nginx.conf
-envsubst "*" < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/nginx.conf && nginx -t
+
+filtered_vars=$(printenv | awk -F '=' '/^NGINX_/ {print $1}')
+envsubst "$(printf '${%s} ' $filtered_vars)" < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/nginx.conf && nginx -t
 
 #show nginx.conf
 cat /etc/nginx/conf.d/nginx.conf

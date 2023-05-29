@@ -3,13 +3,13 @@ resources:
 namespace: dev-peridash
 images:
   - name: backend_image
-    newName: uintuser/dev-peridash-nginx
+    newName: uintuser/peridash-backend
     newTag: dev
   - name: frontend_image
-    newName: uintuser/dev-peridash-frontend
+    newName: uintuser/peridash-frontend
     newTag: dev
   - name: nginx_image
-    newName: uintuser/dev-peridash-nginx
+    newName: uintuser/peridash-nginx
     newTag: dev
     
 configMapGenerator:
