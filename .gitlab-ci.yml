@@ -13,6 +13,9 @@ stages:
   - test
   - build_and_push
 
+before_script:
+  -  if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; else export ENV_NAME=dev; fi
+
 build:
   stage: build
   script:
@@ -44,41 +47,56 @@ test_frontend:
 
 frontend:
   stage: build_and_push
+
   script:
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
-    - docker build -t $DOCKER_HUB_USER/dev-peridash-frontend:latest ./frontend
-    - docker push $DOCKER_HUB_USER/dev-peridash-frontend:latest
+    - docker build -t $DOCKER_HUB_USER/dev-peridash-frontend:$ENV_NAME ./frontend
+    - docker push $DOCKER_HUB_USER/dev-peridash-frontend:$ENV_NAME
+  environment:
+    name: $ENV_NAME
   rules:
     - changes:
         - frontend/**/*
       when: on_success
       if: '$CI_COMMIT_REF_NAME == "main"'
     -  when: manual
+  cache:
+    paths:
+      - ./docker
 
 
 backend:
   stage: build_and_push
   script:
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
-    - docker build -t $DOCKER_HUB_USER/dev-peridash-backend:latest ./backend
-    - docker push $DOCKER_HUB_USER/dev-peridash-backend:latest
+    - docker build -t $DOCKER_HUB_USER/dev-peridash-backend:$ENV_NAME ./backend
+    - docker push $DOCKER_HUB_USER/dev-peridash-backend:$ENV_NAME
+  environment:
+    name: $ENV_NAME
   rules:
     - changes:
         - backend/**/*
       when: on_success
       if: '$CI_COMMIT_REF_NAME == "main"'
     -  when: manual
-
+  cache:
+    paths:
+      - ./docker
 
 nginx:
   stage: build_and_push
   script:
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
-    - docker build -t $DOCKER_HUB_USER/dev-peridash-nginx:latest ./nginx
-    - docker push $DOCKER_HUB_USER/dev-peridash-nginx:latest
+    - docker build -t $DOCKER_HUB_USER/dev-peridash-nginx:$ENV_NAME ./nginx
+    - docker push $DOCKER_HUB_USER/dev-peridash-nginx:$ENV_NAME
+  environment:
+    name: $ENV_NAME
   rules:
     - changes:
         - nginx/**/*
       when: on_success
       if: '$CI_COMMIT_REF_NAME == "main"'
     -  when: manual
+  cache:
+    paths:
+      - ./docker
