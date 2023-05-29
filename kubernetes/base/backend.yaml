@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: uintuser/dev-peridash-backend:latest
+          image: backend_image
           imagePullPolicy: Always
           ports:
             - containerPort: 8000

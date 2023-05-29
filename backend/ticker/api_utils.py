@@ -57,7 +57,7 @@ class TwelveDataCore:
     DATE_FORMATS = ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d")
 
     def __init__(self) -> None:
-        self.api_key = os.environ.get("TWELVE_DATA_API_KEY")
+        self.api_key = os.environ.get("BACKEND_TWELVE_DATA_API_KEY")
         self.client = TDClient(apikey=self.api_key)
 
     def check_plan(self, elem):

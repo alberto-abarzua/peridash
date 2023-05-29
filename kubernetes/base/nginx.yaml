@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: uintuser/dev-peridash-nginx:latest
+          image: nginx_image
           imagePullPolicy: Always
           ports:
             - containerPort: 80

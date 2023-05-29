@@ -21,19 +21,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "secret")
+SECRET_KEY = os.environ.get("BACKEND_DJANGO_SECRET_KEY", "secret")
 
 # SECURITY WARNING: don't run with debug turned on in production.
-DEBUG = os.environ.get("DJANGO_DEBUG", "False").upper() == "TRUE"
+DEBUG = os.environ.get("BACKEND_DJANGO_DEUBG", "False").upper() == "TRUE"
 
+if os.environ.get("GLOBAL_RUN_ENV","prod") == "prod":
+    DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
+ALLOWED_HOSTS = os.environ.get("BACKEND_DJANGO_ALLOWED_HOSTS", "*").split(",")
 
-CORS_ALLOW_ALL_ORIGINS = os.environ.get("DJANGO_DEBUG", "False").upper() == "TRUE"
+CORS_ALLOW_ALL_ORIGINS = DEBUG
 
 if not CORS_ALLOW_ALL_ORIGINS:
-    cors_origin_whitelist = os.environ.get("DJANGO_CORS_WHITELIST", None)
-    if cors_origin_whitelist:
+    cors_origin_whitelist = os.environ.get("BACKEND_DJANGO_CORS_WHITELIST", None)
+    if cors_origin_whitelist is not None and cors_origin_whitelist != "":
         CORS_ALLOWED_ORIGINS = cors_origin_whitelist.split(",")
 
 # Application definition
@@ -90,11 +92,11 @@ WSGI_APPLICATION = "peridash.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB"),
-        "USER": os.environ.get("POSTGRES_USER"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-        "HOST": os.environ.get("POSTGRES_HOSTNAME"),
-        "PORT": int(os.environ.get("POSTGRES_PORT")),
+        "NAME": os.environ.get("BACKEND_POSTGRES_DB"),
+        "USER": os.environ.get("BACKEND_POSTGRES_USER"),
+        "PASSWORD": os.environ.get("BACKEND_POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("BACKEND_POSTGRES_HOSTNAME"),
+        "PORT": int(os.environ.get("BACKEND_POSTGRES_PORT")),
         "TEST": {
             "NAME": "mytestdatabase",
         },
@@ -104,7 +106,7 @@ DATABASES = {
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": f"{os.environ.get('CACHE_HOSTNAME')}:{os.environ.get('CACHE_PORT')}",
+        "LOCATION": f"{os.environ.get('BACKEND_CACHE_HOSTNAME')}:{os.environ.get('BACKEND_CACHE_PORT')}",
         "TIMEOUT": None,
     }
 }

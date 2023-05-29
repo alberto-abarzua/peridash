@@ -31,7 +31,7 @@ const verifyAuth = async req => {
     }
     try {
         const response = await axios.get(
-            process.env.PRIVATE_BACKEND_URL + '/user/me/',
+            process.env.NEXT_PRIVATE_BACKEND_URL + '/user/me/',
             { headers: { Authorization: `Token ${token}` } }
         );
         return response.status === 200;

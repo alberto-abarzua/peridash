@@ -1,0 +1,27 @@
+resources:
+- ../base
+namespace: dev-peridash
+images:
+  - name: backend_image
+    newName: uintuser/dev-peridash-nginx
+    newTag: dev
+  - name: frontend_image
+    newName: uintuser/dev-peridash-frontend
+    newTag: dev
+  - name: nginx_image
+    newName: uintuser/dev-peridash-nginx
+    newTag: dev
+    
+configMapGenerator:
+- name: backend-env
+  envs:
+  - ./envs/BACKEND.env
+- name: nginx-env
+  envs:
+  - ./envs/NGINX.env
+- name: frontend-env
+  envs:
+  - ./envs/NEXT.env
+- name: db-env
+  envs:
+  - ./envs/POSTGRES.env

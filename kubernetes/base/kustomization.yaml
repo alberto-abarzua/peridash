@@ -1,0 +1,6 @@
+resources:
+  - backend.yaml
+  - frontend.yaml
+  - nginx.yaml
+  - db.yaml
+  - memcached.yaml
