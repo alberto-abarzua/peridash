@@ -37,7 +37,7 @@ if not CORS_ALLOW_ALL_ORIGINS:
         CORS_ALLOWED_ORIGINS = cors_origin_whitelist.split(",")
 
 # Application definition
-
+APPEND_SLASH = False
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
