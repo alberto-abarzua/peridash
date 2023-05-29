@@ -131,8 +131,8 @@ AUTH_PASSWORD_VALIDATORS = [
 APPEND_SLASH = False
 
 REST_FRAMEWORK = {
-    'URL_FORMAT_OVERRIDE': None,
-    'APPEND_SLASH': False, 
+    "URL_FORMAT_OVERRIDE": None,
+    "APPEND_SLASH": False,
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
     ],
