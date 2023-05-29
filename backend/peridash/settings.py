@@ -39,9 +39,6 @@ if not CORS_ALLOW_ALL_ORIGINS:
         CORS_ALLOWED_ORIGINS = cors_origin_whitelist.split(",")
 
 
-print(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")
-print(f"CORS_ALLOW_ALL_ORIGINS: {CORS_ALLOW_ALL_ORIGINS}")
-print(f"CORS_ALLOWED_ORIGINS: {CORS_ALLOWED_ORIGINS}")
 # Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
