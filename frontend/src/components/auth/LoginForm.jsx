@@ -1,26 +1,22 @@
+import { createToken, getToken } from '@/utils/auth';
 import { Box } from '@mui/material';
 
-import api from '@/utils/api';
-import {createToken} from '@/utils/auth';
-import React, { useState,useEffect } from 'react';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
 import styles from './LoginForm.module.css';
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-
+    const router = useRouter(); // Initialize useRouter
     const handleSubmit = async event => {
         event.preventDefault();
-       
-        createToken(email, password)
 
-
-        if (response.data && response.data.token) {
-            localStorage.setItem('authToken', response.data.token);
-            // go to home page
-
-            window.location.reload();
+        let success = await createToken(email, password);
+        console.log(success);
+        console.log(getToken());
+        if (success) {
+            router.push('/');
         }
     };
     return (
