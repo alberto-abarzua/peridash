@@ -25,6 +25,7 @@ const removeToken = () => {
 
 const verifyAuth = async req => {
     const token = req.cookies.authToken;
+    console.log('token', token);
     if (!token) {
         return false;
     }
@@ -43,6 +44,7 @@ const verifyAuth = async req => {
 function withAuth(getServerSidePropsFunc) {
     return async context => {
         const authenticated = await verifyAuth(context.req);
+        console.log('authenticated', authenticated);
         if (!authenticated) {
             return {
                 redirect: {
