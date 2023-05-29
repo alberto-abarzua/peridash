@@ -24,16 +24,13 @@ const removeToken = () => {
 };
 
 const verifyAuth = async req => {
-    if (process.env.RUN_ENV != 'prod') {
-        return true;
-    }
     const token = req.cookies.authToken;
     if (!token) {
         return false;
     }
     try {
         const response = await axios.get(
-            process.env.NEXT_PUBLIC_BACKEND_URL + '/user/me/',
+            process.env.PRIVATE_BACKEND_URL + '/user/me/',
             { headers: { Authorization: `Token ${token}` } }
         );
         return response.status === 200;
@@ -46,7 +43,6 @@ const verifyAuth = async req => {
 function withAuth(getServerSidePropsFunc) {
     return async context => {
         const authenticated = await verifyAuth(context.req);
-        console.log('authenticated', authenticated);
         if (!authenticated) {
             return {
                 redirect: {

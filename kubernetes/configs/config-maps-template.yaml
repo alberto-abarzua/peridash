@@ -44,3 +44,4 @@ metadata:
 data:
   NEXT_PUBLIC_BACKEND_URL: "http://api.dev.peridash.com"
   RUN_ENV: prod
+  PRIVATE_BACKEND_URL: "http://backend.dev-peridash:8000"
