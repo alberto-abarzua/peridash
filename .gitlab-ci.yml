@@ -74,8 +74,8 @@ frontend:
   script:
     - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
-    - docker build -t $DOCKER_HUB_USER/dev-peridash-frontend:$ENV_NAME ./frontend
-    - docker push $DOCKER_HUB_USER/dev-peridash-frontend:$ENV_NAME
+    - docker build -t $DOCKER_HUB_USER/peridash-frontend:$ENV_NAME ./frontend
+    - docker push $DOCKER_HUB_USER/peridash-frontend:$ENV_NAME
   environment:
     name: $ENV_NAME
   rules:
@@ -94,8 +94,8 @@ backend:
   script:
     - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
-    - docker build -t $DOCKER_HUB_USER/dev-peridash-backend:$ENV_NAME ./backend
-    - docker push $DOCKER_HUB_USER/dev-peridash-backend:$ENV_NAME
+    - docker build -t $DOCKER_HUB_USER/peridash-backend:$ENV_NAME ./backend
+    - docker push $DOCKER_HUB_USER/peridash-backend:$ENV_NAME
   environment:
     name: $ENV_NAME
   rules:
@@ -113,8 +113,8 @@ nginx:
   script:
     - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
-    - docker build -t $DOCKER_HUB_USER/dev-peridash-nginx:$ENV_NAME ./nginx
-    - docker push $DOCKER_HUB_USER/dev-peridash-nginx:$ENV_NAME
+    - docker build -t $DOCKER_HUB_USER/peridash-nginx:$ENV_NAME ./nginx
+    - docker push $DOCKER_HUB_USER/peridash-nginx:$ENV_NAME
   environment:
     name: $ENV_NAME
   rules:
