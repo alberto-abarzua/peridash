@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get("BACKEND_DJANGO_SECRET_KEY", "secret")
 # SECURITY WARNING: don't run with debug turned on in production.
 DEBUG = os.environ.get("BACKEND_DJANGO_DEUBG", "False").upper() == "TRUE"
 
-if os.environ.get("GLOBAL_RUN_ENV","prod") == "prod":
+if os.environ.get("GLOBAL_RUN_ENV", "prod") == "prod":
     DEBUG = False
 
 ALLOWED_HOSTS = os.environ.get("BACKEND_DJANGO_ALLOWED_HOSTS", "*").split(",")
@@ -103,10 +103,14 @@ DATABASES = {
     }
 }
 
+cache_hostname = os.environ.get("BACKEND_CACHE_HOSTNAME", None)
+cache_port = os.environ.get("BACKEND_CACHE_PORT", None)
+
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": f"{os.environ.get('BACKEND_CACHE_HOSTNAME')}:{os.environ.get('BACKEND_CACHE_PORT')}",
+        "LOCATION": f"{cache_hostname}:{cache_port}",
         "TIMEOUT": None,
     }
 }

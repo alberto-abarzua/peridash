@@ -3,14 +3,14 @@
 echo "Must be called from the root of the project"
 
 output_dir=$1
-input_file=$2
-apply=$3
-cp $input_file $output_dir/.env
+apply=$2
 
+input_file=$output_dir/.env
 
 env_dir=$output_dir/envs
 
-echo "Creating envs in $env_dir"
+
+echo "Creating envs in $env_dir using $input_file"
 # delete env_dir if it exists
 if [ -d "$env_dir" ]; then
     rm -r "$env_dir"
@@ -47,4 +47,3 @@ fi
 
 
 rm -r "$env_dir"
-rm $output_dir/.env
