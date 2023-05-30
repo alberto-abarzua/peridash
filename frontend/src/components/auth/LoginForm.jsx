@@ -13,8 +13,6 @@ const LoginForm = () => {
         event.preventDefault();
 
         let success = await createToken(email, password);
-        console.log(success);
-        console.log(getToken());
         if (success) {
             router.push('/');
         }

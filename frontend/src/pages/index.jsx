@@ -1,8 +1,6 @@
 import { withAuth } from '@/utils/auth';
 import { Grid } from '@mui/material';
 const DashPage = () => {
-    console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
-
     return (
         <div>
             <h1>Test home</h1>
