@@ -3,7 +3,6 @@ import api from '@/utils/api';
 import axios from 'axios';
 import cookie from 'js-cookie';
 const createToken = async (email, password) => {
-    console.log('createToken', email, password);
     const response = await api.post('/user/token/', { email, password });
     if (response.status === 200 && response.data && response.data.token) {
         setToken(response.data.token);
@@ -13,7 +12,7 @@ const createToken = async (email, password) => {
 };
 
 const setToken = token => {
-    cookie.set('authToken', token);
+    cookie.set('authToken', token,{secure: true});
 };
 
 const getToken = () => {
@@ -26,7 +25,6 @@ const removeToken = () => {
 
 const verifyAuth = async req => {
     const token = req.cookies.authToken;
-    console.log('token', token);
     if (!token) {
         return false;
     }
@@ -45,7 +43,6 @@ const verifyAuth = async req => {
 function withAuth(getServerSidePropsFunc) {
     return async context => {
         const authenticated = await verifyAuth(context.req);
-        console.log('authenticated', authenticated);
         if (!authenticated) {
             return {
                 redirect: {

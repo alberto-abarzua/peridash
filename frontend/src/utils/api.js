@@ -19,7 +19,6 @@ api.interceptors.request.use(
         if (token) {
             config.headers.Authorization = `Token ${token}`;
         }
-        console.log('url', config.url);
         return config;
     },
     error => {

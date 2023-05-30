@@ -100,10 +100,10 @@ frontend:
   environment:
     name: $ENV_NAME
   rules:
-    - changes:
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      changes:
         - frontend/**/*
       when: on_success
-      if: '$CI_COMMIT_REF_NAME == "main"'
 
 
 backend:
@@ -115,35 +115,33 @@ backend:
   environment:
     name: $ENV_NAME
   rules:
-    - changes:
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      changes:
         - backend/**/*
       when: on_success
-      if: '$CI_COMMIT_REF_NAME == "main"'
 
 rollout_backend:
   stage: rollout
   script:
     - echo $K8S_TOKEN | kubectl config set-credentials gitlab-ci --token=-
-    - kubectl config set-context --current --namespace=your-namespace
     - kubectl rollout restart deployment backend -n $ENV_NAME-peridash
   environment:
     name: $ENV_NAME
   rules:
-    - changes:
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      changes:
         - backend/**/*
       when: on_success
-      if: '$CI_COMMIT_REF_NAME == "main"'
 
 rollout_frontend:
   stage: rollout
   script:
     - echo $K8S_TOKEN | kubectl config set-credentials gitlab-ci --token=-
-    - kubectl config set-context --current --namespace=your-namespace
     - kubectl rollout restart deployment backend -n $ENV_NAME-peridash
   environment:
     name: $ENV_NAME
   rules:
-    - changes:
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      changes:
         - frontend/**/*
       when: on_success
-      if: '$CI_COMMIT_REF_NAME == "main"'
