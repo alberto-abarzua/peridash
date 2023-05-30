@@ -122,6 +122,7 @@ backend:
 
 rollout_backend:
   stage: rollout
+  image: bitnami/kubectl:latest
   script:
     - echo $K8S_TOKEN | kubectl config set-credentials gitlab-ci --token=-
     - kubectl rollout restart deployment backend -n $ENV_NAME-peridash
@@ -135,6 +136,7 @@ rollout_backend:
 
 rollout_frontend:
   stage: rollout
+  image: bitnami/kubectl:latest
   script:
     - echo $K8S_TOKEN | kubectl config set-credentials gitlab-ci --token=-
     - kubectl rollout restart deployment backend -n $ENV_NAME-peridash
