@@ -6,4 +6,3 @@ fi
 
 kubectl rollout restart deployment frontend -n $1
 kubectl rollout restart deployment backend -n $1
-kubectl rollout restart deployment nginx -n $1
