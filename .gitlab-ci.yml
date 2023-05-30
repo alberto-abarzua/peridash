@@ -9,11 +9,11 @@ variables:
   ENV_NAME: dev
 
 stages:
-  - rollout
   - build
   - lint
   - test
   - build_and_push
+  - rollout
 
 build:
   stage: build
@@ -102,7 +102,7 @@ frontend:
   rules:
     - changes:
         - frontend/**/*
-      if: '$CI_COMMIT_REF_NAME'
+      if: '$CI_COMMIT_REF_NAME == "main"' 
       when: on_success
     - if: '$CI_COMMIT_REF_NAME == "main"'
       when: manual
@@ -120,7 +120,7 @@ backend:
   rules:
     - changes:
         - backend/**/*
-      if: '$CI_COMMIT_REF_NAME'
+      if: '$CI_COMMIT_REF_NAME == "main"'
       when: on_success
     - if: '$CI_COMMIT_REF_NAME == "main"'
       when: manual
@@ -138,12 +138,11 @@ rollout_backend:
   rules:
     - changes:
         - backend/**/*
-      if: '$CI_COMMIT_REF_NAME'
+      if: '$CI_COMMIT_REF_NAME == "main"'
       when: on_success
       
     - if: '$CI_COMMIT_REF_NAME == "main"'
       when: manual
-    - when: manual
 
 rollout_frontend:
   stage: rollout
@@ -158,8 +157,7 @@ rollout_frontend:
   rules:
     - changes:
         - frontend/**/*
-      if: '$CI_COMMIT_REF_NAME'
+      if: '$CI_COMMIT_REF_NAME == "main"'
       when: on_success
     - if: '$CI_COMMIT_REF_NAME == "main"'
       when: manual
-    - when: manual
