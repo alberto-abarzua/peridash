@@ -100,10 +100,13 @@ frontend:
   environment:
     name: $ENV_NAME
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "main"'
-      changes:
+    - changes:
         - frontend/**/*
+      if: '$CI_COMMIT_REF_NAME'
       when: on_success
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: manual
+
 
 
 backend:
@@ -115,10 +118,12 @@ backend:
   environment:
     name: $ENV_NAME
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "main"'
-      changes:
+    - changes:
         - backend/**/*
+      if: '$CI_COMMIT_REF_NAME'
       when: on_success
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: manual
 
 rollout_backend:
   stage: rollout
@@ -129,10 +134,13 @@ rollout_backend:
   environment:
     name: $ENV_NAME
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "main"'
-      changes:
+    - changes:
         - backend/**/*
+      if: '$CI_COMMIT_REF_NAME'
       when: on_success
+      
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: manual
 
 rollout_frontend:
   stage: rollout
@@ -143,7 +151,9 @@ rollout_frontend:
   environment:
     name: $ENV_NAME
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "main"'
-      changes:
+    - changes:
         - frontend/**/*
+      if: '$CI_COMMIT_REF_NAME'
       when: on_success
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: manual
