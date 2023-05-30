@@ -25,6 +25,8 @@ build:
         - backend/**/*
         - frontend/**/*
         - docker-compose.yml
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: always
   environment:
     name: $ENV_NAME
 
@@ -36,6 +38,9 @@ lint_backend:
   rules:
     - changes:
         - backend/**/*
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: always
+    
   environment:
     name: $ENV_NAME
 
@@ -46,6 +51,9 @@ lint_frontend:
   rules:
     - changes:
         - frontend/**/*
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: always
+    
   environment:
     name: $ENV_NAME
 
@@ -60,9 +68,13 @@ test_backend:
         - backend/**/*
         - docker-compose.yml
       when: on_success
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: always
+    
   cache:
     paths:
       - ./docker
+
 test_frontend:
   stage: test
   script:
@@ -74,6 +86,8 @@ test_frontend:
         - frontend/**/*
         - docker-compose.yml
       when: on_success
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+      when: always
 
 
 frontend:
@@ -105,6 +119,7 @@ backend:
         - backend/**/*
       when: on_success
       if: '$CI_COMMIT_REF_NAME == "main"'
+
 rollout_backend:
   stage: rollout
   script:
