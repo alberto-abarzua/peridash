@@ -12,7 +12,7 @@ const createToken = async (email, password) => {
 };
 
 const setToken = token => {
-    cookie.set('authToken', token,{secure: true});
+    cookie.set('authToken', token, { secure: true });
 };
 
 const getToken = () => {
