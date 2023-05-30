@@ -13,66 +13,73 @@ stages:
   - lint
   - test
   - build_and_push
+  - rollout
 
 build:
   stage: build
   script:
-    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker compose build
+  rules:
+    - changes:
+        - backend/**/*
+        - frontend/**/*
+        - docker-compose.yml
   environment:
     name: $ENV_NAME
-  cache:
-    paths:
-      - ./docker
-  
+
 
 lint_backend:
   stage: lint
   script:
-    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker-compose run --rm backend pdm run lint
+  rules:
+    - changes:
+        - backend/**/*
   environment:
     name: $ENV_NAME
-  cache:
-    paths:
-      - ./docker
+
 lint_frontend:
   stage: lint
   script:
-    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker-compose run --rm frontend npm lint_no_fix
+  rules:
+    - changes:
+        - frontend/**/*
   environment:
     name: $ENV_NAME
-  cache:
-    paths:
-      - ./docker
+
 test_backend:
   stage: test
   script:
-    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker compose run --rm backend pdm run test
   environment:
     name: $ENV_NAME
+  rules:
+    - changes:
+        - backend/**/*
+        - docker-compose.yml
+      when: on_success
   cache:
     paths:
       - ./docker
 test_frontend:
   stage: test
   script:
-    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker compose run --rm frontend npm run test_no_watch
   environment:
     name: $ENV_NAME
-  cache:
-    paths:
-      - ./docker
+  rules:
+    - changes:
+        - frontend/**/*
+        - docker-compose.yml
+      when: on_success
+
 
 frontend:
   stage: build_and_push
 
   script:
-    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
     - docker build -t $DOCKER_HUB_USER/peridash-frontend:$ENV_NAME ./frontend
     - docker push $DOCKER_HUB_USER/peridash-frontend:$ENV_NAME
@@ -83,16 +90,11 @@ frontend:
         - frontend/**/*
       when: on_success
       if: '$CI_COMMIT_REF_NAME == "main"'
-    -  when: manual
-  cache:
-    paths:
-      - ./docker
 
 
 backend:
   stage: build_and_push
   script:
-    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
     - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
     - docker build -t $DOCKER_HUB_USER/peridash-backend:$ENV_NAME ./backend
     - docker push $DOCKER_HUB_USER/peridash-backend:$ENV_NAME
@@ -103,26 +105,30 @@ backend:
         - backend/**/*
       when: on_success
       if: '$CI_COMMIT_REF_NAME == "main"'
-    -  when: manual
-  cache:
-    paths:
-      - ./docker
-
-nginx:
-  stage: build_and_push
+rollout_backend:
+  stage: rollout
   script:
-    # - if [ "$CI_COMMIT_REF_NAME" == "main" ]; then export ENV_NAME=main; fi
-    - docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
-    - docker build -t $DOCKER_HUB_USER/peridash-nginx:$ENV_NAME ./nginx
-    - docker push $DOCKER_HUB_USER/peridash-nginx:$ENV_NAME
+    - echo $K8S_TOKEN | kubectl config set-credentials gitlab-ci --token=-
+    - kubectl config set-context --current --namespace=your-namespace
+    - kubectl rollout restart deployment backend -n $ENV_NAME-peridash
   environment:
     name: $ENV_NAME
   rules:
     - changes:
-        - nginx/**/*
+        - backend/**/*
       when: on_success
       if: '$CI_COMMIT_REF_NAME == "main"'
-    -  when: manual
-  cache:
-    paths:
-      - ./docker
+
+rollout_frontend:
+  stage: rollout
+  script:
+    - echo $K8S_TOKEN | kubectl config set-credentials gitlab-ci --token=-
+    - kubectl config set-context --current --namespace=your-namespace
+    - kubectl rollout restart deployment backend -n $ENV_NAME-peridash
+  environment:
+    name: $ENV_NAME
+  rules:
+    - changes:
+        - frontend/**/*
+      when: on_success
+      if: '$CI_COMMIT_REF_NAME == "main"'

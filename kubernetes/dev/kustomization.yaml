@@ -8,20 +8,34 @@ images:
   - name: frontend_image
     newName: uintuser/peridash-frontend
     newTag: dev
-  - name: nginx_image
-    newName: uintuser/peridash-nginx
-    newTag: dev
-    
+
 configMapGenerator:
 - name: backend-env
   envs:
   - ./envs/BACKEND.env
-- name: nginx-env
-  envs:
-  - ./envs/NGINX.env
+
 - name: frontend-env
   envs:
   - ./envs/NEXT.env
 - name: db-env
   envs:
   - ./envs/POSTGRES.env
+
+patches:
+- target:
+    version: v1
+    kind: Ingress
+    name: ingress
+  patch: |-
+    - op: replace
+      path: /spec/rules/0/host
+      value: dev.peridash.com
+    - op: replace
+      path: /spec/rules/1/host
+      value: api.dev.peridash.com
+    - op: replace
+      path: /spec/tls/0/hosts/0
+      value: dev.peridash.com
+    - op: replace
+      path: /spec/tls/0/hosts/1
+      value: api.dev.peridash.com
