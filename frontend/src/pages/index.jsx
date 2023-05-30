@@ -1,5 +1,5 @@
+import { withAuth } from '@/utils/auth';
 import { Grid } from '@mui/material';
-
 const DashPage = () => {
     console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
 
@@ -15,5 +15,6 @@ const DashPage = () => {
         </div>
     );
 };
+export const getServerSideProps = withAuth();
 
 export default DashPage;

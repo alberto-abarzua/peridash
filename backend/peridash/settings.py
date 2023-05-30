@@ -21,22 +21,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "secret")
+SECRET_KEY = os.environ.get("BACKEND_DJANGO_SECRET_KEY", "secret")
 
 # SECURITY WARNING: don't run with debug turned on in production.
-DEBUG = bool(os.environ.get("DJANGO_DEBUG", "False"))
+DEBUG = os.environ.get("BACKEND_DJANGO_DEUBG", "False").upper() == "TRUE"
 
-ALLOWED_HOSTS = [os.environ.get("DJANGO_ALLOWED_HOSTS", "*")]
+if os.environ.get("GLOBAL_RUN_ENV", "prod") == "prod":
+    DEBUG = False
 
-CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = os.environ.get("BACKEND_DJANGO_ALLOWED_HOSTS").split(",")
 
-# CORS_ORIGIN_WHITELIST = [
-#     'http://localhost:3000',
-#     'http://your-other-domain.com',
-# ]
+CORS_ALLOW_ALL_ORIGINS = DEBUG
+
+if not CORS_ALLOW_ALL_ORIGINS:
+    cors_origin_whitelist = os.environ.get("BACKEND_DJANGO_CORS_WHITELIST", None)
+    if cors_origin_whitelist:
+        CORS_ALLOWED_ORIGINS = cors_origin_whitelist.split(",")
+
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -90,21 +93,25 @@ WSGI_APPLICATION = "peridash.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB"),
-        "USER": os.environ.get("POSTGRES_USER"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-        "HOST": os.environ.get("POSTGRES_HOSTNAME"),
-        "PORT": os.environ.get("POSTGRES_PORT"),
+        "NAME": os.environ.get("BACKEND_POSTGRES_DB"),
+        "USER": os.environ.get("BACKEND_POSTGRES_USER"),
+        "PASSWORD": os.environ.get("BACKEND_POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("BACKEND_POSTGRES_HOSTNAME"),
+        "PORT": int(os.environ.get("BACKEND_POSTGRES_PORT")),
         "TEST": {
             "NAME": "mytestdatabase",
         },
     }
 }
 
+cache_hostname = os.environ.get("BACKEND_CACHE_HOSTNAME", None)
+cache_port = os.environ.get("BACKEND_CACHE_PORT", None)
+
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": f"{os.environ.get('CACHE_HOSTNAME')}:{os.environ.get('CACHE_PORT')}",
+        "LOCATION": f"{cache_hostname}:{cache_port}",
         "TIMEOUT": None,
     }
 }
@@ -128,7 +135,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+APPEND_SLASH = False
+
 REST_FRAMEWORK = {
+    "URL_FORMAT_OVERRIDE": None,
+    "APPEND_SLASH": False,
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
     ],
@@ -150,6 +161,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

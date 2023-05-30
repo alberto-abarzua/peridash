@@ -12,7 +12,6 @@ services:
 
   backend:
     build: ./backend
-    command: sh -c "pdm run python manage.py migrate && pdm run python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend/user:/app/user
       - ./backend/ticker:/app/ticker
@@ -26,22 +25,26 @@ services:
       - db
       - memcached
     environment:
-      - DB_NAME
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
-      - POSTGRES_HOSTNAME
-      - POSTGRES_PORT
-      - TWELVE_DATA_API_KEY
-      - CACHE_HOSTNAME
-      - CACHE_PORT
+      - BACKEND_DJANGO_DEUBG
+      - BACKEND_DJANGO_SECRET_KEY
+      - BACKEND_DJANGO_ALLOWED_HOSTS
+      - BACKEND_DJANGO_CORS_WHITELIST
+      - BACKEND_POSTGRES_USER
+      - BACKEND_POSTGRES_PASSWORD
+      - BACKEND_POSTGRES_DB
+      - BACKEND_POSTGRES_HOSTNAME
+      - BACKEND_POSTGRES_PORT
+      - BACKEND_CACHE_HOSTNAME
+      - BACKEND_CACHE_PORT
+      - BACKEND_TWELVE_DATA_API_KEY
+      - GLOBAL_RUN_ENV
+
   memcached:
     image: memcached:1.6.19-bullseye
     command: memcached -m 128
 
   frontend:
     build: ./frontend
-    command: npm run dev
     volumes:
       - ./frontend/src:/app/src
       - ./frontend/package.json:/app/package.json
@@ -51,6 +54,7 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_BACKEND_URL
-
+      - NEXT_PRIVATE_BACKEND_URL
+      - GLOBAL_RUN_ENV
 volumes:
   postgres_data:
