@@ -1,5 +1,4 @@
 import { withAuth } from '@/utils/auth';
-import { Grid } from '@mui/material';
 const DashPage = () => {
     return (
         <div>
