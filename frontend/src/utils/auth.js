@@ -63,4 +63,11 @@ function withAuth(getServerSidePropsFunc) {
     };
 }
 
-export { setToken, getToken, removeToken, createToken, verifyAuth, withAuth };
+function logout() {
+    removeToken();
+    // reload docuemnt to clear all state
+    window.location.href = '/';
+
+}
+
+export { setToken, getToken, removeToken, createToken, verifyAuth, withAuth, logout };

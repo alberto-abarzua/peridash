@@ -2,7 +2,7 @@ import '@/styles/globals.css';
 
 import Navbar from '@/components/layout/Navbar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 
 const theme = createTheme({
@@ -17,15 +17,21 @@ const theme = createTheme({
 });
 
 export default function MainApp({ Component, pageProps }) {
+    const router = useRouter();
+    const cur_route = router.pathname;
+    let nav = <Navbar />;
+    if (cur_route === '/login') {
+        nav = null;
+    }
     return (
         <ThemeProvider theme={theme}>
-            <Navbar />
-            <Component {...pageProps} />;
+            {nav}
+            <Component {...pageProps} />
         </ThemeProvider>
     );
 }
 
 MainApp.propTypes = {
     Component: PropTypes.elementType.isRequired,
-    pageProps: PropTypes.object,
+    pageProps: PropTypes.object.isRequired,
 };
