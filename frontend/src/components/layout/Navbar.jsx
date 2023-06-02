@@ -1,3 +1,8 @@
+import Link from '@/components/layout/Link';
+import { logout } from '@/utils/auth';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SettingsIcon from '@mui/icons-material/Settings';
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
 import {
     AppBar,
@@ -11,15 +16,11 @@ import {
     Divider,
     Box,
 } from '@mui/material';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import { useTheme } from '@mui/material/styles';
 
-import Link from '@/components/layout/Link';
 import { useState } from 'react';
-import SettingsIcon from '@mui/icons-material/Settings';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
-import LogoutIcon from '@mui/icons-material/Logout';
-import {logout} from '@/utils/auth';
+
 export default function Navbar() {
     const theme = useTheme();
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -48,7 +49,7 @@ export default function Navbar() {
     const drawer = (
         <div>
             <List>
-                {navLinks.map((link, index) => (
+                {navLinks.map(link => (
                     <Link href={link.path} key={link.title}>
                         <ListItem button>
                             <ListItemIcon>
@@ -62,15 +63,13 @@ export default function Navbar() {
                         </ListItem>
                     </Link>
                 ))}
-                <Divider/>
-                <ListItem button onClick = {logout}>
+                <Divider />
+                <ListItem button onClick={logout}>
                     <ListItemIcon>
                         <LogoutIcon sx={{ color: 'red' }} />
                     </ListItemIcon>
                     <ListItemText primary="Logout" sx={{ color: 'white' }} />
                 </ListItem>
-
-
             </List>
         </div>
     );

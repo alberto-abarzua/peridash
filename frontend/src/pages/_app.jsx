@@ -2,6 +2,7 @@ import '@/styles/globals.css';
 
 import Navbar from '@/components/layout/Navbar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 
@@ -18,9 +19,8 @@ const theme = createTheme({
 
 export default function MainApp({ Component, pageProps }) {
     const router = useRouter();
-    const cur_route = router.pathname;
     let nav = <Navbar />;
-    if (cur_route === '/login') {
+    if (router.pathname === '/login') {
         nav = null;
     }
     return (

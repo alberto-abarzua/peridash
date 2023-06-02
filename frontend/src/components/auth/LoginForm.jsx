@@ -1,45 +1,89 @@
-import { createToken, getToken } from '@/utils/auth';
-import { Box } from '@mui/material';
+import { createToken } from '@/utils/auth';
+import {
+    Container,
+    TextField,
+    Button,
+    Typography,
+    Box,
+    Card,
+} from '@mui/material';
 
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import styles from './LoginForm.module.css';
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const router = useRouter(); // Initialize useRouter
+    const router = useRouter();
+
     const handleSubmit = async event => {
         event.preventDefault();
+        const success = await createToken(email, password);
 
-        let success = await createToken(email, password);
         if (success) {
             router.push('/');
         }
     };
+
     return (
-        <Box className={styles.outerGrid}>
-            <h1 className={styles.title}>Please Login</h1>
-            <form onSubmit={handleSubmit}>
-                <Box className={styles.loginForm}>
-                    <input
-                        type="input"
-                        placeholder="email"
+        <Container component="main" maxWidth="xs">
+            <Card
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    backgroundColor: 'white',
+                    padding: '20px',
+                }}
+            >
+                <Typography component="h1" variant="h5">
+                    Please Login
+                </Typography>
+                <Box
+                    component="form"
+                    noValidate
+                    sx={{ mt: 1, width: '100%' }}
+                    onSubmit={handleSubmit}
+                >
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
                         value={email}
                         onChange={e => setEmail(e.target.value)}
-                        required={true}
                     />
-                    <input
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
                         type="password"
-                        placeholder="Password"
+                        id="password"
+                        autoComplete="current-password"
                         value={password}
                         onChange={e => setPassword(e.target.value)}
-                        required={true}
                     />
-                    <button type="submit">Login</button>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        sx={{ mt: 3, mb: 2 }}
+                    >
+                        Login
+                    </Button>
                 </Box>
-            </form>
-        </Box>
+            </Card>
+        </Container>
     );
 };
 
