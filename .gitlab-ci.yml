@@ -100,9 +100,7 @@ frontend:
   environment:
     name: $ENV_NAME
   rules:
-    - changes:
-        - frontend/**/*
-      if: '$CI_COMMIT_REF_NAME == "main"' 
+    - if: '$CI_COMMIT_REF_NAME == "main"' 
       when: on_success
     - if: '$CI_COMMIT_REF_NAME == "main"'
       when: manual
@@ -118,9 +116,7 @@ backend:
   environment:
     name: $ENV_NAME
   rules:
-    - changes:
-        - backend/**/*
-      if: '$CI_COMMIT_REF_NAME == "main"'
+    - if: '$CI_COMMIT_REF_NAME == "main"'
       when: on_success
     - if: '$CI_COMMIT_REF_NAME == "main"'
       when: manual
