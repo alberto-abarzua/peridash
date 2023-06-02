@@ -47,7 +47,7 @@ lint_backend:
 lint_frontend:
   stage: lint
   script:
-    - docker-compose run --rm frontend npm lint_no_fix
+    - docker-compose run --rm frontend npm run lint_no_fix
   rules:
     - changes:
         - frontend/**/*
