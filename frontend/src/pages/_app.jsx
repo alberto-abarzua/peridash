@@ -1,12 +1,37 @@
 import '@/styles/globals.css';
 
+import Navbar from '@/components/layout/Navbar';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 
-export default function MyApp({ Component, pageProps }) {
-    return <Component {...pageProps} />;
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#558b2f',
+        },
+        secondary: {
+            main: '#191819',
+        },
+    },
+});
+
+export default function MainApp({ Component, pageProps }) {
+    const router = useRouter();
+    const cur_route = router.pathname;
+    let nav = <Navbar />;
+    if (cur_route === '/login') {
+        nav = null;
+    }
+    return (
+        <ThemeProvider theme={theme}>
+            {nav}
+            <Component {...pageProps} />
+        </ThemeProvider>
+    );
 }
 
-MyApp.propTypes = {
+MainApp.propTypes = {
     Component: PropTypes.elementType.isRequired,
-    pageProps: PropTypes.object,
+    pageProps: PropTypes.object.isRequired,
 };
