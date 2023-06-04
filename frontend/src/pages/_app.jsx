@@ -13,6 +13,7 @@ const theme = createTheme({
         },
         secondary: {
             main: '#191819',
+            dark: 'rgba(9, 9, 9, 0.1)',
         },
     },
 });

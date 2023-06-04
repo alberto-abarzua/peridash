@@ -78,7 +78,11 @@ export default function Navbar() {
         <div>
             <AppBar
                 position="static"
-                sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}
+                sx={{
+                    backgroundColor: 'transparent',
+                    boxShadow: 'none',
+                    mb: '2rem',
+                }}
             >
                 <Toolbar>
                     <IconButton
@@ -87,9 +91,10 @@ export default function Navbar() {
                         aria-label="menu"
                         onClick={handleDrawerToggle}
                     >
-                        <StackedLineChartIcon />
+                        <StackedLineChartIcon sx={{ fontSize: 40 }} />{' '}
+                        <Box m={1} />
+                        <Typography variant="h4">Peridash</Typography>
                     </IconButton>
-                    <Typography variant="h6">Peridash</Typography>
                 </Toolbar>
             </AppBar>
             <Drawer

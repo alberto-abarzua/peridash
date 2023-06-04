@@ -17,7 +17,7 @@ class TickerApiTests(APITestCase):
             name="test_user_name", email="test@me.com", password="testpass123"
         )
         self.client.force_authenticate(user=self.user)
-        self.ticker_settings = TickerSettings.objects.create(user=self.user)
+        self.ticker_settings, _ = TickerSettings.objects.get_or_create(user=self.user)
 
     def test_search_endpoint(self):
         res = self.client.get(reverse("ticker:search"), {"q": "appl"})

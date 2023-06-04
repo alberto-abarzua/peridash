@@ -54,16 +54,18 @@ class TickerSettingsViewSet(viewsets.ModelViewSet):
     queryset = TickerSettings.objects.all()
     lookup_field = "user"
 
-    def get_queryset(self):
-        return TickerSettings.objects.filter(user=self.request.user)
+    def get_queryset(self, request):
+        settings, _ = TickerSettings.objects.get_or_create(user=request.user)
+        return settings
 
     def retrieve(self, request):
-        settings = TickerSettings.objects.get(user=request.user)
+        settings, _ = TickerSettings.objects.get_or_create(user=request.user)
+
         serializer = TickerSettingsSerializer(settings)
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
-        settings = TickerSettings.objects.get(user=request.user)
+        settings, _ = TickerSettings.objects.get_or_create(user=request.user)
         partial = request.data.pop("partial", False)
         # add user to data
         serializer = TickerSettingsSerializer(
@@ -82,17 +84,18 @@ class UserTickerViewSet(viewsets.ModelViewSet):
     queryset = Ticker.objects.all()
 
     def get_queryset(self):
-        ticker_settings = TickerSettings.objects.get(user=self.request.user)
-        return ticker_settings.user_tickers.all()
+        settings, _ = TickerSettings.objects.get_or_create(user=self.request.user)
+        return settings.user_tickers.all()
 
     def list(self, request):
-        tickers = TickerSettings.objects.get(user=request.user).user_tickers.all()
+        settings, _ = TickerSettings.objects.get_or_create(user=request.user)
+        tickers = settings.user_tickers.all()
         tickers = tickers.order_by("symbol")
         serializer = TickerSerializer(tickers, many=True)
         return Response(serializer.data)
 
     def create(self, request):
-        settings = TickerSettings.objects.get(user=request.user)
+        settings, _ = TickerSettings.objects.get_or_create(user=request.user)
         user_tickers = settings.user_tickers
         ticker = Ticker.get_or_create_using_str(
             ticker_set=user_tickers,
@@ -113,9 +116,9 @@ class UserTickerViewSet(viewsets.ModelViewSet):
         return Response({"detail": serializer.errors}, status=400)
 
     def destroy(self, request, pk):
-        settings = TickerSettings.objects.get(user=request.user)
+        settings, _ = TickerSettings.objects.get_or_create(user=request.user)
         ticker = Ticker.objects.get(pk=pk)
-        settings = TickerSettings.objects.get(user=request.user)
+        settings, _ = TickerSettings.objects.get_or_create(user=request.user)
         settings.user_tickers.remove(ticker)
         settings.save()
         return Response({"detail": "Ticker removed from settings."}, status=200)

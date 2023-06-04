@@ -1,42 +1,60 @@
-import axios from 'axios';
+import api from '@/utils/api';
+import {
+    Card,
+    CardContent,
+    Typography,
+    CircularProgress,
+    Box,
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+
 import { useEffect, useState } from 'react';
 
-import LoginForm from './LoginForm';
 import LogoutButton from './LogoutButton';
 
 const UserInfoCard = () => {
     const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true); // Loading state
+    const theme = useTheme();
 
     useEffect(() => {
         const fetchUser = async () => {
-            const token = localStorage.getItem('authToken');
-
-            if (token) {
-                const response = await axios.get(
-                    process.env.NEXT_PUBLIC_BACKEND_URL + '/user/me',
-                    {
-                        headers: { Authorization: `Token ${token}` },
-                    }
-                );
-
-                setUser(response.data);
-            }
+            let response = await api.get('/user/me/');
+            setUser(response.data);
+            console.log(response.data);
+            setIsLoading(false); // Stop the loading spinner
         };
-
         fetchUser();
     }, []);
 
+    if (isLoading) {
+        return (
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '60vh', // 100% of the viewport height
+                }}
+            >
+                <CircularProgress size="5rem" />
+            </Box>
+        );
+    }
+
     return (
-        <div>
-            {user ? (
-                <div>
-                    <h2>{user.email}</h2>
-                    <LogoutButton />
-                </div>
-            ) : (
-                <LoginForm />
-            )}
-        </div>
+        <Card sx={{ backgroundColor: theme.palette.secondary.dark }}>
+            <CardContent>
+                <Typography
+                    variant="h4"
+                    component="div"
+                    sx={{ color: 'white' }}
+                >
+                    {user ? user.email : 'No User'}
+                </Typography>
+                {user && <LogoutButton />}
+            </CardContent>
+        </Card>
     );
 };
 
