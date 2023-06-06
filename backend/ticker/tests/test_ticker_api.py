@@ -17,7 +17,7 @@ class TickerApiTests(APITestCase):
             name="test_user_name", email="test@me.com", password="testpass123"
         )
         self.client.force_authenticate(user=self.user)
-        self.ticker_settings = TickerSettings.objects.create(user=self.user)
+        self.ticker_settings, _ = TickerSettings.objects.get_or_create(user=self.user)
 
     def test_search_endpoint(self):
         res = self.client.get(reverse("ticker:search"), {"q": "appl"})
@@ -141,6 +141,34 @@ class TickerApiTests(APITestCase):
         self.assertEqual(self.ticker_settings.user_tickers.count(), 1)
         self.assertTrue(self.ticker_settings.user_tickers.first().is_favorite)
 
+    def test_add_remove_add_user_ticker(self):
+        # add ticker
+        data = {"symbol": "AAPL", "exchange": "NASDAQ"}
+        url = reverse("ticker:user-tickers-list")
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("Ticker added to user settings.", response.data["detail"])
+        self.assertEqual(self.ticker_settings.user_tickers.count(), 1)
+        ticker = self.ticker_settings.user_tickers.first()
+        self.assertEqual(ticker.symbol.symbol, "AAPL")
+        self.assertEqual(ticker.symbol.exchange, "NASDAQ")
+        # remove ticker
+        url = reverse("ticker:user-tickers-detail", args=[ticker.id])
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("Ticker removed from settings.", response.data["detail"])
+        self.assertEqual(self.ticker_settings.user_tickers.count(), 0)
+        # add ticker again
+        data = {"symbol": "AAPL", "exchange": "NASDAQ"}
+        url = reverse("ticker:user-tickers-list")
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("Ticker added to user settings.", response.data["detail"])
+        self.assertEqual(self.ticker_settings.user_tickers.count(), 1)
+        ticker = self.ticker_settings.user_tickers.first()
+        self.assertEqual(ticker.symbol.symbol, "AAPL")
+        self.assertEqual(ticker.symbol.exchange, "NASDAQ")
+
     def test_ticker_user_settings(self):
         url = reverse("ticker:user-settings")
         response = self.client.get(url)
@@ -172,3 +200,21 @@ class TickerApiTests(APITestCase):
         self.ticker_settings.refresh_from_db()
         self.assertEqual(self.ticker_settings.plot_range, 20)
         self.assertEqual(self.ticker_settings.stats_range, 1)
+
+    def test_forex_pair(self):
+        data = {"symbol": "USD/CLP", "exchange": "PHYSICALCURRENCY"}
+        # add to user
+        url = reverse("ticker:user-tickers-list")
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("Ticker added to user settings.", response.data["detail"])
+        self.assertEqual(self.ticker_settings.user_tickers.count(), 1)
+        # get time series
+        url = reverse("ticker:time_series")
+        response = self.client.get(
+            url,
+            {
+                "symbols": "__ALL_USER__",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

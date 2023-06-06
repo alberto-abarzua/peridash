@@ -15,6 +15,10 @@ class Symbol(models.Model):
     def __str__(self) -> str:
         return self.comp_name
 
+    def save(self, *args, **kwargs):
+        self.exchange = self.exchange.replace(" ", "")
+        super().save(*args, **kwargs)
+
     @property
     def comp_name(self) -> str:
         return self.symbol + ":" + self.exchange
@@ -26,7 +30,7 @@ class Symbol(models.Model):
 class Ticker(models.Model):
     id = models.CharField(primary_key=True, max_length=100, default=get_token)
     is_favorite = models.BooleanField(default=False)
-    symbol = models.OneToOneField(Symbol, on_delete=models.CASCADE)
+    symbol = models.ForeignKey(Symbol, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return str(self.symbol)
@@ -34,16 +38,16 @@ class Ticker(models.Model):
     @classmethod
     def create_using_str(cls, symbol, exchange):
         symbol_obj, _ = Symbol.objects.get_or_create(symbol=symbol, exchange=exchange)
-        ticker_obj = cls.objects.create(symbol=symbol_obj)
+        ticker_obj = Ticker.objects.create(symbol=symbol_obj)
         return ticker_obj
 
     @classmethod
     def get_or_create_using_str(cls, ticker_set, symbol, exchange):
         try:
             ticker_obj = ticker_set.get(symbol__symbol=symbol, symbol__exchange=exchange)
-        except cls.DoesNotExist:
+        except Ticker.DoesNotExist:
             symbol_obj, _ = Symbol.objects.get_or_create(symbol=symbol, exchange=exchange)
-            ticker_obj = cls.objects.create(symbol=symbol_obj)
+            ticker_obj = Ticker.objects.create(symbol=symbol_obj)
         return ticker_obj
 
 
