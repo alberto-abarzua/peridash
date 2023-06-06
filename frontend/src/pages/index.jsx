@@ -1,28 +1,27 @@
+import TickerContainerBig from '@/components/tickers/TickerContainerBig';
+import api from '@/utils/api';
 import { withAuth } from '@/utils/auth';
 import { Grid } from '@mui/material';
+
 import { useEffect, useState } from 'react';
-import api from '@/utils/api';
-import TickerContainerBig from '@/components/tickers/TickerContainerBig';
 const DashPage = () => {
     const [timeSeries, setTimeSeries] = useState([]);
 
-    const get_tickers = async () => {
-        let response = await api.get(
-            '/ticker/time_series/?symbols=__ALL_USER__'
-        );
-        // if 200
-        if (response.status === 200) {
-            setTimeSeries(response.data);
-            console.log(timeSeries);
-        } else {
-            alert('Error fetching time series');
-        }
-    };
-
     useEffect(() => {
+        const get_tickers = async () => {
+            let response = await api.get(
+                '/ticker/time_series/?symbols=__ALL_USER__'
+            );
+            // if 200
+            if (response.status === 200) {
+                setTimeSeries(response.data);
+                console.log(timeSeries);
+            } else {
+                alert('Error fetching time series');
+            }
+        };
         get_tickers();
-        console.log('This is time sires', timeSeries);
-    }, []);
+    }, [timeSeries]);
 
     return (
         <div>

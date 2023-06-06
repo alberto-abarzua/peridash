@@ -1,3 +1,6 @@
+import api from '@/utils/api';
+import GradeIcon from '@mui/icons-material/Grade';
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import {
     Card,
     CardContent,
@@ -6,10 +9,8 @@ import {
     Grid,
     IconButton,
 } from '@mui/material';
-import api from '@/utils/api';
+
 import PropTypes from 'prop-types';
-import GradeIcon from '@mui/icons-material/Grade';
-import StarOutlineIcon from '@mui/icons-material/StarOutline';
 const StockInfo = ({ result, getUserTickers }) => {
     console.log(result);
     const handleDelete = async () => {
@@ -76,18 +77,18 @@ const StockInfo = ({ result, getUserTickers }) => {
     );
 };
 
-// StockInfo.propTypes = {
-//     result: PropTypes.shape({
-//         id: PropTypes.number,
-//         is_favorite: PropTypes.bool,
-//         symbol: PropTypes.shape({
-//             name: PropTypes.string,
-//             exchange: PropTypes.string,
-//             id: PropTypes.string,
-//             symbol: PropTypes.string,
-//         }).isRequired,
-//     }).isRequired,
-//     setUserTickers: PropTypes.func.isRequired,
-// };
+StockInfo.propTypes = {
+    result: PropTypes.shape({
+        id: PropTypes.number,
+        is_favorite: PropTypes.bool,
+        symbol: PropTypes.shape({
+            name: PropTypes.string,
+            exchange: PropTypes.string,
+            id: PropTypes.string,
+            symbol: PropTypes.string,
+        }).isRequired,
+    }).isRequired,
+    getUserTickers: PropTypes.func.isRequired,
+};
 
 export default StockInfo;

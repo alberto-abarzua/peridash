@@ -215,6 +215,6 @@ class TickerApiTests(APITestCase):
             url,
             {
                 "symbols": "__ALL_USER__",
-            }
+            },
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)

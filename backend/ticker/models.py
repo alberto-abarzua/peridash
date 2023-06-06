@@ -14,10 +14,11 @@ class Symbol(models.Model):
 
     def __str__(self) -> str:
         return self.comp_name
-    
+
     def save(self, *args, **kwargs):
-        self.exchange = self.exchange.replace(' ', '')
+        self.exchange = self.exchange.replace(" ", "")
         super().save(*args, **kwargs)
+
     @property
     def comp_name(self) -> str:
         return self.symbol + ":" + self.exchange

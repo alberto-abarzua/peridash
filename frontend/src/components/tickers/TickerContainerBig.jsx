@@ -21,7 +21,7 @@ const TickerContainerBig = ({ ticker_data }) => {
     // Convert to array of {date, value} objects, so we can sort by date
     // Convert to array of {date, value} objects, so we can sort by date
     let rawData = Object.entries(ticker_data.df.datetime).map(
-        ([date, _], index) => ({
+        ([date], index) => ({
             date: new Date(date),
             value: ticker_data.df.close[index],
         })
@@ -50,9 +50,9 @@ const TickerContainerBig = ({ ticker_data }) => {
 
     const highValues = Object.values(ticker_data.df.high);
     let minHighValue = Math.min(...highValues);
-    minHighValue -= minHighValue*0.05;
+    minHighValue -= minHighValue * 0.05;
     let maxHighValue = Math.max(...highValues);
-    maxHighValue += maxHighValue*0.05;
+    maxHighValue += maxHighValue * 0.05;
 
     const options = {
         scales: {
@@ -118,13 +118,16 @@ const TickerContainerBig = ({ ticker_data }) => {
     );
 };
 
-// TickerContainerBig.propTypes = {
-//     ticker_data: PropTypes.shape({
-//         cur_price: PropTypes.number.isRequired,
-//         price_dif: PropTypes.number.isRequired,
-//         price_dif_percent: PropTypes.number.isRequired,
-//         df: PropTypes.object.isRequired,
-//     }),
-// };
+TickerContainerBig.propTypes = {
+    ticker_data: PropTypes.shape({
+        cur_price: PropTypes.number.isRequired,
+        price_dif: PropTypes.number.isRequired,
+        price_dif_percent: PropTypes.number.isRequired,
+        df: PropTypes.object.isRequired,
+        symbol: PropTypes.PropTypes.shape({
+            name: PropTypes.string.isRequired,
+        }),
+    }),
+};
 
 export default TickerContainerBig;
