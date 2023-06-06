@@ -98,6 +98,7 @@ class TwelveDataCore:
             )
 
             result = []
+            print(sym_dict.keys())
             for symbol, ts_dicts in time_series.items():
                 cur = TickerInfo(sym_dict[symbol], ts_dicts)
                 result.append(cur)
@@ -143,7 +144,8 @@ class TwelveDataCore:
         return res
 
     def get_key_time_series(self, symbol, start, end):
-        return f"TWELVE_SERIES_{symbol.__str__()}-{start.date()}-{end.date()}"
+        safe_symbol = symbol.__str__().replace('/', '_').replace(':', '_').replace(' ', '_')
+        return f"TWELVE_SERIES_{safe_symbol}-{start.date()}-{end.date()}"
 
     def get_eod(self, symbols):
         results = []

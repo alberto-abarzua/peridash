@@ -1,19 +1,35 @@
-import api from '@/utils/api';
+import { Box } from '@mui/material';
 
-import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
-const UserTickers = () => {
-    const [userTickers, setUserTickers] = useState([]);
-    useEffect(() => {
-        const getUserTickers = async () => {
-            let response = await api.get('/ticker/user-tickers/');
-            console.log(response.data);
-            setUserTickers(response.data);
-        };
-        getUserTickers();
-    }, []);
-    console.log(userTickers);
-    return <h1>hola</h1>;
+import StockInfo from './StockInfo';
+
+const UserTickers = ({ userTickers, getUserTickers }) => {
+    console.log('user tickres here', userTickers);
+
+    return (
+        <Box>
+            {userTickers &&
+                userTickers.map(result => (
+                    <StockInfo
+                        key={result.id}
+                        getUserTickers={getUserTickers}
+                        result={result}
+                    />
+                ))}
+        </Box>
+    );
+};
+
+UserTickers.propTypes = {
+    userTickers: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            symbol: PropTypes.string,
+            exchange: PropTypes.string,
+        })
+    ).isRequired,
+    getUserTickers: PropTypes.func.isRequired,
 };
 
 export default UserTickers;

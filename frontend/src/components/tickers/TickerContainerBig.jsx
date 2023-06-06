@@ -9,21 +9,58 @@ import styles from './TickerContainerBig.module.css';
 
 Chart.register(...registerables);
 
-const TickerContainerBig = props => {
-    useEffect(() => {}, [props]);
-    let data = props.ticker_data;
+const TickerContainerBig = ({ ticker_data }) => {
+    useEffect(() => {
+        console.log(ticker_data);
+    }, [ticker_data]);
 
-    let currentPrice = data.cur_price;
-    let priceVariation = data.price_dif;
-    let percentageVariation = data.price_dif_percent;
-    useEffect(() => {}, [props]);
-    // let df = data.df; // django df
+    let currentPrice = ticker_data.cur_price;
+    let priceVariation = ticker_data.price_dif;
+    let main_color = priceVariation > 0 ? 'green' : 'red';
+    let percentageVariation = ticker_data.price_dif_percent;
+    // Convert to array of {date, value} objects, so we can sort by date
+    // Convert to array of {date, value} objects, so we can sort by date
+    let rawData = Object.entries(ticker_data.df.datetime).map(
+        ([date, _], index) => ({
+            date: new Date(date),
+            value: ticker_data.df.close[index],
+        })
+    );
+
+    // Sort the data by date
+    rawData.sort((a, b) => a.date - b.date);
+
+    // Split back into separate arrays for the labels and data
+    let date_labels = rawData.map(item => item.date);
+    let data = rawData.map(item => item.value);
+
+    const chartData = {
+        labels: date_labels,
+        datasets: [
+            {
+                label: 'Close Prices',
+                data: data,
+                fill: false,
+                backgroundColor: 'rgb(75, 192, 192)',
+                borderColor: main_color,
+                pointRadius: 0, // This line hides the data points
+            },
+        ],
+    };
+
+    const highValues = Object.values(ticker_data.df.high);
+    let minHighValue = Math.min(...highValues);
+    minHighValue -= minHighValue*0.05;
+    let maxHighValue = Math.max(...highValues);
+    maxHighValue += maxHighValue*0.05;
+
     const options = {
         scales: {
             y: {
+                min: minHighValue,
+                max: maxHighValue,
                 display: false,
-
-                beginAtZero: true,
+                beginAtZero: false,
                 grid: {
                     display: false,
                 },
@@ -33,7 +70,6 @@ const TickerContainerBig = props => {
             },
             x: {
                 display: false,
-
                 grid: {
                     display: false,
                 },
@@ -56,12 +92,12 @@ const TickerContainerBig = props => {
         <Box width={1 / 2} p={2}>
             <Card className={styles.container}>
                 <CardContent>
+                    <Grid item xs={6}>
+                        <Typography variant="h5" component="div">
+                            {ticker_data.symbol.name}
+                        </Typography>
+                    </Grid>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
-                            <Typography variant="h5" component="div">
-                                Stock Name
-                            </Typography>
-                        </Grid>
                         <Grid item xs={6}>
                             <Typography variant="h5" component="div">
                                 Current Price: {currentPrice}
@@ -75,20 +111,20 @@ const TickerContainerBig = props => {
                         </Grid>
                     </Grid>
 
-                    <Line data={data} options={options} />
+                    <Line data={chartData} options={options} />
                 </CardContent>
             </Card>
         </Box>
     );
 };
 
-TickerContainerBig.propTypes = {
-    ticker_data: PropTypes.shape({
-        cur_price: PropTypes.number.isRequired,
-        price_dif: PropTypes.number.isRequired,
-        price_dif_percent: PropTypes.number.isRequired,
-        df: PropTypes.object.isRequired,
-    }),
-};
+// TickerContainerBig.propTypes = {
+//     ticker_data: PropTypes.shape({
+//         cur_price: PropTypes.number.isRequired,
+//         price_dif: PropTypes.number.isRequired,
+//         price_dif_percent: PropTypes.number.isRequired,
+//         df: PropTypes.object.isRequired,
+//     }),
+// };
 
 export default TickerContainerBig;

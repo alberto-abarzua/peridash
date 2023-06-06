@@ -120,5 +120,6 @@ class UserTickerViewSet(viewsets.ModelViewSet):
         ticker = Ticker.objects.get(pk=pk)
         settings, _ = TickerSettings.objects.get_or_create(user=request.user)
         settings.user_tickers.remove(ticker)
+        ticker.delete()
         settings.save()
         return Response({"detail": "Ticker removed from settings."}, status=200)

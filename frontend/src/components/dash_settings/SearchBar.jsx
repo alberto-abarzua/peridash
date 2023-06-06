@@ -3,10 +3,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import { TextField, Button, Box, List, ListItem } from '@mui/material';
 import { Dialog, DialogContent } from '@mui/material';
 
+import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
 import TickerSearchResult from './TickerSearchResult';
-const SearchBar = () => {
+const SearchBar = ({ getUserTickers }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,6 +42,7 @@ const SearchBar = () => {
         };
         console.log(data);
         let response = await api.post('/ticker/user-tickers/', data);
+        getUserTickers();
         console.log(response.data);
     };
 
@@ -121,4 +123,7 @@ const SearchBar = () => {
     );
 };
 
+SearchBar.propTypes = {
+    getUserTickers: PropTypes.func.isRequired,
+};
 export default SearchBar;
