@@ -4,24 +4,56 @@ import { Chart, registerables } from 'chart.js';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
-
-import styles from './TickerContainerBig.module.css';
+import annotationPlugin from 'chartjs-plugin-annotation';
+import SouthEastIcon from '@mui/icons-material/SouthEast';
+import NorthEastIcon from '@mui/icons-material/NorthEast';
+import { useTheme } from '@mui/material/styles';
 
 Chart.register(...registerables);
-
+Chart.register(annotationPlugin);
 const TickerContainerBig = ({ ticker_data }) => {
+    const theme = useTheme();
+
     useEffect(() => {
         console.log(ticker_data);
     }, [ticker_data]);
 
     let currentPrice = ticker_data.cur_price;
     let priceVariation = ticker_data.price_dif;
-    let main_color = priceVariation > 0 ? 'green' : 'red';
     let percentageVariation = ticker_data.price_dif_percent;
-    // Convert to array of {date, value} objects, so we can sort by date
-    // Convert to array of {date, value} objects, so we can sort by date
+    priceVariation = priceVariation.toFixed(2);
+    percentageVariation = percentageVariation.toFixed(2);
+    let main_color =
+        priceVariation > 0
+            ? theme.palette.stocks.green
+            : theme.palette.stocks.red;
+    let main_color_light =
+        priceVariation > 0
+            ? theme.palette.stocks.green_light
+            : theme.palette.stocks.red_light;
+    let main_color_dark =
+        priceVariation > 0
+            ? theme.palette.stocks.green_dark
+            : theme.palette.stocks.red_dark;
+
+    let iconSx = {
+        color: main_color_dark,
+        fontSize: '2.1rem',
+    };
+    let arrowIcon =
+        priceVariation > 0 ? (
+            <NorthEastIcon sx={iconSx} />
+        ) : (
+            <SouthEastIcon sx={iconSx} />
+        );
+    /// iter trhough dates and print
+    for (let [date, value] of Object.entries(ticker_data.df.datetime)) {
+        console.log('date', date);
+        console.log('value', value);
+    }
+
     let rawData = Object.entries(ticker_data.df.datetime).map(
-        ([date], index) => ({
+        ([, date], index) => ({
             date: new Date(date),
             value: ticker_data.df.close[index],
         })
@@ -34,27 +66,40 @@ const TickerContainerBig = ({ ticker_data }) => {
     let date_labels = rawData.map(item => item.date);
     let data = rawData.map(item => item.value);
 
+    const canvas = document.createElement('canvas');
+
+    const ctx = canvas.getContext('2d');
+
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, main_color_light);
+    gradient.addColorStop(0.04, main_color_light);
+    gradient.addColorStop(0.9, 'rgba(0, 0, 0, 0)');
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
     const chartData = {
         labels: date_labels,
         datasets: [
             {
                 label: 'Close Prices',
                 data: data,
-                fill: false,
-                backgroundColor: 'rgb(75, 192, 192)',
+                fill: 'origin',
+                backgroundColor: gradient,
                 borderColor: main_color,
                 pointRadius: 0, // This line hides the data points
+                borderWidth: 1,
+                tension: 1.2,
             },
         ],
     };
 
     const highValues = Object.values(ticker_data.df.high);
     let minHighValue = Math.min(...highValues);
-    minHighValue -= minHighValue * 0.05;
+    minHighValue -= minHighValue * 0.03;
     let maxHighValue = Math.max(...highValues);
-    maxHighValue += maxHighValue * 0.05;
+    maxHighValue += maxHighValue * 0.03;
 
     const options = {
+        // maintainAspectRatio: false,
         scales: {
             y: {
                 min: minHighValue,
@@ -85,34 +130,91 @@ const TickerContainerBig = ({ ticker_data }) => {
                     color: 'white',
                 },
             },
+            annotation: {
+                annotations: {
+                    line1: {
+                        type: 'line',
+                        yMin: currentPrice,
+                        yMax: currentPrice,
+                        borderColor: 'rgba(198, 199, 199, 0.68)',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                    },
+                },
+            },
         },
     };
 
     return (
-        <Box width={1 / 2} p={2}>
-            <Card className={styles.container}>
+        <Box sx={{ maxHeight: '20%' }}>
+            <Card
+                sx={{
+                    color: 'rgb(255, 255, 255)',
+                    backgroundColor: '#191819',
+                    border: '1px solid rgba(198, 199, 199, 0.3)',
+                }}
+            >
                 <CardContent>
-                    <Grid item xs={6}>
-                        <Typography variant="h5" component="div">
-                            {ticker_data.symbol.name}
-                        </Typography>
-                    </Grid>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
-                            <Typography variant="h5" component="div">
-                                Current Price: {currentPrice}
+                            <Typography variant="h4" component="div">
+                                {ticker_data.symbol.symbol}
                             </Typography>
-                            <Typography variant="body2">
-                                {priceVariation}
-                            </Typography>
-                            <Typography>
-                                Percentage Variation: {percentageVariation}%
+                            <Typography variant="h6" component="div">
+                                {ticker_data.symbol.exchange}
                             </Typography>
                         </Grid>
-                    </Grid>
+                        <Grid
+                            item
+                            xs={6}
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'right',
+                                alignItems: 'right',
+                            }}
+                        >
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'right',
+                                    justifyContent: 'right',
+                                }}
+                            >
+                                <Typography
+                                    variant="h4"
+                                    sx={{ textAlign: 'right', mr: 2 }}
+                                >
+                                    {currentPrice}
+                                </Typography>
+                                {arrowIcon}
+                            </Box>
 
-                    <Line data={chartData} options={options} />
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'right',
+                                    justifyContent: 'right',
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Typography variant="h5" sx={{ mr: 2 }}>
+                                        {priceVariation}
+                                    </Typography>
+                                    <Typography variant="h5" sx={{ mr: 2 }}>
+                                        {percentageVariation}%
+                                    </Typography>
+                                </Box>
+                            </Box>
+                        </Grid>
+                    </Grid>
                 </CardContent>
+                <Line data={chartData} options={options} />
             </Card>
         </Box>
     );
