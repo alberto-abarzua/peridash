@@ -1,13 +1,13 @@
+import NorthEastIcon from '@mui/icons-material/NorthEast';
+import SouthEastIcon from '@mui/icons-material/SouthEast';
 import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import { Chart, registerables } from 'chart.js';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
-import annotationPlugin from 'chartjs-plugin-annotation';
-import SouthEastIcon from '@mui/icons-material/SouthEast';
-import NorthEastIcon from '@mui/icons-material/NorthEast';
-import { useTheme } from '@mui/material/styles';
 
 Chart.register(...registerables);
 Chart.register(annotationPlugin);
@@ -228,6 +228,8 @@ TickerContainerBig.propTypes = {
         df: PropTypes.object.isRequired,
         symbol: PropTypes.PropTypes.shape({
             name: PropTypes.string.isRequired,
+            symbol: PropTypes.string.isRequired,
+            exchange: PropTypes.string.isRequired,
         }),
     }),
 };
