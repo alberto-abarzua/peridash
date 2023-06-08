@@ -22,6 +22,10 @@ const theme = createTheme({
             red: 'rgba(255, 0, 0, 0.79)',
             red_light: 'rgba(255, 0, 0, 0.2)',
             red_dark: 'rgba(255, 0, 0, 0.5)',
+            yellow: 'rgba(246, 233, 67, 0.8)',
+            grey: 'rgba(198, 199, 199, 0.68)',
+            purple: 'rgba(214, 67, 246, 0.8)',
+            aqua: 'rgba(67, 246, 222, 0.8)',
         },
     },
     typography: {

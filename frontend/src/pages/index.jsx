@@ -8,17 +8,20 @@ const DashPage = () => {
     const [timeSeries, setTimeSeries] = useState([]);
 
     useEffect(() => {
-        const get_tickers = async () => {
+        const get_time_series = async () => {
             let response = await api.get(
                 '/ticker/time_series/?symbols=__ALL_USER__'
             );
             if (response.status === 200) {
+                console.log(response.data);
+
                 setTimeSeries(response.data);
             } else {
                 alert('Error fetching time series');
             }
         };
-        get_tickers();
+
+        get_time_series();
     }, [setTimeSeries]);
 
     return (

@@ -35,8 +35,8 @@ class TickerApiTests(APITestCase):
         )
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         first_elem = res.data[0]
-        self.assertEqual(first_elem["symbol"]["symbol"], "AAPL")
-        self.assertEqual(first_elem["symbol"]["exchange"], "NASDAQ")
+        self.assertEqual(first_elem["ticker"]["symbol"]["symbol"], "AAPL")
+        self.assertEqual(first_elem["ticker"]["symbol"]["exchange"], "NASDAQ")
         self.assertEqual(first_elem["cur_price"], 168.55)
         self.assertEqual(first_elem["eod_price"], 169.56)
         self.assertEqual(first_elem["price_dif"], -1.009999999999991)
@@ -51,8 +51,8 @@ class TickerApiTests(APITestCase):
         )
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         first_elem = res.data[0]
-        self.assertEqual(first_elem["symbol"]["symbol"], "AAPL")
-        self.assertEqual(first_elem["symbol"]["exchange"], "NASDAQ")
+        self.assertEqual(first_elem["ticker"]["symbol"]["symbol"], "AAPL")
+        self.assertEqual(first_elem["ticker"]["symbol"]["exchange"], "NASDAQ")
         self.assertTrue("df" in first_elem.keys())
         self.assertEqual(len(first_elem["df"].keys()), 6)
 
@@ -218,3 +218,23 @@ class TickerApiTests(APITestCase):
             },
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_patch_ticker(self):
+        # modify ticker fields
+
+        ticker = Ticker.create_using_str(symbol="AAPL", exchange="NASDAQ")
+        self.ticker_settings.user_tickers.add(ticker)
+        self.ticker_settings.save()
+        url = reverse("ticker:user-tickers-detail", args=[ticker.id])
+        data = {
+            "buy": 100,
+            "gain": 10,
+            "loss": 5,
+        }
+        response = self.client.patch(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("Ticker updated", response.data["detail"])
+        ticker.refresh_from_db()
+        self.assertEqual(ticker.buy, 100)
+        self.assertEqual(ticker.gain, 10)
+        self.assertEqual(ticker.loss, 5)

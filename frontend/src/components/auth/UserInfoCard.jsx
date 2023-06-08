@@ -21,7 +21,6 @@ const UserInfoCard = () => {
         const fetchUser = async () => {
             let response = await api.get('/user/me/');
             setUser(response.data);
-            console.log(response.data);
             setIsLoading(false); // Stop the loading spinner
         };
         fetchUser();

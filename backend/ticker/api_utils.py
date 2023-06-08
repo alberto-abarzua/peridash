@@ -175,7 +175,8 @@ class TwelveDataCore:
             site_cache.get(self.get_key_time_series(sym, start, end)) for sym in symbols
         ]
 
-    def __call__(self, symbols, start=None, end=None, days=None):
+    def __call__(self, tickers, start=None, end=None, days=None):
+        symbols = [ticker.symbol for ticker in tickers]
         if days is None:
             days = self.DAY_RANGE_ALWAYS
         if end is None:
@@ -185,4 +186,7 @@ class TwelveDataCore:
         if len(symbols) == 0:
             return {}
         start, end = self.get_start_end(end, self.DAY_RANGE_ALWAYS)
-        return self.cache_symbols(symbols, start, end)
+        res = self.cache_symbols(symbols, start, end)
+        for i, ticker in enumerate(tickers):
+            res[i].ticker = ticker
+        return res

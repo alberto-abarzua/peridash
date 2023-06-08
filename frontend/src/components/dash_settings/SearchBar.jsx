@@ -16,10 +16,8 @@ const SearchBar = ({ getUserTickers }) => {
     };
 
     const handleSearch = async () => {
-        console.log('Searching for:', searchTerm);
         let params = { q: searchTerm };
         let response = await api.get('/ticker/search/', { params });
-        console.log(response.data);
         setSearchResults(response.data);
         setIsModalOpen(true); // Open the modal once we have the results
     };
@@ -34,16 +32,14 @@ const SearchBar = ({ getUserTickers }) => {
         setSearchResults([]);
         setSearchTerm('');
         setIsModalOpen(false);
-        console.log('Clicked:', symbol, exchange);
-        //add to user
         let data = {
             symbol: symbol,
             exchange: exchange,
         };
-        console.log(data);
         let response = await api.post('/ticker/user-tickers/', data);
-        getUserTickers();
-        console.log(response.data);
+        if (response.status === 201) {
+            getUserTickers();
+        }
     };
 
     useEffect(() => {

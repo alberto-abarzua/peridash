@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 import StockInfo from './StockInfo';
 
 const UserTickers = ({ userTickers, getUserTickers }) => {
-    console.log('user tickres here', userTickers);
-
     return (
         <Box>
             {userTickers &&

@@ -31,6 +31,10 @@ class Ticker(models.Model):
     id = models.CharField(primary_key=True, max_length=100, default=get_token)
     is_favorite = models.BooleanField(default=False)
     symbol = models.ForeignKey(Symbol, on_delete=models.CASCADE)
+    # 3 float fields, to_buy, gain, loss
+    buy = models.FloatField(default=0.0)
+    gain = models.FloatField(default=0.0)
+    loss = models.FloatField(default=0.0)
 
     def __str__(self) -> str:
         return str(self.symbol)

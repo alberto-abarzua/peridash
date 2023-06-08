@@ -13,7 +13,6 @@ const DashPage = () => {
     const getUserTickers = async () => {
         try {
             let response = await api.get('/ticker/user-tickers/');
-            console.log(response.data);
             setUserTickers(response.data);
         } catch (error) {
             console.error('Error fetching user tickers', error);
