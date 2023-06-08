@@ -1,5 +1,8 @@
 import api from '@/utils/api';
+import AddIcon from '@mui/icons-material/Add';
+import AttachMoneySharpIcon from '@mui/icons-material/AttachMoneySharp';
 import GradeIcon from '@mui/icons-material/Grade';
+import RemoveIcon from '@mui/icons-material/Remove';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import {
     Card,
@@ -8,26 +11,133 @@ import {
     Button,
     Grid,
     IconButton,
+    TextField,
+    Box,
+    Collapse,
+    InputAdornment,
 } from '@mui/material';
 
 import PropTypes from 'prop-types';
+import { useState, useEffect, useRef } from 'react';
+
 const StockInfo = ({ result, getUserTickers }) => {
-    console.log(result);
+    const [favorite, setFavorite] = useState(result.is_favorite);
+    const [buy, setBuy] = useState(result.buy);
+    const [gain, setGain] = useState(result.gain);
+    const [loss, setLoss] = useState(result.loss);
+    const isFirstRender = useRef(true);
+
     const handleDelete = async () => {
-        console.log('Deleting:', result.id);
         let response = await api.delete(`/ticker/user-tickers/${result.id}/`);
-        console.log(response.data);
-        getUserTickers();
+        if (response.status === 204) {
+            getUserTickers();
+        }
     };
 
-    const handleFavorite = async () => {
-        console.log('Favorite:', result.id);
-        let response = await api.patch(`/ticker/user-tickers/${result.id}/`, {
-            is_favorite: !result.is_favorite,
-        });
-        console.log(response.data);
-        getUserTickers();
+    const handleBuyChange = event => {
+        setBuy(event.target.value);
     };
+
+    const handleGainChange = event => {
+        setGain(event.target.value);
+    };
+
+    const handleLossChange = event => {
+        setLoss(event.target.value);
+    };
+
+    useEffect(() => {
+        const updateTicker = async () => {
+            let response = await api.patch(
+                `/ticker/user-tickers/${result.id}/`,
+                {
+                    is_favorite: favorite,
+                    buy: buy,
+                    gain: gain,
+                    loss: loss,
+                }
+            );
+            if (response.status === 200) {
+                getUserTickers();
+            }
+        };
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        updateTicker();
+    }, [favorite, buy, gain, loss, getUserTickers, result.id]);
+
+    const handleFavorite = () => {
+        setFavorite(!favorite);
+    };
+
+    const textFieldSx = {
+        mt: 2,
+        width: '10rem',
+        mr: 1,
+    };
+
+    const textFieldsJsx = (
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'right',
+                alignItems: 'right',
+            }}
+        >
+            <TextField
+                label="Buy"
+                value={buy}
+                type="number"
+                onChange={handleBuyChange}
+                sx={textFieldSx}
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <IconButton>
+                                <AttachMoneySharpIcon />
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
+            />
+            <TextField
+                label="Gain"
+                value={gain}
+                type="number"
+                onChange={handleGainChange}
+                sx={textFieldSx}
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <IconButton>
+                                <AddIcon />
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
+            />
+
+            <TextField
+                label="Loss"
+                value={loss}
+                type="number"
+                onChange={handleLossChange}
+                sx={textFieldSx}
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <IconButton>
+                                <RemoveIcon />
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
+            />
+        </Box>
+    );
 
     return (
         <Card>
@@ -52,15 +162,7 @@ const StockInfo = ({ result, getUserTickers }) => {
                         </IconButton>
                     </Grid>
                 </Grid>
-                <Typography variant="body2" color="text.secondary">
-                    Exchange: {result.symbol.exchange}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    ID: {result.symbol.id}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    Symbol: {result.symbol.symbol}
-                </Typography>
+                <Collapse in={favorite}>{textFieldsJsx}</Collapse>
                 <Button
                     variant="contained"
                     onClick={handleDelete}
@@ -81,6 +183,9 @@ StockInfo.propTypes = {
     result: PropTypes.shape({
         id: PropTypes.number,
         is_favorite: PropTypes.bool,
+        buy: PropTypes.number,
+        gain: PropTypes.number,
+        loss: PropTypes.number,
         symbol: PropTypes.shape({
             name: PropTypes.string,
             exchange: PropTypes.string,

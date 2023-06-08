@@ -8,32 +8,37 @@ const DashPage = () => {
     const [timeSeries, setTimeSeries] = useState([]);
 
     useEffect(() => {
-        const get_tickers = async () => {
+        const get_time_series = async () => {
             let response = await api.get(
                 '/ticker/time_series/?symbols=__ALL_USER__'
             );
-            // if 200
             if (response.status === 200) {
+                console.log(response.data);
+
                 setTimeSeries(response.data);
-                console.log(timeSeries);
             } else {
                 alert('Error fetching time series');
             }
         };
-        get_tickers();
-    }, [timeSeries]);
+
+        get_time_series();
+    }, [setTimeSeries]);
 
     return (
         <div>
-            {timeSeries.map((ticker, index) => (
-                <TickerContainerBig key={index} ticker_data={ticker} />
-            ))}
-
             <Grid container spacing={2}>
-                <Grid item xs={12} md={6}></Grid>
-                <Grid item xs={12} md={6}></Grid>
-                <Grid item xs={12} md={6}></Grid>
-                <Grid item xs={12} md={6}></Grid>
+                <Grid item xs={12} sm={12} md={3}>
+                    {timeSeries.map((ticker, index) => (
+                        <TickerContainerBig key={index} ticker_data={ticker} />
+                    ))}
+                </Grid>
+
+                <Grid item xs={12} sm={12} md={3}>
+                    <h1>hola</h1>
+                </Grid>
+                <Grid item xs={12} sm={12} md={3}>
+                    <h1>hola</h1>
+                </Grid>
             </Grid>
         </div>
     );

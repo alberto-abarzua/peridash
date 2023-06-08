@@ -1,6 +1,6 @@
 from django import forms
 
-from ticker.models import Symbol, TickerSettings
+from ticker.models import Ticker, TickerSettings
 
 
 class TimeSeriesForm(forms.Form):
@@ -17,12 +17,13 @@ class TimeSeriesForm(forms.Form):
         symbols = self.cleaned_data["symbols"]
         if symbols == "__ALL_USER__":
             user_settings = TickerSettings.objects.get(user=self.request.user)
-            return [ticker.symbol for ticker in user_settings.user_tickers.all()]
+            return [ticker for ticker in user_settings.user_tickers.all()]
         if "," in symbols:
             symbols = symbols.split(",")
         else:
             symbols = [symbols]
-        db_symbols = []
+
+        db_tickers = []
         for symbol in symbols:
             if ":" not in symbol:
                 raise forms.ValidationError(
@@ -30,10 +31,10 @@ class TimeSeriesForm(forms.Form):
                 )
 
             symbol, exchange = symbol.split(":")
-            cur_sym, _ = Symbol.objects.get_or_create(
+            cur_ticker = Ticker.get_or_create_using_str(
+                ticker_set=Ticker.objects.all(),
                 symbol=symbol,
                 exchange=exchange,
-                defaults={"symbol": symbol, "exchange": exchange},
             )
-            db_symbols.append(cur_sym)
-        return db_symbols
+            db_tickers.append(cur_ticker)
+        return db_tickers

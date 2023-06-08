@@ -36,13 +36,13 @@ class TimeSeries(views.APIView):
             return Response({"detail": f"Invalid input: {form.errors}"}, status=400)
 
         # extract cleaned data from form and pass to stock_client
-        symbols = form.cleaned_data["symbols"]
+        tickers = form.cleaned_data["symbols"]
         start = form.cleaned_data.get("start", None)
         end = form.cleaned_data.get("end", None)
         days = form.cleaned_data.get("days", 30)
 
         serializer = TimeSeriesSerializer(
-            stock_client(symbols, start=start, end=end, days=days), many=True
+            stock_client(tickers, start=start, end=end, days=days), many=True
         )
         return Response(serializer.data)
 

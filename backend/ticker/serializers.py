@@ -20,21 +20,8 @@ class SymbolSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TimeSeriesSerializer(serializers.Serializer):
-    df = serializers.SerializerMethodField()
-    cur_price = serializers.FloatField()
-    eod_price = serializers.FloatField()
-    price_dif = serializers.FloatField()
-    price_dif_percent = serializers.FloatField()
-    symbol = SymbolSerializer()
-
-    def get_df(self, obj):
-        return pd.DataFrame.to_dict(obj.df)
-
-
 class TickerSerializer(serializers.ModelSerializer):
     symbol = SymbolSerializer()
-    is_favorite = serializers.BooleanField()
 
     class Meta:
         model = Ticker
@@ -47,3 +34,15 @@ class TickerSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = TickerSettings
         fields = "__all__"
+
+
+class TimeSeriesSerializer(serializers.Serializer):
+    df = serializers.SerializerMethodField()
+    cur_price = serializers.FloatField()
+    eod_price = serializers.FloatField()
+    price_dif = serializers.FloatField()
+    price_dif_percent = serializers.FloatField()
+    ticker = TickerSerializer()
+
+    def get_df(self, obj):
+        return pd.DataFrame.to_dict(obj.df)
