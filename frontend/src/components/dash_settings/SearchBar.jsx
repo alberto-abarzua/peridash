@@ -37,6 +37,7 @@ const SearchBar = ({ getUserTickers }) => {
             exchange: exchange,
         };
         let response = await api.post('/ticker/user-tickers/', data);
+        console.log(response.status, 'aaaaaa');
         if (response.status === 201) {
             getUserTickers();
         }

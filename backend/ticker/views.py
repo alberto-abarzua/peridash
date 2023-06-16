@@ -104,7 +104,7 @@ class UserTickerViewSet(viewsets.ModelViewSet):
         )
         settings.user_tickers.add(ticker)
         settings.save()
-        return Response({"detail": "Ticker added to user settings."}, status=200)
+        return Response({"detail": "Ticker added to user settings."}, status=201)
 
     def update(self, request, pk, *args, **kwargs):
         ticker = Ticker.objects.get(pk=pk)

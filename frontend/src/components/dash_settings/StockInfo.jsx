@@ -181,7 +181,7 @@ const StockInfo = ({ result, getUserTickers }) => {
 
 StockInfo.propTypes = {
     result: PropTypes.shape({
-        id: PropTypes.number,
+        id: PropTypes.string,
         is_favorite: PropTypes.bool,
         buy: PropTypes.number,
         gain: PropTypes.number,

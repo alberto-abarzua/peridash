@@ -115,7 +115,7 @@ class TickerApiTests(APITestCase):
         data = {"symbol": "AAPL", "exchange": "NASDAQ"}
         url = reverse("ticker:user-tickers-list")
         response = self.client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("Ticker added to user settings.", response.data["detail"])
         self.assertEqual(self.ticker_settings.user_tickers.count(), 1)
         ticker = self.ticker_settings.user_tickers.first()
@@ -146,7 +146,7 @@ class TickerApiTests(APITestCase):
         data = {"symbol": "AAPL", "exchange": "NASDAQ"}
         url = reverse("ticker:user-tickers-list")
         response = self.client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("Ticker added to user settings.", response.data["detail"])
         self.assertEqual(self.ticker_settings.user_tickers.count(), 1)
         ticker = self.ticker_settings.user_tickers.first()
@@ -162,7 +162,7 @@ class TickerApiTests(APITestCase):
         data = {"symbol": "AAPL", "exchange": "NASDAQ"}
         url = reverse("ticker:user-tickers-list")
         response = self.client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("Ticker added to user settings.", response.data["detail"])
         self.assertEqual(self.ticker_settings.user_tickers.count(), 1)
         ticker = self.ticker_settings.user_tickers.first()
@@ -206,7 +206,7 @@ class TickerApiTests(APITestCase):
         # add to user
         url = reverse("ticker:user-tickers-list")
         response = self.client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("Ticker added to user settings.", response.data["detail"])
         self.assertEqual(self.ticker_settings.user_tickers.count(), 1)
         # get time series

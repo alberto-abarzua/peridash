@@ -5,23 +5,23 @@ import api from '@/utils/api';
 import { withAuth } from '@/utils/auth';
 import { Grid, Typography, Divider, Box } from '@mui/material';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 const DashPage = () => {
     const [userTickers, setUserTickers] = useState([]);
 
-    const getUserTickers = async () => {
+    const getUserTickers = useCallback(async () => {
         try {
             let response = await api.get('/ticker/user-tickers/');
             setUserTickers(response.data);
         } catch (error) {
             console.error('Error fetching user tickers', error);
         }
-    };
+    }, []);
 
     useEffect(() => {
         getUserTickers();
-    }, []);
+    }, [getUserTickers]);
     return (
         <Box>
             <Grid>

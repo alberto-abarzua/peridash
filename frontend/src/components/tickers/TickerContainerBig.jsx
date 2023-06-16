@@ -165,7 +165,7 @@ const TickerContainerBig = ({ ticker_data }) => {
     };
 
     return (
-        <Box sx={{ maxHeight: '20%' }}>
+        <Box sx={{ maxHeight: '400px' }}>
             <Card
                 sx={{
                     color: 'rgb(255, 255, 255)',
