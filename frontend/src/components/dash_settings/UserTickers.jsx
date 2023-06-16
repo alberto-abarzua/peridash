@@ -22,8 +22,13 @@ const UserTickers = ({ userTickers, getUserTickers }) => {
 UserTickers.propTypes = {
     userTickers: PropTypes.arrayOf(
         PropTypes.shape({
-            id: PropTypes.number,
-            symbol: PropTypes.string,
+            id: PropTypes.string,
+            symbol: PropTypes.shape({
+                name: PropTypes.string,
+                exchange: PropTypes.string,
+                id: PropTypes.string,
+                symbol: PropTypes.string,
+            }).isRequired,
             exchange: PropTypes.string,
         })
     ).isRequired,
