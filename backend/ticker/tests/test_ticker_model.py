@@ -10,7 +10,7 @@ from ticker.models import Symbol, Ticker, TickerSettings
 
 
 class TickerModels(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         # clear the cache
         site_cache.clear()
         self.stock_client = TwelveDataCore()
@@ -18,19 +18,17 @@ class TickerModels(TestCase):
         self.msft = Symbol.objects.create(symbol="MSFT", exchange="NASDAQ")
         self.usd_clp = Symbol.objects.create(symbol="USD/CLP", exchange="FX")
 
-    def test_search_symbol(self):
+    def test_search_symbol(self) -> None:
         """Test searching for a symbol."""
         symbols = self.stock_client.search_symbol("AAPL")
         self.assertTrue(len(symbols) > 0)
         self.assertEqual(symbols[0]["symbol"], "AAPL")
 
-    def test_query_one_symbol(self):
+    def test_query_one_symbol(self) -> None:
         datetime_end = datetime.datetime.strptime("2023-05-02", "%Y-%m-%d")
         symbol_list = [self.appl]
         ticker_list = [
-            Ticker.get_or_create_using_str(
-                Ticker.objects.all(), symbol.symbol, symbol.exchange
-            )
+            Ticker.get_or_create_using_str(Ticker.objects.all(), symbol.symbol, symbol.exchange)
             for symbol in symbol_list
         ]
         res = self.stock_client(ticker_list, end=datetime_end)
@@ -40,14 +38,12 @@ class TickerModels(TestCase):
         self.assertEqual(res[0].price_dif, -1.009999999999991)
         self.assertEqual(res[0].price_dif_percent, -0.5956593536211318)
 
-    def test_query_symbol_data(self):
+    def test_query_symbol_data(self) -> None:
         datetime_end = datetime.datetime.strptime("2023-05-02", "%Y-%m-%d")
         # symbol list
         symbol_list = [self.appl, self.msft, self.usd_clp]
         ticker_list = [
-            Ticker.get_or_create_using_str(
-                Ticker.objects.all(), symbol.symbol, symbol.exchange
-            )
+            Ticker.get_or_create_using_str(Ticker.objects.all(), symbol.symbol, symbol.exchange)
             for symbol in symbol_list
         ]
         res = self.stock_client(ticker_list, end=datetime_end)
@@ -86,17 +82,17 @@ class TickerModels(TestCase):
 
 
 class TickerSettingsTest(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(
             name="test_user_name", email="test@me.com", password="testpass123"
         )
 
-    def test_ticker_settings_creation(self):
+    def test_ticker_settings_creation(self) -> None:
         ticker_settings = TickerSettings.objects.get(user=self.user)
         self.assertTrue(ticker_settings is not None)
         self.assertEqual(ticker_settings.user, self.user)
 
-    def test_ticker_settings_creation_superuser(self):
+    def test_ticker_settings_creation_superuser(self) -> None:
         super_user = get_user_model().objects.create_superuser(
             email="test_super_user@me.com", password="testpass123"
         )

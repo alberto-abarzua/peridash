@@ -1,18 +1,21 @@
+from typing import Any, Dict, Hashable
+
 import pandas as pd
 from rest_framework import serializers
 
+from ticker.api_utils import TickerInfo
 from ticker.models import Symbol, Ticker, TickerSettings
 
 
 class DictSerializer(serializers.Serializer):
-    def to_representation(self, instance):
+    def to_representation(self, instance: Dict) -> Dict:
         return instance
 
 
 class SymbolSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
 
-    def get_name(self, obj):
+    def get_name(self, obj: Symbol) -> str:
         return obj.comp_name
 
     class Meta:
@@ -44,5 +47,5 @@ class TimeSeriesSerializer(serializers.Serializer):
     price_dif_percent = serializers.FloatField()
     ticker = TickerSerializer()
 
-    def get_df(self, obj):
-        return pd.DataFrame.to_dict(obj.df)
+    def get_df(self, ticker_info: TickerInfo) -> Dict[Hashable, Any]:
+        return pd.DataFrame.to_dict(ticker_info.df)

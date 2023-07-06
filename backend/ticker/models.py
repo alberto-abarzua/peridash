@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Any
+
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -15,7 +19,7 @@ class Symbol(models.Model):
     def __str__(self) -> str:
         return self.comp_name
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         self.exchange = self.exchange.replace(" ", "")
         super().save(*args, **kwargs)
 
@@ -23,7 +27,7 @@ class Symbol(models.Model):
     def comp_name(self) -> str:
         return self.symbol + ":" + self.exchange
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         return self.id == other.id
 
 
@@ -40,13 +44,13 @@ class Ticker(models.Model):
         return str(self.symbol)
 
     @classmethod
-    def create_using_str(cls, symbol, exchange):
+    def create_using_str(cls, symbol: str, exchange: str) -> Ticker:
         symbol_obj, _ = Symbol.objects.get_or_create(symbol=symbol, exchange=exchange)
         ticker_obj = Ticker.objects.create(symbol=symbol_obj)
         return ticker_obj
 
     @classmethod
-    def get_or_create_using_str(cls, ticker_set, symbol, exchange):
+    def get_or_create_using_str(cls, ticker_set: models.QuerySet, symbol: str, exchange: str) -> Ticker:
         try:
             ticker_obj = ticker_set.get(symbol__symbol=symbol, symbol__exchange=exchange)
         except Ticker.DoesNotExist:
@@ -61,12 +65,8 @@ class TickerSettings(models.Model):
     id = models.CharField(primary_key=True, max_length=100, default=get_token)
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     user_tickers = models.ManyToManyField(Ticker, blank=True)
-    plot_range = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(30)], default=5
-    )
-    stats_range = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(30)], default=1
-    )
+    plot_range = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(30)], default=5)
+    stats_range = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(30)], default=1)
 
     def __str__(self) -> str:
         return str(self.user) + "'s Ticker Settings"
