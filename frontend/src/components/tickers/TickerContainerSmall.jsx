@@ -19,10 +19,6 @@ const TickerContainerSmall = ({ ticker_data }) => {
     currentPrice = currentPrice.toFixed(2);
     priceVariation = priceVariation.toFixed(2);
     percentageVariation = percentageVariation.toFixed(2);
-    let main_color =
-        priceVariation > 0
-            ? theme.palette.stocks.green
-            : theme.palette.stocks.red;
 
     let main_color_dark =
         priceVariation > 0
