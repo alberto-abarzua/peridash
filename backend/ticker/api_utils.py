@@ -82,7 +82,6 @@ class TwelveDataCore:
     def get_time_series(self, symbols, start, end):
         if symbols is not None and len(symbols) > 0:
             sym_dict = {f"{sym.symbol}:{sym.exchange}": sym for sym in symbols}
-            print(start, end)
             time_series = self.client.time_series(
                 symbol=list(sym_dict.keys()),
                 interval=self.TIME_INTERVAL,
@@ -162,17 +161,12 @@ class TwelveDataCore:
             if cur is None:
                 not_cached_symbols.append(sym)
         # split in chunks of 10 symbols'
-        print("not_cached_symbols", len(not_cached_symbols))
         not_cached_symbols = [
-            not_cached_symbols[i: i + 10]
-            for i in range(0, len(not_cached_symbols), 10)
+            not_cached_symbols[i : i + 10] for i in range(0, len(not_cached_symbols), 10)
         ]
         time_series = []
         for chunk in not_cached_symbols:
-            print("chunk", len(chunk))
             time_series += self.get_time_series(chunk, start, end)
-
-        print("time_series", len(time_series))
 
         for ts in time_series:
             site_cache.set(
@@ -186,8 +180,6 @@ class TwelveDataCore:
             cur = site_cache.get(self.get_key_time_series(sym, start, end))
             if cur is not None:
                 final_tickers.append(cur)
-            else:
-                print("not found", sym)
         return final_tickers
 
     def __call__(self, tickers, start=None, end=None, days=None):
