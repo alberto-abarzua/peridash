@@ -29,7 +29,7 @@ DEBUG = os.environ.get("BACKEND_DJANGO_DEUBG", "False").upper() == "TRUE"
 if os.environ.get("GLOBAL_RUN_ENV", "prod") == "prod":
     DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get("BACKEND_DJANGO_ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS = os.environ.get("BACKEND_DJANGO_ALLOWED_HOSTS", "").split(",")
 
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 
@@ -97,7 +97,7 @@ DATABASES = {
         "USER": os.environ.get("BACKEND_POSTGRES_USER"),
         "PASSWORD": os.environ.get("BACKEND_POSTGRES_PASSWORD"),
         "HOST": os.environ.get("BACKEND_POSTGRES_HOSTNAME"),
-        "PORT": int(os.environ.get("BACKEND_POSTGRES_PORT")),
+        "PORT": int(os.environ.get("BACKEND_POSTGRES_PORT", 5432)),
         "TEST": {
             "NAME": "mytestdatabase",
         },

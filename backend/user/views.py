@@ -1,6 +1,7 @@
 """
 Views for the user API.
 """
+from django.contrib.auth.models import AbstractBaseUser
 from rest_framework import authentication, generics, permissions
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
@@ -22,6 +23,6 @@ class ManageUserView(generics.RetrieveAPIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self):
+    def get_object(self) -> AbstractBaseUser:
         """Retrieve and return the authenticated user."""
         return self.request.user

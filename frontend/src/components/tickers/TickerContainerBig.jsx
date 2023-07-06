@@ -21,6 +21,7 @@ const TickerContainerBig = ({ ticker_data }) => {
     let currentPrice = ticker_data.cur_price;
     let priceVariation = ticker_data.price_dif;
     let percentageVariation = ticker_data.price_dif_percent;
+    currentPrice = currentPrice.toFixed(2);
     priceVariation = priceVariation.toFixed(2);
     percentageVariation = percentageVariation.toFixed(2);
     let main_color =

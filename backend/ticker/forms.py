@@ -1,3 +1,5 @@
+from typing import Any, List
+
 from django import forms
 
 from ticker.models import Ticker, TickerSettings
@@ -9,11 +11,11 @@ class TimeSeriesForm(forms.Form):
     end = forms.DateTimeField(required=False)
     days = forms.IntegerField(required=False)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         self.request = kwargs.pop("request")
         super(TimeSeriesForm, self).__init__(*args, **kwargs)
 
-    def clean_symbols(self):
+    def clean_symbols(self) -> List[Ticker]:
         symbols = self.cleaned_data["symbols"]
         if symbols == "__ALL_USER__":
             user_settings = TickerSettings.objects.get(user=self.request.user)
@@ -26,9 +28,7 @@ class TimeSeriesForm(forms.Form):
         db_tickers = []
         for symbol in symbols:
             if ":" not in symbol:
-                raise forms.ValidationError(
-                    'Symbols must be in the format "symbol:exchange"'
-                )
+                raise forms.ValidationError('Symbols must be in the format "symbol:exchange"')
 
             symbol, exchange = symbol.split(":")
             cur_ticker = Ticker.get_or_create_using_str(

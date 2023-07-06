@@ -4,7 +4,7 @@ import os
 import sys
 
 
-def main():
+def main() -> None:  # type: ignore
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "peridash.settings")
     try:

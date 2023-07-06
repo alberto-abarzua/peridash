@@ -22,6 +22,10 @@ dependencies = [
     "django-cors-headers>=4.0.0",
     "coverage>=7.2.6",
     "gunicorn>=20.1.0",
+    "mypy>=1.4.1",
+    "flake8-annotations>=3.0.1",
+    "pandas-stubs>=2.0.2.230605",
+    "types-requests>=2.31.0.1",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}
@@ -31,12 +35,19 @@ license = {text = "MIT"}
 profile = "black"
 
 [tool.black]
-line-length = 90
+line-length = 110
+
+
+
+
 [tool.pdm.scripts]
 isort = "isort . --skip .venv"
 black = "black . --exclude .venv"
-lint = "flake8 ."
+pure_lint = "flake8 ."
+type_check = "mypy ."
+lint = {composite = ["pure_lint", "type_check"]}
 format = {composite = ["isort", "black"]}
+flint = {composite = ["format", "pure_lint"]}
 fixtures = "pdm run python manage.py loaddata fixtures/*.jsonpdm run py"
 test = "pdm run python manage.py test --pattern=\"test_*.py\""
 coverage = "coverage run --source='.' manage.py test --pattern=\"test_*.py\""

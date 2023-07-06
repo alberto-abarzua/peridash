@@ -17,9 +17,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="tickersettings",
             name="user",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name="tickersettings",
@@ -29,8 +27,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="ticker",
             name="symbol",
-            field=models.OneToOneField(
-                on_delete=django.db.models.deletion.CASCADE, to="ticker.symbol"
-            ),
+            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to="ticker.symbol"),
         ),
     ]
