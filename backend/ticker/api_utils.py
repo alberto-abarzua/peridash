@@ -82,7 +82,7 @@ class TwelveDataCore:
     def get_time_series(self, symbols, start, end):
         if symbols is not None and len(symbols) > 0:
             sym_dict = {f"{sym.symbol}:{sym.exchange}": sym for sym in symbols}
-
+            print(start, end)
             time_series = self.client.time_series(
                 symbol=list(sym_dict.keys()),
                 interval=self.TIME_INTERVAL,
@@ -161,8 +161,18 @@ class TwelveDataCore:
             cur = site_cache.get(self.get_key_time_series(sym, start, end))
             if cur is None:
                 not_cached_symbols.append(sym)
+        # split in chunks of 10 symbols'
+        print("not_cached_symbols", len(not_cached_symbols))
+        not_cached_symbols = [
+            not_cached_symbols[i: i + 10]
+            for i in range(0, len(not_cached_symbols), 10)
+        ]
+        time_series = []
+        for chunk in not_cached_symbols:
+            print("chunk", len(chunk))
+            time_series += self.get_time_series(chunk, start, end)
 
-        time_series = self.get_time_series(not_cached_symbols, start, end)
+        print("time_series", len(time_series))
 
         for ts in time_series:
             site_cache.set(
@@ -170,10 +180,15 @@ class TwelveDataCore:
                 ts,
                 self.TIME_SERIES_CACHE_INTERVAL,
             )
+        final_tickers = []
 
-        return [
-            site_cache.get(self.get_key_time_series(sym, start, end)) for sym in symbols
-        ]
+        for sym in symbols:
+            cur = site_cache.get(self.get_key_time_series(sym, start, end))
+            if cur is not None:
+                final_tickers.append(cur)
+            else:
+                print("not found", sym)
+        return final_tickers
 
     def __call__(self, tickers, start=None, end=None, days=None):
         symbols = [ticker.symbol for ticker in tickers]
@@ -182,10 +197,10 @@ class TwelveDataCore:
         if end is None:
             end = datetime.datetime.now()
         if start is None:
-            start = end - datetime.timedelta(days=self.DAY_RANGE_ALWAYS)
+            start = end - datetime.timedelta(days=days)
         if len(symbols) == 0:
             return {}
-        start, end = self.get_start_end(end, self.DAY_RANGE_ALWAYS)
+        start, end = self.get_start_end(end, days)
         res = self.cache_symbols(symbols, start, end)
         for i, ticker in enumerate(tickers):
             res[i].ticker = ticker
