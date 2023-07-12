@@ -1,43 +1,80 @@
-# Peridash - Stocks Dashboard
+# Peridash
 
----
+## About the Project
 
-## Getting started
+The Peridash project is a Stocks dashboard that fetches data from the [TwelveData API](https://twelvedata.com/). It's built with Django and React, both of which are popular and powerful frameworks for backend and frontend development respectively. The project is containerized using Docker, a platform that packages an application and its dependencies together in the form of containers to ensure that the application works seamlessly in any environment.
 
-1. Clonar la repo
+For package and dependency management, the project uses [PDM](https://pdm.fming.dev/), a modern Python package manager with PEP 582 support. It simplifies managing the dependencies of your Python projects.
 
-2. Copiar y cambiar el nombre de `.env.template` a `.env`
-   Para poder usar todos los features se debe tener una api key de openai.
+[Docker Compose](https://docs.docker.com/compose/) is used to define and run multi-container Docker applications, which means the application does not need to rely on the host system's setup and can run independently, isolated from other applications running on the same system.
 
-3. Correr `docker compose build --no-cache`
+The project has a clear separation between the backend and frontend. 
 
-4. Correr `docker compose up` para iniciar el proyecto
 
-## Comandos utiles
+### Architecture
 
-```python
+![Architecture](./imgs/arch.png)
 
-# Comandos para el backend
-docker compose run backend pdm run python manage.py --help # esto para correr cosas de django
-docker compose run backend pdm lint # para correr flake8 y lintear
-docker compose run backend pdm format # para formatiar el codigo que se puede auto formatear
-docker compose run backend pdm test # para  correr los tests
-docker compese run backend pdm test_full # Corre tests y genera reporte de coverage
+### Backend
 
-# Comandos para el fronted
+The backend of the project is powered by Django, specifically the Django REST Framework. This is used to create an API, which the frontend consumes. Django is a high-level Python Web framework that encourages rapid development and clean, pragmatic design.
 
-docker compose run backend npm lint
-docker compose run backend npm format
-docker compose run backend npm test
-docker compese run backend npm test_full
+PostgreSQL is used as the primary database for this project. PostgreSQL is a powerful, open-source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
+
+Memcached is used for caching in order to speed up live data access times. Memcached is a high-performance, distributed memory object caching system, generic in nature, but intended for use in speeding up dynamic web applications by alleviating database load.
+
+### Frontend
+
+The frontend is built using Next.js, a popular framework for building React applications. It offers features like server-side rendering and generating static websites for React based web applications. It simplifies the development of complex user interfaces and optimizes performance.
+
+
+
+## Setup
+
+You start by cloning the repository to your local machine, this is a git operation which duplicates the codebase onto your local machine for you to work on.
+
+Creating an `.env` file from the `.env.template` is the next step. The `.env` file is used to store sensitive data such as API keys, Database URIs, secret keys etc. In this project, you are required to get an API key from the TwelveData service and add it to this `.env` file.
+
+## Running the project
+
+Docker Compose is used to run the project. Docker Compose is a tool for defining and running multi-container Docker applications. First, you build the Docker images for the project using `docker compose build`. Docker images are lightweight, standalone, executable packages that include everything needed to run a piece of software, including the code, a runtime, libraries, environment variables, and config files.
+
+Once the Docker images have been built, you can start the project using `docker compose up`. This command starts the services as defined in the `docker-compose.yml` file in the project root.
+
+## Useful Commands
+
+There are several helpful commands provided for interacting with the project. These commands involve running the backend and frontend, linting (checking for stylistic errors), formatting the code, and running tests. The use of Docker here allows the project to be run in an isolated environment.
+
+
+### Backend
+
+```bash
+
+docker compose run backend pdm run python manage.py --help # Run django commands
+docker compose run backend pdm lint # Lint the backend code
+docker compose run backend pdm format # Format the backend code
+docker compose run backend pdm test # Run backend tests
+docker compese run backend pdm test_full # Run tests with coverage
+```
+
+
+
+### Frontend
+
+```bash
+
+docker compose run backend npm lint # Lint the frontend code
+docker compose run backend npm format # Format the frontend code
 
 ```
 
-## Como hacer cambios
 
-1. No se puede pushear directo a `main`, siempre se debe crear una rama nueva y hacer merge al final
+## Making Changes
 
-2. Para hacer merge:
-    - `git rebase main` en la rama que uno quiera mergear para resolver conflictos antes del merge
-    - Correr los comandos `lint`, `format` y `test` de arriba. Notar que `format` no arregla todos los errores, entonces hay que revisar el output de `lint` para asegurarse de que todo esta bien
-    - Hacer el merge request y asignar algun reviewer. Para poder completar el merge, el pipeline debe ser exitoso (build, lint, test)
+The rules for making changes and pushing them are well defined to ensure a smooth workflow. You're not allowed to push directly to the `main` branch. Instead, you should create a new branch, make your changes there, and then merge it back into `main`.
+
+Before merging, you're advised to run the `git rebase main` command in your feature branch. This command will update your branch with the latest changes from `main` and let you resolve any conflicts that might have arisen due to changes in `main` after you had created your feature branch.
+
+After resolving conflicts, you're required to run the `lint`, `format`, and `test` commands to ensure your code is clean, well-formatted, and working as expected.
+
+Finally, you can make a merge request and assign a reviewer. The merge request can only be completed if all the automated checks (build, lint, test) are successful.
