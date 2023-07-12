@@ -15,15 +15,27 @@ const DashPage = () => {
             );
             if (response.status === 200) {
                 console.log(response.data);
-
+    
                 setTickerData(response.data);
             } else {
                 alert('Error fetching time series');
             }
         };
-
+    
+        // call it immediately
         get_time_series();
+    
+        // setup the interval
+        const interval = setInterval(() => {
+            get_time_series();
+        }, 30000); // fetches every 30 seconds
+    
+        // return a cleanup function to clear the interval when the component is unmounted
+        return () => clearInterval(interval);
     }, [setTickerData]);
+
+
+
     console.log(tickerData);
     let favorite_tickers = tickerData.filter(
         ticker => ticker.ticker.is_favorite
