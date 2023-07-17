@@ -1,0 +1,31 @@
+name: CI | Build & Lint & Test
+on:
+  push:
+jobs:
+  build-lint-test:
+    runs-on: ubuntu-latest
+    environment: general
+    env:
+      # WIFI_SSID: ${{ vars.WIFI_SSID }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Build Docker Compose
+        run: docker compose build
+
+      - name: Run Docker Compose Up 
+        run: |
+          docker-compose up -d
+          sleep 5
+          docker-compose down
+      - name: Lint Backend with Flake8
+        run: docker compose run controller pdm lint
+
+      - name: Run Backend Tests
+        run: ./run.sh test
+    
+      - name: Stop and remove containers
+        if: always()
+        run: docker compose down
+    

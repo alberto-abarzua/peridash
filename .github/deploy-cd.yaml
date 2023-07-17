@@ -1,0 +1,50 @@
+name: CI | Build & Lint & Test
+on:
+  release:
+    types: [published]
+
+jobs:
+  docker-build-backend: 
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: "Login to DockerHub"
+        run: docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
+      - name: "Build Image"
+        run: docker build -t $DOCKER_HUB_USER/peridash-backend:$GITHUB_REF_NAME ./backend
+      - name: "Push Image"
+        run: docker push $DOCKER_HUB_USER/peridash-backend:$GITHUB_REF_NAME
+    
+  docker-build-frontend:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: "Login to DockerHub"
+        run:  docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
+      - name: "Build Image"
+        run: docker build -t $DOCKER_HUB_USER/peridash-frontend:$GITHUB_REF_NAME ./frontend
+      - name: "Push Image"
+        run: docker push $DOCKER_HUB_USER/peridash-frontend:$GITHUB_REF_NAME
+        
+
+  deploy: 
+    needs: [docker-build-backend, docker-build-frontend]
+    runs-on: ubuntu-latest
+    environment: production
+    container:
+      image: bitnami/kubectl:latest
+    env: 
+      KUBECONFIG: ${{ secrets.ROLLOUT_KUBECONFIG }}}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: "Rollout Kubernetes Deployment"
+        run: |
+          export KUBECONFIG=$KUBECONFIG
+          kubectl rollout restart deployment prod-peridash
+          kubectl rollout restart deployment prod-peridash
