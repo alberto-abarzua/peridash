@@ -37,7 +37,7 @@ jobs:
         run: docker push $DOCKER_HUB_USER/peridash-frontend:$GITHUB_REF_NAME
 
   deploy:
-    needs: [docker-build-backend, docker-build-frontend]
+    # needs: [docker-build-backend, docker-build-frontend]
     runs-on: ubuntu-latest
     environment: Production
     env:
