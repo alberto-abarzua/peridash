@@ -1,81 +1,104 @@
 name: CI | Deployment to LKE Cluster
 on:
-  release:
-    types: [published]
-  workflow_dispatch:
+    release:
+        types: [published]
+    workflow_dispatch:
 jobs:
-  docker-build-backend:
-    runs-on: ubuntu-latest
-    environment: Production
-    env:
-        DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
-        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-      - name: "Login to DockerHub"
-        run: docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
-      - name: "Build Image"
-        run: docker build -t $DOCKER_HUB_USER/peridash-backend:$GITHUB_REF_NAME ./backend
-      - name: "Push Image"
-        run: docker push $DOCKER_HUB_USER/peridash-backend:$GITHUB_REF_NAME
+    docker-build-backend:
+        runs-on: ubuntu-latest
+        environment: Production
+        env:
+            DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+            DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v3
 
-  docker-build-frontend:
-    runs-on: ubuntu-latest
-    environment: Production
-    env:
-        DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
-        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-      - name: "Login to DockerHub"
-        run: docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
-      - name: "Build Image"
-        run: docker build -t $DOCKER_HUB_USER/peridash-frontend:$GITHUB_REF_NAME ./frontend
-      - name: "Push Image"
-        run: docker push $DOCKER_HUB_USER/peridash-frontend:$GITHUB_REF_NAME
+            - name: Cache Docker layers
+              uses: actions/cache@v2
+              with:
+                  path: ~/.docker
+                  key: ${{ runner.os }}-docker-${{ hashFiles('backend/Dockerfile') }}
 
-  deploy:
-    needs: [docker-build-backend, docker-build-frontend]
-    runs-on: ubuntu-latest
-    environment: Production
-    env:
-        BACKEND_TWELVE_DATA_API_KEY: ${{ secrets.BACKEND_TWELVE_DATA_API_KEY }}
-        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        BACKEND_DJANGO_SECRET_KEY: ${{ secrets.BACKEND_DJANGO_SECRET_KEY }}
-        BACKEND_POSTGRES_PASSWORD: ${{ secrets.BACKEND_POSTGRES_PASSWORD }}
-        KUBECONFIG_CONTENTS: ${{ secrets.KUBECONFIG_CONTENTS }}
-        DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
-        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-        # Variables
-        BACKEND_DJANGO_DEUBG: ${{ vars.BACKEND_DJANGO_DEUBG }}
-        BACKEND_DJANGO_ALLOWED_HOSTS: ${{ vars.BACKEND_DJANGO_ALLOWED_HOSTS }}
-        BACKEND_DJANGO_CORS_ORIGIN_WHITELIST: ${{ vars.BACKEND_DJANGO_CORS_ORIGIN_WHITELIST }}
-        BACKEND_POSTGRES_USER: ${{ vars.BACKEND_POSTGRES_USER }}
-        BACKEND_POSTGRES_DB: ${{ vars.BACKEND_POSTGRES_DB }}
-        BACKEND_POSTGRES_HOSTNAME: ${{ vars.BACKEND_POSTGRES_HOSTNAME }}
-        BACKEND_POSTGRES_PORT: ${{ vars.BACKEND_POSTGRES_PORT }}
-        BACKEND_CACHE_HOSTNAME: ${{ vars.BACKEND_CACHE_HOSTNAME }}
-        BACKEND_CACHE_PORT: ${{ vars.BACKEND_CACHE_PORT }}
-        NEXT_PUBLIC_BACKEND_URL: ${{ vars.NEXT_PUBLIC_BACKEND_URL }}
-        NEXT_PRIVATE_BACKEND_URL: ${{ vars.NEXT_PRIVATE_BACKEND_URL }}
-        POSTGRES_USER: ${{ vars.POSTGRES_USER }}
-        POSTGRES_DB: ${{ vars.POSTGRES_DB }}
-        GLOBAL_RUN_ENV: ${{ vars.GLOBAL_RUN_ENV }}
-    container:
-      image: uintuser/kubectl-python:latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
+            - name: "Login to DockerHub"
+              run: docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
 
-      - name: "Set config file and access to cluster"
-        run: |
-            echo $KUBECONFIG_CONTENTS > ./temp_kubeconfig
-            echo "KUBECONFIG=$PWD/temp_kubeconfig" >> $GITHUB_ENV
-            kubectl config view
-      - name: "Apply changes to cluster"
-        run :  python kubernetes/deploy_commands/deploy.py kustomize --dir prod --show --tag $GITHUB_REF_NAME --apply
+            - name: "Build Image"
+              run: |
+                  echo "This is the branch name: $GITHUB_REF_NAME"
+                  docker build -t $DOCKER_HUB_USER/peridash-backend:$GITHUB_REF_NAME ./backend
 
-      - name: "Rollout deployments"
-        run: python kubernetes/deploy_commands/deploy.py rollout --dir prod --deployments frontend backend 
+            - name: "Push Image"
+              run: docker push $DOCKER_HUB_USER/peridash-backend:$GITHUB_REF_NAME
+
+    docker-build-frontend:
+        runs-on: ubuntu-latest
+        environment: Production
+        env:
+            DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+            DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v3
+
+            - name: Cache Docker layers
+              uses: actions/cache@v2
+              with:
+                  path: ~/.docker
+                  key: ${{ runner.os }}-docker-${{ hashFiles('frontend/Dockerfile') }}
+
+            - name: "Login to DockerHub"
+              run: docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
+
+            - name: "Build Image"
+              run: |
+                  echo "This is the branch name: $GITHUB_REF_NAME"
+                  docker build -t $DOCKER_HUB_USER/peridash-frontend:$GITHUB_REF_NAME ./frontend
+
+            - name: "Push Image"
+              run: docker push $DOCKER_HUB_USER/peridash-frontend:$GITHUB_REF_NAME
+
+    deploy:
+        needs: [docker-build-backend, docker-build-frontend]
+        runs-on: ubuntu-latest
+        environment: Production
+        env:
+            BACKEND_TWELVE_DATA_API_KEY: ${{ secrets.BACKEND_TWELVE_DATA_API_KEY }}
+            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+            BACKEND_DJANGO_SECRET_KEY: ${{ secrets.BACKEND_DJANGO_SECRET_KEY }}
+            BACKEND_POSTGRES_PASSWORD: ${{ secrets.BACKEND_POSTGRES_PASSWORD }}
+            KUBECONFIG_CONTENTS: ${{ secrets.KUBECONFIG_CONTENTS }}
+            DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+            DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+            # Variables
+            BACKEND_DJANGO_DEUBG: ${{ vars.BACKEND_DJANGO_DEUBG }}
+            BACKEND_DJANGO_ALLOWED_HOSTS: ${{ vars.BACKEND_DJANGO_ALLOWED_HOSTS }}
+            BACKEND_DJANGO_CORS_ORIGIN_WHITELIST: ${{ vars.BACKEND_DJANGO_CORS_ORIGIN_WHITELIST }}
+            BACKEND_POSTGRES_USER: ${{ vars.BACKEND_POSTGRES_USER }}
+            BACKEND_POSTGRES_DB: ${{ vars.BACKEND_POSTGRES_DB }}
+            BACKEND_POSTGRES_HOSTNAME: ${{ vars.BACKEND_POSTGRES_HOSTNAME }}
+            BACKEND_POSTGRES_PORT: ${{ vars.BACKEND_POSTGRES_PORT }}
+            BACKEND_CACHE_HOSTNAME: ${{ vars.BACKEND_CACHE_HOSTNAME }}
+            BACKEND_CACHE_PORT: ${{ vars.BACKEND_CACHE_PORT }}
+            NEXT_PUBLIC_BACKEND_URL: ${{ vars.NEXT_PUBLIC_BACKEND_URL }}
+            NEXT_PRIVATE_BACKEND_URL: ${{ vars.NEXT_PRIVATE_BACKEND_URL }}
+            POSTGRES_USER: ${{ vars.POSTGRES_USER }}
+            POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+            GLOBAL_RUN_ENV: ${{ vars.GLOBAL_RUN_ENV }}
+        container:
+            image: uintuser/kubectl-python:latest
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v3
+
+            - name: "Set config file and access to cluster"
+              run: |
+                  mkdir -p ~/.kube
+                  echo "$KUBECONFIG_CONTENTS" > ~/.kube/config
+                  kubectl config view
+                  kubectl get pods
+            - name: "Apply changes to cluster"
+              run: python kubernetes/deploy_commands/deploy.py kustomize --dir prod --show --tag $GITHUB_REF_NAME --apply
+
+            - name: "Rollout deployments"
+              run: python kubernetes/deploy_commands/deploy.py rollout --dir prod --deployments frontend backend

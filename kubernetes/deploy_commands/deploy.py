@@ -69,10 +69,15 @@ class DeployTool:
                 print(kustomization_str)
 
             if args.apply:
-                proc = subprocess.run(["kubectl", "apply", "-f", "-"],
-                                      input=kustomization_str, text=True, capture_output=True)
-                print(proc.stdout)
-                print(proc.stderr)
+                splitted_kustomization = kustomization_str.split("---")
+                for kustomization in splitted_kustomization:
+                    if not kustomization:
+                        continue
+
+                    proc = subprocess.run(["kubectl", "apply", "-f", "-"],
+                                        input=kustomization, text=True, capture_output=True)
+                    print(proc.stdout)
+                    print(proc.stderr)
             if args.dry_run:
                 proc = subprocess.run(["kubectl", "apply", "--dry-run=client", "-f", "-"],
                                       input=kustomization_str, text=True, capture_output=True)

@@ -1,51 +1,55 @@
 name: CI | Build & Lint & Test
 on:
-  push:
+    push:
 jobs:
-  build-lint-test:
-    runs-on: ubuntu-latest
-    environment: Testing
-    env:
-      # Secrets
-      BACKEND_TWELVE_DATA_API_KEY: ${{ secrets.BACKEND_TWELVE_DATA_API_KEY }}
-      # Variables
-      BACKEND_DJANGO_DEUBG: ${{ vars.BACKEND_DJANGO_DEUBG }}
-      BACKEND_DJANGO_SECRET_KEY: ${{ vars.BACKEND_DJANGO_SECRET_KEY }}
-      BACKEND_DJANGO_ALLOWED_HOSTS: ${{ vars.BACKEND_DJANGO_ALLOWED_HOSTS }}
-      BACKEND_DJANGO_CORS_ORIGIN_WHITELIST: ${{ vars.BACKEND_DJANGO_CORS_ORIGIN_WHITELIST }}
-      BACKEND_POSTGRES_USER: ${{ vars.BACKEND_POSTGRES_USER }}
-      BACKEND_POSTGRES_PASSWORD: ${{ vars.BACKEND_POSTGRES_PASSWORD }}
-      BACKEND_POSTGRES_DB: ${{ vars.BACKEND_POSTGRES_DB }}
-      BACKEND_POSTGRES_HOSTNAME: ${{ vars.BACKEND_POSTGRES_HOSTNAME }}
-      BACKEND_POSTGRES_PORT: ${{ vars.BACKEND_POSTGRES_PORT }}
-      BACKEND_CACHE_HOSTNAME: ${{ vars.BACKEND_CACHE_HOSTNAME }}
-      BACKEND_CACHE_PORT: ${{ vars.BACKEND_CACHE_PORT }}
-      NEXT_PUBLIC_BACKEND_URL: ${{ vars.NEXT_PUBLIC_BACKEND_URL }}
-      NEXT_PRIVATE_BACKEND_URL: ${{ vars.NEXT_PRIVATE_BACKEND_URL }}
-      POSTGRES_USER: ${{ vars.POSTGRES_USER }}
-      POSTGRES_PASSWORD: ${{ vars.POSTGRES_PASSWORD }}
-      POSTGRES_DB: ${{ vars.POSTGRES_DB }}
-      GLOBAL_RUN_ENV: ${{ vars.GLOBAL_RUN_ENV }}
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
+    build-lint-test:
+        runs-on: ubuntu-latest
+        environment: Testing
+        env:
+            # Secrets
+            BACKEND_TWELVE_DATA_API_KEY: ${{ secrets.BACKEND_TWELVE_DATA_API_KEY }}
+            # Variables
+            BACKEND_DJANGO_DEUBG: ${{ vars.BACKEND_DJANGO_DEUBG }}
+            BACKEND_DJANGO_SECRET_KEY: ${{ vars.BACKEND_DJANGO_SECRET_KEY }}
+            BACKEND_DJANGO_ALLOWED_HOSTS: ${{ vars.BACKEND_DJANGO_ALLOWED_HOSTS }}
+            BACKEND_DJANGO_CORS_ORIGIN_WHITELIST: ${{ vars.BACKEND_DJANGO_CORS_ORIGIN_WHITELIST }}
+            BACKEND_POSTGRES_USER: ${{ vars.BACKEND_POSTGRES_USER }}
+            BACKEND_POSTGRES_PASSWORD: ${{ vars.BACKEND_POSTGRES_PASSWORD }}
+            BACKEND_POSTGRES_DB: ${{ vars.BACKEND_POSTGRES_DB }}
+            BACKEND_POSTGRES_HOSTNAME: ${{ vars.BACKEND_POSTGRES_HOSTNAME }}
+            BACKEND_POSTGRES_PORT: ${{ vars.BACKEND_POSTGRES_PORT }}
+            BACKEND_CACHE_HOSTNAME: ${{ vars.BACKEND_CACHE_HOSTNAME }}
+            BACKEND_CACHE_PORT: ${{ vars.BACKEND_CACHE_PORT }}
+            NEXT_PUBLIC_BACKEND_URL: ${{ vars.NEXT_PUBLIC_BACKEND_URL }}
+            NEXT_PRIVATE_BACKEND_URL: ${{ vars.NEXT_PRIVATE_BACKEND_URL }}
+            POSTGRES_USER: ${{ vars.POSTGRES_USER }}
+            POSTGRES_PASSWORD: ${{ vars.POSTGRES_PASSWORD }}
+            POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+            GLOBAL_RUN_ENV: ${{ vars.GLOBAL_RUN_ENV }}
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v3
 
-      - name: Build Docker Compose
-        run: docker compose build
+            - name: Cache Docker layers
+              uses: actions/cache@v2
+              with:
+                  path: ~/.docker
+                  key: ${{ runner.os }}-docker-${{ hashFiles('**/docker-compose.yml') }}-${{ hashFiles('**/Dockerfile') }}
 
-      - name: Run Docker Compose Up 
-        run: |
-          docker-compose up -d
-          sleep 5
-          docker-compose down
-      - name: Lint Backend with Flake8
-        run: docker compose run backend pdm lint
-      - name: "Lint Frontend with ESLint"
-        run: docker compose run frontend npm run lint_no_fix
-      - name: Run Backend Tests
-        run:  docker compose run backend pdm test
+            - name: Build Docker Compose
+              run: docker compose build
+            - name: Run Docker Compose Up
+              run: |
+                  docker-compose up -d
+                  sleep 5
+                  docker-compose down
+            - name: Lint Backend with Flake8
+              run: docker compose run backend pdm lint
+            - name: "Lint Frontend with ESLint"
+              run: docker compose run frontend npm run lint_no_fix
+            - name: Run Backend Tests
+              run: docker compose run backend pdm test
 
-      - name: Stop and remove containers
-        if: always()
-        run: docker compose down
-    
+            - name: Stop and remove containers
+              if: always()
+              run: docker compose down
