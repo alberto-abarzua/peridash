@@ -30,14 +30,14 @@ jobs:
             - name: Check out repository
               uses: actions/checkout@v3
 
-            - name: Build Docker Compose
-              run: docker compose build
-              
             - name: Cache Docker layers
               uses: actions/cache@v2
               with:
                   path: ~/.docker
                   key: ${{ runner.os }}-docker-${{ hashFiles('**/docker-compose.yml') }}-${{ hashFiles('**/Dockerfile') }}
+
+            - name: Build Docker Compose
+              run: docker compose build
             - name: Run Docker Compose Up
               run: |
                   docker-compose up -d
