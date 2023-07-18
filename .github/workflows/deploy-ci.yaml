@@ -71,8 +71,8 @@ jobs:
 
       - name: "Set config file and access to cluster"
         run: |
-            echo $KUBECONFIG_CONTENTS > ./temp_kubeconfig
-            echo "KUBECONFIG=$PWD/temp_kubeconfig" >> $GITHUB_ENV
+            echo "$KUBECONFIG_CONTENTS" > ~/.kube/config
+            kubectl config view
             kubectl get pods
       - name: "Apply changes to cluster"
         run :  python kubernetes/deploy_commands/deploy.py kustomize --dir prod --show --tag $GITHUB_REF_NAME --apply
