@@ -73,8 +73,6 @@ jobs:
         run: |
             echo $KUBECONFIG_CONTENTS > ./temp_kubeconfig
             echo "KUBECONFIG=$PWD/temp_kubeconfig" >> $GITHUB_ENV
-            cat $KUBECONFIG
-            kubectl config view
             kubectl get pods
       - name: "Apply changes to cluster"
         run :  python kubernetes/deploy_commands/deploy.py kustomize --dir prod --show --tag $GITHUB_REF_NAME --apply
