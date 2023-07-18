@@ -8,55 +8,55 @@ jobs:
         runs-on: ubuntu-latest
         environment: Production
         env:
-          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
-          DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+            DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+            DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
         steps:
-          - name: Check out repository
-            uses: actions/checkout@v3
-      
-          - name: Cache Docker layers
-            uses: actions/cache@v2
-            with:
-              path: ~/.docker
-              key: ${{ runner.os }}-docker-${{ hashFiles('backend/Dockerfile') }}
-      
-          - name: "Login to DockerHub"
-            run: docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
-      
-          - name: "Build Image"
-            run: |
-              echo "This is the branch name: $GITHUB_REF_NAME"
-              docker build -t $DOCKER_HUB_USER/peridash-backend:$GITHUB_REF_NAME ./backend
-      
-          - name: "Push Image"
-            run: docker push $DOCKER_HUB_USER/peridash-backend:$GITHUB_REF_NAME
-      
+            - name: Check out repository
+              uses: actions/checkout@v3
+
+            - name: Cache Docker layers
+              uses: actions/cache@v2
+              with:
+                  path: ~/.docker
+                  key: ${{ runner.os }}-docker-${{ hashFiles('backend/Dockerfile') }}
+
+            - name: "Login to DockerHub"
+              run: docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
+
+            - name: "Build Image"
+              run: |
+                  echo "This is the branch name: $GITHUB_REF_NAME"
+                  docker build -t $DOCKER_HUB_USER/peridash-backend:$GITHUB_REF_NAME ./backend
+
+            - name: "Push Image"
+              run: docker push $DOCKER_HUB_USER/peridash-backend:$GITHUB_REF_NAME
+
     docker-build-frontend:
         runs-on: ubuntu-latest
         environment: Production
         env:
-          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
-          DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+            DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+            DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
         steps:
-          - name: Check out repository
-            uses: actions/checkout@v3
-      
-          - name: Cache Docker layers
-            uses: actions/cache@v2
-            with:
-              path: ~/.docker
-              key: ${{ runner.os }}-docker-${{ hashFiles('frontend/Dockerfile') }}
-      
-          - name: "Login to DockerHub"
-            run: docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
-      
-          - name: "Build Image"
-            run: |
-              echo "This is the branch name: $GITHUB_REF_NAME"
-              docker build -t $DOCKER_HUB_USER/peridash-frontend:$GITHUB_REF_NAME ./frontend
-      
-          - name: "Push Image"
-            run: docker push $DOCKER_HUB_USER/peridash-frontend:$GITHUB_REF_NAME
+            - name: Check out repository
+              uses: actions/checkout@v3
+
+            - name: Cache Docker layers
+              uses: actions/cache@v2
+              with:
+                  path: ~/.docker
+                  key: ${{ runner.os }}-docker-${{ hashFiles('frontend/Dockerfile') }}
+
+            - name: "Login to DockerHub"
+              run: docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
+
+            - name: "Build Image"
+              run: |
+                  echo "This is the branch name: $GITHUB_REF_NAME"
+                  docker build -t $DOCKER_HUB_USER/peridash-frontend:$GITHUB_REF_NAME ./frontend
+
+            - name: "Push Image"
+              run: docker push $DOCKER_HUB_USER/peridash-frontend:$GITHUB_REF_NAME
 
     deploy:
         needs: [docker-build-backend, docker-build-frontend]
