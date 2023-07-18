@@ -39,11 +39,12 @@ jobs:
           sleep 5
           docker-compose down
       - name: Lint Backend with Flake8
-        run: docker compose run controller pdm lint
-
+        run: docker compose run backend pdm lint
+      - name: "Lint Frontend with ESLint"
+        run: docker compose run frontend npm run lint_no_fix
       - name: Run Backend Tests
-        run: ./run.sh test
-    
+        run:  docker compose run backend pdm test
+
       - name: Stop and remove containers
         if: always()
         run: docker compose down
