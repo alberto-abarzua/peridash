@@ -6,7 +6,7 @@ on:
 jobs:
   docker-build-backend:
     runs-on: ubuntu-latest
-    environment: production
+    environment: Production
     env:
         DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
         DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -22,7 +22,7 @@ jobs:
 
   docker-build-frontend:
     runs-on: ubuntu-latest
-    environment: production
+    environment: Production
     env:
         DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
         DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -39,7 +39,7 @@ jobs:
   deploy:
     needs: [docker-build-backend, docker-build-frontend]
     runs-on: ubuntu-latest
-    environment: production
+    environment: Production
     env:
         BACKEND_TWELVE_DATA_API_KEY: ${{ secrets.BACKEND_TWELVE_DATA_API_KEY }}
         POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
