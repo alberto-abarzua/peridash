@@ -71,6 +71,7 @@ jobs:
 
       - name: "Set config file and access to cluster"
         run: |
+            mkdir -p ~/.kube
             echo "$KUBECONFIG_CONTENTS" > ~/.kube/config
             kubectl config view
             kubectl get pods
