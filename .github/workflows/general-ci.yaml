@@ -4,7 +4,7 @@ on:
 jobs:
   build-lint-test:
     runs-on: ubuntu-latest
-    environment: testing
+    environment: Testing
     env:
       # Secrets
       BACKEND_TWELVE_DATA_API_KEY: ${{ secrets.BACKEND_TWELVE_DATA_API_KEY }}
