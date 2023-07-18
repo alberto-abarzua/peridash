@@ -7,7 +7,7 @@ fi
 
 # Get the ServiceAccount's token Secret's name
 SECRET_NAME=$(kubectl get serviceaccount gitlab-ci -n $1 -o jsonpath='{.secrets[0].name}')
-
+echo $SECRET_NAME
 # Extract the Bearer token from the Secret and decode
 TOKEN=$(kubectl get secret $SECRET_NAME -n $1 -o jsonpath='{.data.token}' | base64 --decode)
 

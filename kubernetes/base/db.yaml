@@ -55,13 +55,11 @@ spec:
           resources:  
                 requests:
                   cpu: "100m"
-                  memory: "100Mi"
+                  memory: "120Mi"
                 limits:
-                  cpu: "500m"
-                  memory: "500Mi"
+                  cpu: "400m"
+                  memory: "200Mi"
       volumes:
         - name: postgres-data
           persistentVolumeClaim:
             claimName: postgres-data
-      imagePullSecrets:
-        - name: regcred

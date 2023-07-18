@@ -4,4 +4,4 @@ resources:
   - db.yaml
   - memcached.yaml
   - ingress.yaml
-  - rollout_ci_role.yaml
+  - ci-service-account.yaml

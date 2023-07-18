@@ -36,10 +36,10 @@ spec:
                 name: frontend-env
           resources:  
                 requests:
-                  cpu: "100m"
-                  memory: "100Mi"
+                  cpu: "200m"
+                  memory: "650Mi"
                 limits:
                   cpu: "500m"
-                  memory: "500Mi"
+                  memory: "1000Mi"
       imagePullSecrets:
         - name: regcred
