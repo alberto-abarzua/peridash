@@ -64,16 +64,16 @@ jobs:
         POSTGRES_DB: ${{ vars.POSTGRES_DB }}
         GLOBAL_RUN_ENV: ${{ vars.GLOBAL_RUN_ENV }}
     container:
-      image: bitnami/kubectl:latest
+      image: uintuser/kubectl-python:latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
 
       - name: "Set config file and access to cluster"
         run: |
-          echo $KUBECONFIG_CONTENTS > ./temp_kubeconfig
-          export KUBECONFIG=./temp_kubeconfig
-          kubectl config view
+            echo $KUBECONFIG_CONTENTS > ./temp_kubeconfig
+            echo "KUBECONFIG=$PWD/temp_kubeconfig" >> $GITHUB_ENV
+            kubectl config view
       - name: "Apply changes to cluster"
         run :  python kubernetes/deploy_commands/deploy.py kustomize --dir prod --show --tag $GITHUB_REF_NAME --apply
 
