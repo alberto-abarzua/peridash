@@ -1,13 +1,15 @@
-name: CI | Build & Lint & Test
+name: CI | Deployment to LKE Cluster
 on:
   release:
     types: [published]
   workflow_dispatch:
-
 jobs:
   docker-build-backend:
     runs-on: ubuntu-latest
     environment: production
+    env:
+        DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -21,6 +23,9 @@ jobs:
   docker-build-frontend:
     runs-on: ubuntu-latest
     environment: production
+    env:
+        DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
