@@ -5,7 +5,7 @@ from pathlib import Path
 import yaml
 import shutil
 from collections import defaultdict
-
+import base64
 
 class PrettyDumper(yaml.Dumper):
     def ignore_aliases(self, data):
@@ -92,7 +92,7 @@ class DeployTool:
                 print(proc.stderr)
 
         elif args.command == 'get-service-token':
-            self.get_service_token()
+            print(self.get_service_token(kustonmization_dir))
 
         self.cleanup_temp_files(kustonmization_dir)
 
@@ -150,7 +150,6 @@ class DeployTool:
 
     def cleanup_temp_files(self, kustomization_dir: Path) -> None:
         # delete temp envs dir
-        print("Cleaning up")
         file_to_delete = kustomization_dir / self.ENVS_TEMP_DIR
         if os.path.exists(file_to_delete):
             shutil.rmtree(file_to_delete)
@@ -172,17 +171,84 @@ class DeployTool:
     def get_rollout_service_token(self) -> str:
         pass
 
-    def get_service_token(self) -> str:
+    def get_service_token(self,kustomizaton_dir: Path) -> str:
+        kustomization_dict = self.read_kustomization_yaml(kustomizaton_dir)
+        namespace = kustomization_dict["namespace"]
         secret_name = subprocess.run(
-            ["kubectl", "get", "serviceaccount", self.SERVICE_ACCOUNT, "-o", "jsonpath='{.secrets[0].name}'"], capture_output=True, text=True)
+            ["kubectl", "get", "serviceaccount","-n",namespace, self.SERVICE_ACCOUNT, "-o", "jsonpath='{.secrets[0].name}'"], capture_output=True, text=True)
         
         output = secret_name.stdout
         error = secret_name.stderr
         if error:
             print(error)
             return ""
-        print (output)
         secret_name = secret_name.stdout
+        secret_name = secret_name.strip("'")  # removing the enclosing single quotes
+        # extract tthe Beares token from the secret and decode
+        #TOKEN=$(kubectl get secret $SECRET_NAME -n $1 -o jsonpath='{.data.token}' | base64 --decode)
+        token = subprocess.run(
+            ["kubectl", "get", "secret", secret_name,"-n",namespace, "-o", "jsonpath='{.data.token}'"], capture_output=True, text=True)
+        error = token.stderr
+        error = token.stderr
+        if error:
+            print(error)
+            return ""
+        token = token.stdout.strip("'")  # removing the enclosing single quotes
+        # base64 decode
+        token = base64.b64decode(token).decode("utf-8")
+        #CLUSTER_NAME=$(kubectl config view -o jsonpath='{.clusters[0].name}')
+
+        #CA_CERT=$(kubectl get secret $SECRET_NAME -n $1 -o jsonpath='{.data.ca\.crt}' | base64 --decode | base64 -w 0)
+
+        ca_cert = subprocess.run(
+            ["kubectl", "get", "secret", secret_name,"-n",namespace, "-o", "jsonpath='{.data.ca\\.crt}'"], capture_output=True, text=True)
+        error = ca_cert.stderr
+        if error:
+            print(error)
+            return ""
+        ca_cert = ca_cert.stdout.strip("'")  # removing the enclosing single quotes
+        # base64 decode
+
+
+        cluster_name  = subprocess.run(
+            ["kubectl", "config", "view", "-o", "jsonpath='{.clusters[0].name}'"], capture_output=True, text=True)
+        error = cluster_name.stderr
+        if error:
+            print(error)
+            return ""
+        cluster_name = cluster_name.stdout.strip("'")  # removing the enclosing single quotes
+        server = subprocess.run(
+            ["kubectl", "config", "view", "-o", "jsonpath='{.clusters[0].cluster.server}'"], capture_output=True, text=True)
+        error = server.stderr
+        if error:
+            print(error)
+            return ""
+        server = server.stdout.strip("'")  # removing the enclosing single quotes
+
+        kubeconfig = f"""
+apiVersion: v1
+clusters:
+- name: {cluster_name}
+  cluster:  
+    certificate-authority-data: {ca_cert}
+    server: {server}
+contexts: 
+- context:
+    cluster: {cluster_name}
+    user: {self.SERVICE_ACCOUNT}
+  name: {self.SERVICE_ACCOUNT}-context
+current-context: {self.SERVICE_ACCOUNT}-context
+kind: Config
+preferences: {""}
+users:
+- name: {self.SERVICE_ACCOUNT}
+  user:
+    token: {token}
+"""
+        return kubeconfig
+        
+
+
         
 
 

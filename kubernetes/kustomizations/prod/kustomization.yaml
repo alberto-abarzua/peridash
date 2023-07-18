@@ -13,9 +13,11 @@ configMapGenerator:
   name: db-env
 images:
 - name: backend_image
-  newTag: v1.0.0
+  newName: uintuser/peridash-backend
+  newTag: dev
 - name: frontend_image
-  newTag: v1.0.0
+  newName: uintuser/peridash-frontend
+  newTag: dev
 namespace: prod-peridash
 patches:
 - target:
