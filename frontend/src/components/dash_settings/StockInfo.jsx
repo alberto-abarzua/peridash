@@ -28,7 +28,7 @@ const StockInfo = ({ result, getUserTickers }) => {
     const isFirstRender = useRef(true);
 
     const handleDelete = async () => {
-        let response = await api.delete(`/ticker/user-tickers/${result.id}/`);
+        await api.delete(`/ticker/user-tickers/${result.id}/`);
         getUserTickers();
     };
 
@@ -138,7 +138,7 @@ const StockInfo = ({ result, getUserTickers }) => {
     );
 
     return (
-        <Card sx={{ width: '50%' , }}>
+        <Card sx={{ width: '50%' }}>
             <CardContent sx={{ padding: 1 }}>
                 <Grid container>
                     <Grid item xs={7}>
