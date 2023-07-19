@@ -7,7 +7,7 @@ import { Grid, Typography, Divider, Box } from '@mui/material';
 
 import { useState, useEffect, useCallback } from 'react';
 
-const DashPage = () => {
+const SettingsPage = () => {
     const [userTickers, setUserTickers] = useState([]);
 
     const getUserTickers = useCallback(async () => {
@@ -52,4 +52,4 @@ const DashPage = () => {
 };
 export const getServerSideProps = withAuth();
 
-export default DashPage;
+export default SettingsPage;

@@ -29,9 +29,7 @@ const StockInfo = ({ result, getUserTickers }) => {
 
     const handleDelete = async () => {
         let response = await api.delete(`/ticker/user-tickers/${result.id}/`);
-        if (response.status === 204) {
-            getUserTickers();
-        }
+        getUserTickers();
     };
 
     const handleBuyChange = event => {
@@ -140,10 +138,10 @@ const StockInfo = ({ result, getUserTickers }) => {
     );
 
     return (
-        <Card>
-            <CardContent>
+        <Card sx={{ width: '50%' , }}>
+            <CardContent sx={{ padding: 1 }}>
                 <Grid container>
-                    <Grid item xs={10}>
+                    <Grid item xs={7}>
                         <Typography variant="h5" component="div">
                             {result.symbol.name}
                         </Typography>
@@ -156,24 +154,27 @@ const StockInfo = ({ result, getUserTickers }) => {
                                 />
                             ) : (
                                 <StarOutlineIcon
-                                    sx={{ color: 'grey', fontSize: '4rem' }}
+                                    sx={{ color: 'grey', fontSize: '3.5rem' }}
                                 />
                             )}
                         </IconButton>
                     </Grid>
+                    <Grid item xs={3}>
+                        <Button
+                            variant="contained"
+                            onClick={handleDelete}
+                            sx={{
+                                mt: 2,
+                                ml: 1,
+                                backgroundColor: 'error.main',
+                                '&:hover': { backgroundColor: 'error.dark' },
+                            }}
+                        >
+                            Delete
+                        </Button>
+                    </Grid>
                 </Grid>
                 <Collapse in={favorite}>{textFieldsJsx}</Collapse>
-                <Button
-                    variant="contained"
-                    onClick={handleDelete}
-                    sx={{
-                        mt: 2,
-                        backgroundColor: 'error.main',
-                        '&:hover': { backgroundColor: 'error.dark' },
-                    }}
-                >
-                    Delete
-                </Button>
             </CardContent>
         </Card>
     );
