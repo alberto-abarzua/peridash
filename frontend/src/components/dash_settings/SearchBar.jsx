@@ -94,7 +94,6 @@ const SearchBar = ({ getUserTickers }) => {
                     Search
                 </Button>
             </Box>
-            <h1>Search Results</h1>
             <Dialog
                 open={isModalOpen}
                 onClose={handleDialogClose}

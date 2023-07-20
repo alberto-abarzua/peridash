@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
+import { StyledEngineProvider } from '@mui/material/styles';
 
 const theme = createTheme({
     palette: {
@@ -40,10 +41,12 @@ export default function MainApp({ Component, pageProps }) {
         nav = null;
     }
     return (
+        <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
             {nav}
             <Component {...pageProps} />
         </ThemeProvider>
+        </StyledEngineProvider>
     );
 }
 

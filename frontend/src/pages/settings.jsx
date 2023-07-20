@@ -23,7 +23,10 @@ const SettingsPage = () => {
         getUserTickers();
     }, [getUserTickers]);
     return (
+        
         <Box>
+
+
             <Grid>
                 <Divider
                     style={{
@@ -34,9 +37,7 @@ const SettingsPage = () => {
             </Grid>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
-                    <Typography variant="h2" sx={{ color: 'white' }}>
-                        Control Panel
-                    </Typography>
+                    <div className="text-7xl text-white p-3">Control Panel</div>
                     <SearchBar getUserTickers={getUserTickers} />
                 </Grid>
                 <Grid item xs={12} md={6}>
