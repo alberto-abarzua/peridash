@@ -28,16 +28,11 @@ const SettingsPage = () => {
 
 
             <Grid>
-                <Divider
-                    style={{
-                        backgroundColor: 'rgba(195, 195, 195, 0.3)',
-                        height: '1px',
-                    }}
-                />
+                <Divider className = "bg-slate-300 h-0"/>
             </Grid>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
-                    <div className="text-7xl text-white p-3">Control Panel</div>
+                    <div className="text-7xl text-white p-3">Dash Settings</div>
                     <SearchBar getUserTickers={getUserTickers} />
                 </Grid>
                 <Grid item xs={12} md={6}>
