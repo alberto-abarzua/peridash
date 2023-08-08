@@ -58,10 +58,11 @@ export default function Navbar() {
 
                             <ListItemText
                                 primary={link.title}
-                                slotProps = {{
+                                slotProps={{
                                     thumb: {
-                                        className:"text-white text-lg hover:text-slate-300"
-                                    }
+                                        className:
+                                            'text-white text-lg hover:text-slate-300',
+                                    },
                                 }}
                             />
                         </ListItem>

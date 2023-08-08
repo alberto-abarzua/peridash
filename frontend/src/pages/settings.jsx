@@ -3,7 +3,7 @@ import SearchBar from '@/components/dash_settings/SearchBar';
 import UserTickers from '@/components/dash_settings/UserTickers';
 import api from '@/utils/api';
 import { withAuth } from '@/utils/auth';
-import { Grid, Typography, Divider, Box } from '@mui/material';
+import { Grid, Divider, Box } from '@mui/material';
 
 import { useState, useEffect, useCallback } from 'react';
 
@@ -23,12 +23,9 @@ const SettingsPage = () => {
         getUserTickers();
     }, [getUserTickers]);
     return (
-        
         <Box>
-
-
             <Grid>
-                <Divider className = "bg-slate-300 h-0"/>
+                <Divider className="bg-slate-300 h-0" />
             </Grid>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>

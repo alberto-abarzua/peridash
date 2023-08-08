@@ -1,11 +1,11 @@
 import '@/styles/globals.css';
 
-import Navbar from '@/components/layout/Navbar';
+import SideNav from '@/components/layout/SideNav';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { StyledEngineProvider } from '@mui/material/styles';
 
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { StyledEngineProvider } from '@mui/material/styles';
 
 const theme = createTheme({
     palette: {
@@ -36,16 +36,16 @@ const theme = createTheme({
 
 export default function MainApp({ Component, pageProps }) {
     const router = useRouter();
-    let nav = <Navbar />;
+    let nav = <SideNav />;
     if (router.pathname === '/login') {
         nav = null;
     }
     return (
         <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={theme}>
-            {nav}
-            <Component {...pageProps} />
-        </ThemeProvider>
+            <ThemeProvider theme={theme}>
+                {nav}
+                <Component {...pageProps} />
+            </ThemeProvider>
         </StyledEngineProvider>
     );
 }
