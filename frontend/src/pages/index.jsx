@@ -1,24 +1,37 @@
+import useNotification from '@/components/general/notification/useNotification';
 import TickerContainerBig from '@/components/tickers/TickerContainerBig';
 import TickerContainerSmall from '@/components/tickers/TickerContainerSmall';
+import TickerStatsInfo from '@/components/tickers/TickerStatsInfo';
 import api from '@/utils/api';
 import { withAuth } from '@/utils/auth';
-import { Grid } from '@mui/material';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 
 import { useEffect, useState } from 'react';
+import { ClipLoader } from 'react-spinners';
+
 const DashPage = () => {
     const [tickerData, setTickerData] = useState([]);
-
+    const [loading, setLoading] = useState(false);
+    const { showNotification, renderNotification } = useNotification();
+    const NUM_DAYS = 7;
     useEffect(() => {
+        setLoading(true);
         const get_time_series = async () => {
             let response = await api.get(
-                '/ticker/time_series/?symbols=__ALL_USER__&days=7'
+                '/ticker/time_series/?symbols=__ALL_USER__&days=' + NUM_DAYS
             );
             if (response.status === 200) {
-                console.log(response.data);
+                setLoading(false);
 
                 setTickerData(response.data);
             } else {
-                alert('Error fetching time series');
+                showNotification(
+                    'Failed to get Ticker Data!',
+                    <ReportProblemIcon className=" text-red-500" />,
+                    'bg-red-100'
+                );
+
+                setLoading(false);
             }
         };
 
@@ -32,15 +45,11 @@ const DashPage = () => {
 
         // return a cleanup function to clear the interval when the component is unmounted
         return () => clearInterval(interval);
-    }, [setTickerData]);
+    }, [setTickerData, showNotification]);
 
     console.log(tickerData);
-    let favorite_tickers = tickerData.filter(
-        ticker => ticker.ticker.is_favorite
-    );
-    let not_favorite_tickers = tickerData.filter(
-        ticker => !ticker.ticker.is_favorite
-    );
+    let favorite_tickers = tickerData.filter(ticker => ticker.ticker.is_favorite);
+    let not_favorite_tickers = tickerData.filter(ticker => !ticker.ticker.is_favorite);
     console.log(favorite_tickers);
     console.log(not_favorite_tickers);
     //Divide not_favorite_tickers into 3 arrays of equal size
@@ -54,46 +63,50 @@ const DashPage = () => {
     );
 
     //split favorite in 2 arrays
-    let favorite_tickers_1 = favorite_tickers.slice(
-        0,
-        Math.ceil(favorite_tickers.length / 2)
-    );
+    let favorite_tickers_1 = favorite_tickers.slice(0, Math.ceil(favorite_tickers.length / 2));
     let favorite_tickers_2 = favorite_tickers.slice(
         Math.ceil(favorite_tickers.length / 2),
         favorite_tickers.length
     );
 
+    if (loading) {
+        return (
+            <div className="container mx-auto px-4">
+                <div className="flex min-h-screen items-center justify-center">
+                    <ClipLoader color="rgba(0, 193, 46, 0.8)" size={70} />
+                </div>
+            </div>
+        );
+    }
     return (
-        <div>
-            <Grid container spacing={2}>
-                <Grid item xs={14} sm={12} md={3}>
+        <div className="container mx-auto px-4">
+            {renderNotification()}
+            <div className="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
+                <div className="flex flex-1 flex-col space-y-2">
                     {favorite_tickers_1.map((ticker, index) => (
                         <TickerContainerBig key={index} ticker_data={ticker} />
                     ))}
-                </Grid>
+                </div>
 
-                <Grid item xs={12} sm={12} md={3}>
+                <div className="flex flex-1 flex-col space-y-2">
                     {favorite_tickers_2.map((ticker, index) => (
                         <TickerContainerBig key={index} ticker_data={ticker} />
                     ))}
-                </Grid>
-                <Grid item xs={12} sm={12} md={3}>
+                </div>
+
+                <div className="flex flex-1 flex-col space-y-2">
                     {not_favorite_tickers_1.map((ticker, index) => (
-                        <TickerContainerSmall
-                            key={index}
-                            ticker_data={ticker}
-                        />
+                        <TickerContainerSmall key={index} ticker_data={ticker} />
                     ))}
-                </Grid>
-                <Grid item xs={12} sm={12} md={3}>
+                </div>
+
+                <div className="flex flex-1 flex-col space-y-2">
                     {not_favorite_tickers_2.map((ticker, index) => (
-                        <TickerContainerSmall
-                            key={index}
-                            ticker_data={ticker}
-                        />
+                        <TickerContainerSmall key={index} ticker_data={ticker} />
                     ))}
-                </Grid>
-            </Grid>
+                </div>
+            </div>
+            <TickerStatsInfo stats={{ num_days: NUM_DAYS }} />
         </div>
     );
 };

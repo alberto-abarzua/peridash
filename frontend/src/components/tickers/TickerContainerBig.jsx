@@ -1,7 +1,4 @@
-import NorthEastIcon from '@mui/icons-material/NorthEast';
-import SouthEastIcon from '@mui/icons-material/SouthEast';
-import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import TickerCoreInfo from '@/components/tickers/TickerCoreInfo';
 
 import { Chart, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
@@ -12,48 +9,19 @@ import { Line } from 'react-chartjs-2';
 Chart.register(...registerables);
 Chart.register(annotationPlugin);
 const TickerContainerBig = ({ ticker_data }) => {
-    const theme = useTheme();
-
     useEffect(() => {
-        // here update te chart
+        // here update the chart
     }, [ticker_data]);
 
-    let currentPrice = ticker_data.cur_price;
-    let priceVariation = ticker_data.price_dif;
-    let percentageVariation = ticker_data.price_dif_percent;
-    currentPrice = currentPrice.toFixed(2);
-    priceVariation = priceVariation.toFixed(2);
-    percentageVariation = percentageVariation.toFixed(2);
-    let main_color =
-        priceVariation > 0
-            ? theme.palette.stocks.green
-            : theme.palette.stocks.red;
-    let main_color_light =
-        priceVariation > 0
-            ? theme.palette.stocks.green_light
-            : theme.palette.stocks.red_light;
-    let main_color_dark =
-        priceVariation > 0
-            ? theme.palette.stocks.green_dark
-            : theme.palette.stocks.red_dark;
+    let currentPrice = ticker_data.cur_price.toFixed(2);
+    let isPositive = ticker_data.price_dif > 0;
+    let main_color = isPositive ? 'rgba(5, 150, 105, 1)' : 'rgba(220, 38, 38, 0.1)'; // green-600 and red-600 in rgba format
+    let main_color_light = isPositive ? 'rgba(0, 255, 61, 0.8)' : 'rgba(255, 25, 25, 0.8)'; // green-300 and red-300 in rgba format
 
-    let iconSx = {
-        color: main_color_dark,
-        fontSize: '2.1rem',
-    };
-    let arrowIcon =
-        priceVariation > 0 ? (
-            <NorthEastIcon sx={iconSx} />
-        ) : (
-            <SouthEastIcon sx={iconSx} />
-        );
-
-    let rawData = Object.entries(ticker_data.df.datetime).map(
-        ([, date], index) => ({
-            date: new Date(date),
-            value: ticker_data.df.close[index],
-        })
-    );
+    let rawData = Object.entries(ticker_data.df.datetime).map(([, date], index) => ({
+        date: new Date(date),
+        value: ticker_data.df.close[index],
+    }));
 
     // Sort the data by date
     rawData.sort((a, b) => a.date - b.date);
@@ -132,7 +100,7 @@ const TickerContainerBig = ({ ticker_data }) => {
                         type: 'line',
                         yMin: currentPrice,
                         yMax: currentPrice,
-                        borderColor: theme.palette.stocks.grey,
+                        borderColor: 'rgba(156, 163, 175, 1)', // gray-400
                         borderWidth: 1.2,
                         borderDash: [6, 6],
                     },
@@ -140,7 +108,7 @@ const TickerContainerBig = ({ ticker_data }) => {
                         type: 'line',
                         yMin: ticker_data.ticker.buy,
                         yMax: ticker_data.ticker.buy,
-                        borderColor: theme.palette.stocks.yellow,
+                        borderColor: 'rgba(252, 211, 77, 1)', // yellow-400
                         borderWidth: 1.2,
                         borderDash: [6, 6],
                     },
@@ -148,7 +116,7 @@ const TickerContainerBig = ({ ticker_data }) => {
                         type: 'line',
                         yMin: ticker_data.ticker.gain,
                         yMax: ticker_data.ticker.gain,
-                        borderColor: theme.palette.stocks.aqua,
+                        borderColor: 'rgba(59, 130, 246, 1)', // blue-400 as a replacement for aqua
                         borderWidth: 1.2,
                         borderDash: [6, 6],
                     },
@@ -156,7 +124,7 @@ const TickerContainerBig = ({ ticker_data }) => {
                         type: 'line',
                         yMin: ticker_data.ticker.loss,
                         yMax: ticker_data.ticker.loss,
-                        borderColor: theme.palette.stocks.purple,
+                        borderColor: 'rgba(167, 139, 250, 1)', // purple-400
                         borderWidth: 1.2,
                         borderDash: [6, 6],
                     },
@@ -166,77 +134,14 @@ const TickerContainerBig = ({ ticker_data }) => {
     };
 
     return (
-        <Box sx={{ maxHeight: '400px' }}>
-            <Card
-                sx={{
-                    color: 'rgb(255, 255, 255)',
-                    backgroundColor: '#191819',
-                    border: '1px solid rgba(198, 199, 199, 0.3)',
-                }}
-            >
-                <CardContent>
-                    <Grid container spacing={2}>
-                        <Grid item xs={6}>
-                            <Typography variant="h4" component="div">
-                                {ticker_data.ticker.symbol.symbol}
-                            </Typography>
-                            <Typography variant="h6" component="div">
-                                {ticker_data.ticker.symbol.exchange}
-                            </Typography>
-                        </Grid>
-                        <Grid
-                            item
-                            xs={6}
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'right',
-                                alignItems: 'right',
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'right',
-                                    justifyContent: 'right',
-                                }}
-                            >
-                                <Typography
-                                    variant="h4"
-                                    sx={{ textAlign: 'right', mr: 2 }}
-                                >
-                                    {currentPrice}
-                                </Typography>
-                                {arrowIcon}
-                            </Box>
-
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'right',
-                                    justifyContent: 'right',
-                                }}
-                            >
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <Typography variant="h5" sx={{ mr: 2 }}>
-                                        {priceVariation}
-                                    </Typography>
-                                    <Typography variant="h5" sx={{ mr: 2 }}>
-                                        {percentageVariation}%
-                                    </Typography>
-                                </Box>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-                <Line data={chartData} options={options} />
-            </Card>
-        </Box>
+        <div className=" max-h-96">
+            <div className="rounded bg-slate-700 p-0 text-white ">
+                <TickerCoreInfo ticker_data={ticker_data}></TickerCoreInfo>
+                <div>
+                    <Line className="m-0 p-0" data={chartData} options={options} />
+                </div>
+            </div>
+        </div>
     );
 };
 

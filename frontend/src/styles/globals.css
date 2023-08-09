@@ -16,9 +16,12 @@
     }
 }
 
-body {
-    background-color: #191819;
-    font-family: 'Playfair Display', serif !important;
-
-    /* color: rgb(var(--foreground-rgb));   */
+@layer base {
+    html {
+        background-color: #191819;
+        font-family:
+            PT Sans,
+            system-ui,
+            sans-serif;
+    }
 }

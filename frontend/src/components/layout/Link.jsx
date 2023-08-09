@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const Link = React.forwardRef(({ onClick, href, children }, ref) => {
+const Link = React.forwardRef(({ onClick, href, children, ...rest }, ref) => {
     return (
         <a
             style={{ textDecoration: 'none', color: 'inherit' }}
             href={href}
             onClick={onClick}
             ref={ref}
+            {...rest}
         >
             {children}
         </a>

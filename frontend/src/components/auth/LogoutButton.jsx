@@ -1,20 +1,11 @@
+import WarningButton from '@/components/general/buttons/WarningButton';
 import { logout } from '@/utils/auth';
 import LogoutIcon from '@mui/icons-material/Logout';
-import Button from '@mui/material/Button';
 const LogoutButton = () => {
     return (
-        <Button
-            variant="contained"
-            endIcon={<LogoutIcon />}
-            onClick={logout}
-            sx={{
-                mt: 2,
-                backgroundColor: 'error.main',
-                '&:hover': { backgroundColor: 'error.dark' },
-            }}
-        >
+        <WarningButton icon={<LogoutIcon />} onClick={logout} text="Logout" className="rounded">
             Logout
-        </Button>
+        </WarningButton>
     );
 };
 

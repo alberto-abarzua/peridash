@@ -1,12 +1,4 @@
 import api from '@/utils/api';
-import {
-    Card,
-    CardContent,
-    Typography,
-    CircularProgress,
-    Box,
-} from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
 import { useEffect, useState } from 'react';
 
@@ -15,7 +7,6 @@ import LogoutButton from './LogoutButton';
 const UserInfoCard = () => {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true); // Loading state
-    const theme = useTheme();
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -28,32 +19,20 @@ const UserInfoCard = () => {
 
     if (isLoading) {
         return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '60vh', // 100% of the viewport height
-                }}
-            >
-                <CircularProgress size="5rem" />
-            </Box>
+            <div className="flex h-screen items-center justify-center">
+                {/* You might need to style or replace the spinner if you don't have a similar utility in your Tailwind setup */}
+                <div className="spinner h-20 w-20"></div>
+            </div>
         );
     }
 
     return (
-        <Card sx={{ backgroundColor: theme.palette.secondary.dark }}>
-            <CardContent>
-                <Typography
-                    variant="h4"
-                    component="div"
-                    sx={{ color: 'white' }}
-                >
-                    {user ? user.email : 'No User'}
-                </Typography>
-                {user && <LogoutButton />}
-            </CardContent>
-        </Card>
+        <div className="flex w-full rounded-md bg-gray-800 p-4">
+            <div className="flex-grow self-center text-2xl text-white ">
+                {user ? user.email : 'No User'}
+            </div>
+            <div className="mr-3 flex-shrink self-center">{user && <LogoutButton />}</div>
+        </div>
     );
 };
 
