@@ -15,6 +15,7 @@ const DashPage = () => {
     const { showNotification, renderNotification } = useNotification();
     const NUM_DAYS = 7;
     useEffect(() => {
+        console.log('THIS WAS CALLED');
         setLoading(true);
         const get_time_series = async () => {
             let response = await api.get(
@@ -47,11 +48,8 @@ const DashPage = () => {
         return () => clearInterval(interval);
     }, [setTickerData, showNotification]);
 
-    console.log(tickerData);
     let favorite_tickers = tickerData.filter(ticker => ticker.ticker.is_favorite);
     let not_favorite_tickers = tickerData.filter(ticker => !ticker.ticker.is_favorite);
-    console.log(favorite_tickers);
-    console.log(not_favorite_tickers);
     //Divide not_favorite_tickers into 3 arrays of equal size
     let not_favorite_tickers_1 = not_favorite_tickers.slice(
         0,

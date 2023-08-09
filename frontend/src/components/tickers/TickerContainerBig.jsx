@@ -55,7 +55,6 @@ const TickerContainerBig = ({ ticker_data }) => {
             },
         ],
     };
-    console.log(ticker_data);
     const highValues = Object.values(ticker_data.df.high);
     let minHighValue = Math.min(...highValues);
     minHighValue -= minHighValue * 0.03;

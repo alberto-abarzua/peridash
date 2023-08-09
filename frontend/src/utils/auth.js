@@ -13,7 +13,6 @@ const createToken = async (email, password) => {
         console.error('Error during token creation:', error);
         if (error.response && error.response.status === 400) {
             // Handle 400 error. Maybe set some state here or trigger a notification.
-            console.log('Bad Request:', error.response.data);
         }
         return false;
     }
