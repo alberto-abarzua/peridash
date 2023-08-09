@@ -34,7 +34,7 @@ ALLOWED_HOSTS = os.environ.get("BACKEND_DJANGO_ALLOWED_HOSTS", "").split(",")
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 
 if not CORS_ALLOW_ALL_ORIGINS:
-    cors_origin_whitelist = os.environ.get("BACKEND_DJANGO_CORS_WHITELIST", None)
+    cors_origin_whitelist = os.environ.get("BACKEND_DJANGO_CORS_ORIGIN_WHITELIST", None)
     if cors_origin_whitelist:
         CORS_ALLOWED_ORIGINS = cors_origin_whitelist.split(",")
 
