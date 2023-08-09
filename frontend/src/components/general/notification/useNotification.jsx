@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import Notification from './Notification';
 
 const useNotification = () => {
     const [notification, setNotification] = useState(null);
 
-    const showNotification = (message, icon, className, duration = 3000) => {
+    const showNotification = useCallback((message, icon, className, duration = 3000) => {
         setNotification({ message, icon, className, duration });
-    };
+    }, []);
 
     const hideNotification = () => {
         setNotification(null);
