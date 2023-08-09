@@ -1,16 +1,14 @@
+import InconTextInput from '@/components/general/inputs/IconTextInput';
+import useNotification from '@/components/general/notification/useNotification';
 import api from '@/utils/api';
+import AddIcon from '@mui/icons-material/Add';
+import AttachMoneySharpIcon from '@mui/icons-material/AttachMoneySharp';
+import CheckIcon from '@mui/icons-material/Check';
+import DeleteIcon from '@mui/icons-material/Delete';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from 'react';
-import AddIcon from '@mui/icons-material/Add';
-import InconTextInput from '@/components/general/inputs/IconTextInput';
-import AttachMoneySharpIcon from '@mui/icons-material/AttachMoneySharp';
-import RemoveIcon from '@mui/icons-material/Remove';
-import DeleteIcon from '@mui/icons-material/Delete';
-
-import Notification from '@/components/general/notification/Notification';
-import useNotification from '@/components/general/notification/useNotification';
-import CheckIcon from '@mui/icons-material/Check';
 
 const UserTicker = ({ result, getUserTickers }) => {
     const { showNotification, renderNotification } = useNotification();
@@ -40,15 +38,12 @@ const UserTicker = ({ result, getUserTickers }) => {
 
     useEffect(() => {
         const updateTicker = async () => {
-            let response = await api.patch(
-                `/ticker/user-tickers/${result.id}/`,
-                {
-                    is_favorite: favorite,
-                    buy: buy,
-                    gain: gain,
-                    loss: loss,
-                }
-            );
+            let response = await api.patch(`/ticker/user-tickers/${result.id}/`, {
+                is_favorite: favorite,
+                buy: buy,
+                gain: gain,
+                loss: loss,
+            });
             if (response.status === 200) {
                 getUserTickers();
                 showNotification(
@@ -63,7 +58,7 @@ const UserTicker = ({ result, getUserTickers }) => {
             return;
         }
         updateTicker();
-    }, [favorite, buy, gain, loss, getUserTickers, result.id]);
+    }, [favorite, buy, gain, loss, getUserTickers, result.id, showNotification]);
 
     const handleFavorite = () => {
         setFavorite(!favorite);
@@ -84,9 +79,7 @@ const UserTicker = ({ result, getUserTickers }) => {
                     <div className="z-20 flex-shrink-0 self-center">
                         <button onClick={handleFavorite}>
                             {result.is_favorite ? (
-                                <div className="text-5xl text-yellow-500">
-                                    ★
-                                </div>
+                                <div className="text-5xl text-yellow-500">★</div>
                             ) : (
                                 <div className="transform text-5xl text-gray-500 transition-all duration-100  hover:text-yellow-500">
                                     ☆

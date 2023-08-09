@@ -15,19 +15,13 @@ const TickerContainerBig = ({ ticker_data }) => {
 
     let currentPrice = ticker_data.cur_price.toFixed(2);
     let isPositive = ticker_data.price_dif > 0;
-    let main_color = isPositive
-        ? 'rgba(5, 150, 105, 1)'
-        : 'rgba(220, 38, 38, 0.1)'; // green-600 and red-600 in rgba format
-    let main_color_light = isPositive
-        ? 'rgba(0, 255, 61, 0.8)'
-        : 'rgba(255, 25, 25, 0.8)'; // green-300 and red-300 in rgba format
+    let main_color = isPositive ? 'rgba(5, 150, 105, 1)' : 'rgba(220, 38, 38, 0.1)'; // green-600 and red-600 in rgba format
+    let main_color_light = isPositive ? 'rgba(0, 255, 61, 0.8)' : 'rgba(255, 25, 25, 0.8)'; // green-300 and red-300 in rgba format
 
-    let rawData = Object.entries(ticker_data.df.datetime).map(
-        ([, date], index) => ({
-            date: new Date(date),
-            value: ticker_data.df.close[index],
-        })
-    );
+    let rawData = Object.entries(ticker_data.df.datetime).map(([, date], index) => ({
+        date: new Date(date),
+        value: ticker_data.df.close[index],
+    }));
 
     // Sort the data by date
     rawData.sort((a, b) => a.date - b.date);
@@ -144,11 +138,7 @@ const TickerContainerBig = ({ ticker_data }) => {
             <div className="rounded bg-slate-700 p-0 text-white ">
                 <TickerCoreInfo ticker_data={ticker_data}></TickerCoreInfo>
                 <div>
-                    <Line
-                        className="m-0 p-0"
-                        data={chartData}
-                        options={options}
-                    />
+                    <Line className="m-0 p-0" data={chartData} options={options} />
                 </div>
             </div>
         </div>

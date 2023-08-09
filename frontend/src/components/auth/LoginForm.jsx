@@ -1,8 +1,9 @@
+import useNotification from '@/components/general/notification/useNotification';
 import { createToken } from '@/utils/auth';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import useNotification from '@/components/general/notification/useNotification';
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -46,10 +47,7 @@ const LoginForm = () => {
                         />
                     </div>
                     <div className="flex flex-col space-y-2">
-                        <label
-                            htmlFor="password"
-                            className="text-sm font-medium"
-                        >
+                        <label htmlFor="password" className="text-sm font-medium">
                             Password
                         </label>
                         <input

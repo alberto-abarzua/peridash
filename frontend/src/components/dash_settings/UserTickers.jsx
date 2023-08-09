@@ -1,9 +1,8 @@
-import PropTypes from 'prop-types';
-import UserTicker from './UserTicker';
 import SegmentIcon from '@mui/icons-material/Segment';
-import Notification from '@/components/general/notification/Notification';
-import useNotification from '@/components/general/notification/useNotification';
-import CheckIcon from '@mui/icons-material/Check';
+
+import PropTypes from 'prop-types';
+
+import UserTicker from './UserTicker';
 
 const UserTickers = ({ userTickers, getUserTickers }) => {
     return (

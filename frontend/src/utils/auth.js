@@ -37,10 +37,9 @@ const verifyAuth = async req => {
         return false;
     }
     try {
-        const response = await axios.get(
-            process.env.NEXT_PRIVATE_BACKEND_URL + '/user/me/',
-            { headers: { Authorization: `Token ${token}` } }
-        );
+        const response = await axios.get(process.env.NEXT_PRIVATE_BACKEND_URL + '/user/me/', {
+            headers: { Authorization: `Token ${token}` },
+        });
         return response.status === 200;
     } catch (error) {
         console.error(error);
@@ -77,12 +76,4 @@ function logout() {
     window.location.href = '/';
 }
 
-export {
-    setToken,
-    getToken,
-    removeToken,
-    createToken,
-    verifyAuth,
-    withAuth,
-    logout,
-};
+export { setToken, getToken, removeToken, createToken, verifyAuth, withAuth, logout };

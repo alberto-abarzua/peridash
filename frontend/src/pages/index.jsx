@@ -1,12 +1,13 @@
+import useNotification from '@/components/general/notification/useNotification';
 import TickerContainerBig from '@/components/tickers/TickerContainerBig';
 import TickerContainerSmall from '@/components/tickers/TickerContainerSmall';
+import TickerStatsInfo from '@/components/tickers/TickerStatsInfo';
 import api from '@/utils/api';
 import { withAuth } from '@/utils/auth';
-import useNotification from '@/components/general/notification/useNotification';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+
 import { useEffect, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
-import TickerStatsInfo from '@/components/tickers/TickerStatsInfo';
 
 const DashPage = () => {
     const [tickerData, setTickerData] = useState([]);
@@ -44,15 +45,11 @@ const DashPage = () => {
 
         // return a cleanup function to clear the interval when the component is unmounted
         return () => clearInterval(interval);
-    }, [setTickerData]);
+    }, [setTickerData, showNotification]);
 
     console.log(tickerData);
-    let favorite_tickers = tickerData.filter(
-        ticker => ticker.ticker.is_favorite
-    );
-    let not_favorite_tickers = tickerData.filter(
-        ticker => !ticker.ticker.is_favorite
-    );
+    let favorite_tickers = tickerData.filter(ticker => ticker.ticker.is_favorite);
+    let not_favorite_tickers = tickerData.filter(ticker => !ticker.ticker.is_favorite);
     console.log(favorite_tickers);
     console.log(not_favorite_tickers);
     //Divide not_favorite_tickers into 3 arrays of equal size
@@ -66,10 +63,7 @@ const DashPage = () => {
     );
 
     //split favorite in 2 arrays
-    let favorite_tickers_1 = favorite_tickers.slice(
-        0,
-        Math.ceil(favorite_tickers.length / 2)
-    );
+    let favorite_tickers_1 = favorite_tickers.slice(0, Math.ceil(favorite_tickers.length / 2));
     let favorite_tickers_2 = favorite_tickers.slice(
         Math.ceil(favorite_tickers.length / 2),
         favorite_tickers.length
@@ -87,26 +81,26 @@ const DashPage = () => {
     return (
         <div className="container mx-auto px-4">
             {renderNotification()}
-            <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-                <div className="flex-1 flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
+                <div className="flex flex-1 flex-col space-y-2">
                     {favorite_tickers_1.map((ticker, index) => (
                         <TickerContainerBig key={index} ticker_data={ticker} />
                     ))}
                 </div>
-    
-                <div className="flex-1 flex flex-col space-y-2">
+
+                <div className="flex flex-1 flex-col space-y-2">
                     {favorite_tickers_2.map((ticker, index) => (
                         <TickerContainerBig key={index} ticker_data={ticker} />
                     ))}
                 </div>
-    
-                <div className="flex-1 flex flex-col space-y-2">
+
+                <div className="flex flex-1 flex-col space-y-2">
                     {not_favorite_tickers_1.map((ticker, index) => (
                         <TickerContainerSmall key={index} ticker_data={ticker} />
                     ))}
                 </div>
-    
-                <div className="flex-1 flex flex-col space-y-2">
+
+                <div className="flex flex-1 flex-col space-y-2">
                     {not_favorite_tickers_2.map((ticker, index) => (
                         <TickerContainerSmall key={index} ticker_data={ticker} />
                     ))}
@@ -115,7 +109,7 @@ const DashPage = () => {
             <TickerStatsInfo stats={{ num_days: NUM_DAYS }} />
         </div>
     );
-                    };
+};
 export const getServerSideProps = withAuth();
 
 export default DashPage;

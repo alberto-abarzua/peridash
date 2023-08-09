@@ -4,10 +4,7 @@ import BaseButton from './BaseButton';
 
 const PrimaryButton = ({ className, ...rest }) => {
     return (
-        <BaseButton
-            className={`bg-red-600 text-white hover:bg-red-700 ${className}`}
-            {...rest}
-        />
+        <BaseButton className={`bg-red-600 text-white hover:bg-red-700 ${className}`} {...rest} />
     );
 };
 PrimaryButton.propTypes = {

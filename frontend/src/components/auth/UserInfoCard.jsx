@@ -1,4 +1,5 @@
 import api from '@/utils/api';
+
 import { useEffect, useState } from 'react';
 
 import LogoutButton from './LogoutButton';
@@ -30,9 +31,7 @@ const UserInfoCard = () => {
             <div className="flex-grow self-center text-2xl text-white ">
                 {user ? user.email : 'No User'}
             </div>
-            <div className="mr-3 flex-shrink self-center">
-                {user && <LogoutButton />}
-            </div>
+            <div className="mr-3 flex-shrink self-center">{user && <LogoutButton />}</div>
         </div>
     );
 };

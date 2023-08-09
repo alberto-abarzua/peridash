@@ -1,14 +1,15 @@
 import UserInfoCard from '@/components/auth/UserInfoCard';
 import SearchBar from '@/components/dash_settings/SearchBar';
 import UserTickers from '@/components/dash_settings/UserTickers';
+import useNotification from '@/components/general/notification/useNotification';
 import api from '@/utils/api';
 import { withAuth } from '@/utils/auth';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { useState, useEffect, useCallback } from 'react';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import SettingsIcon from '@mui/icons-material/Settings';
 
-import useNotification from '@/components/general/notification/useNotification';
+import { useState, useEffect, useCallback } from 'react';
+
 const SettingsPage = () => {
     const { showNotification, renderNotification } = useNotification();
     const [userTickers, setUserTickers] = useState([]);
@@ -24,7 +25,7 @@ const SettingsPage = () => {
                 'bg-red-100'
             );
         }
-    }, []);
+    }, [showNotification]);
 
     useEffect(() => {
         getUserTickers();
@@ -50,10 +51,7 @@ const SettingsPage = () => {
                     </div>
                     <SearchBar getUserTickers={getUserTickers} />
                 </div>
-                <UserTickers
-                    userTickers={userTickers}
-                    getUserTickers={getUserTickers}
-                />
+                <UserTickers userTickers={userTickers} getUserTickers={getUserTickers} />
             </div>
         </div>
     );

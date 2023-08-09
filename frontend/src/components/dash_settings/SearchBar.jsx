@@ -1,13 +1,15 @@
-import api from '@/utils/api';
-import SearchIcon from '@mui/icons-material/Search';
 import PrimaryButton from '@/components/general/buttons/PrimaryButton';
+import useNotification from '@/components/general/notification/useNotification';
+import api from '@/utils/api';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import SearchIcon from '@mui/icons-material/Search';
+
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
+
 import TickerSearchResult from './SymbolSearchResult';
-import useNotification from '@/components/general/notification/useNotification';
-import CheckIcon from '@mui/icons-material/Check';
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 
 const SearchBar = ({ getUserTickers }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -95,14 +97,12 @@ const SearchBar = ({ getUserTickers }) => {
                 {searchResults.map((result, index) => (
                     <TickerSearchResult
                         result={result}
+                        key={index}
                         onClick={handleSearchResultClick}
                     />
                 ))}
 
-                <div
-                    className="absolute -right-0 -top-0"
-                    onClick={() => handleModalClose()}
-                >
+                <div className="absolute -right-0 -top-0" onClick={() => handleModalClose()}>
                     <CloseIcon className="cursor-pointer rounded-full p-2 text-6xl text-white transition duration-100 hover:scale-105 hover:text-black" />
                 </div>
             </div>

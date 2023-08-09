@@ -3,8 +3,7 @@ import Link from '@/components/layout/Link';
 import PropTypes from 'prop-types';
 
 function NavLink({ text, icon, path, ...rest }) {
-    const hoverStyle =
-        'transform transition-transform duration-200 hover:-translate-y-1';
+    const hoverStyle = 'transform transition-transform duration-200 hover:-translate-y-1';
     return (
         <Link
             className={`my-4 flex hover:border-b-2 hover:border-b-white ${hoverStyle}`}

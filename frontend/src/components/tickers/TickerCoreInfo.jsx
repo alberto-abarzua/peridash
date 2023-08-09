@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
+
+import PropTypes from 'prop-types';
 
 const TickerCoreInfo = ({ ticker_data }) => {
     let currentPrice = ticker_data.cur_price.toFixed(2);
@@ -19,9 +19,7 @@ const TickerCoreInfo = ({ ticker_data }) => {
         <div className="flex items-center justify-between p-2">
             <div>
                 <h4 className="text-lg">{ticker_data.ticker.symbol.symbol}</h4>
-                <h6 className="text-sm">
-                    {ticker_data.ticker.symbol.exchange}
-                </h6>
+                <h6 className="text-sm">{ticker_data.ticker.symbol.exchange}</h6>
             </div>
             <div className="text-right">
                 <div className="flex items-center justify-end">

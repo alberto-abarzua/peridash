@@ -1,4 +1,5 @@
 // Notification.jsx
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 
 const Notification = ({ message, icon, className, duration, onTimeout }) => {
@@ -32,20 +33,26 @@ const Notification = ({ message, icon, className, duration, onTimeout }) => {
 
     return (
         <div
-            className={`fixed transform transition-transform duration-700 ease-out 
-            ${
-                isVisible ? 'z-50 -translate-y-2' : 'translate-y-96'
-            } bottom-0 left-4 rounded-md 
+            className={`
+            fixed transform transition-transform duration-700 ease-out 
+            ${isVisible ? 'z-50 -translate-y-2' : 'translate-y-96'} 
+            bottom-0 left-4 rounded-md 
             p-5 shadow-lg ${className}`}
         >
             <div className="flex">
-                <div className="relative mr-2 scale-[1.6] transform self-center">
-                    {icon}
-                </div>
+                <div className="relative mr-2 scale-[1.6] transform self-center">{icon}</div>
                 <span className="ml-2 self-center text-lg">{message}</span>
             </div>
         </div>
     );
+};
+
+Notification.propTypes = {
+    message: PropTypes.string.isRequired,
+    icon: PropTypes.element.isRequired,
+    className: PropTypes.string,
+    duration: PropTypes.number,
+    onTimeout: PropTypes.func,
 };
 
 export default Notification;

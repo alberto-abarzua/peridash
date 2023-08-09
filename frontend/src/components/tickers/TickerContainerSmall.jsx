@@ -1,7 +1,7 @@
+import TickerCoreInfo from '@/components/tickers/TickerCoreInfo';
+
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
-
-import TickerCoreInfo from '@/components/tickers/TickerCoreInfo';
 
 const TickerContainerSmall = ({ ticker_data }) => {
     useEffect(() => {
