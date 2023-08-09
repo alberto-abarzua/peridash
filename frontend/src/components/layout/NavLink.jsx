@@ -7,13 +7,13 @@ function NavLink({ text, icon, path, ...rest }) {
         'transform transition-transform duration-200 hover:-translate-y-1';
     return (
         <Link
-            className={`flex my-4 hover:border-b-2 hover:border-b-white ${hoverStyle}`}
+            className={`my-4 flex hover:border-b-2 hover:border-b-white ${hoverStyle}`}
             href={path}
             key={{ text, icon, path }}
             {...rest}
         >
             {icon}
-            <h1 className="text-white pl-3 text-2xl ">{text}</h1>
+            <h1 className="pl-3 text-2xl text-white ">{text}</h1>
         </Link>
     );
 }

@@ -90,7 +90,9 @@ class UserTickerViewSet(viewsets.ModelViewSet):
     def list(self, request: HttpRequest) -> Response:
         settings, _ = TickerSettings.objects.get_or_create(user=request.user)
         tickers = settings.user_tickers.all()
-        tickers = tickers.order_by("symbol")
+        # tickers = tickers.order_by("symbol")
+        # order by favorite then by symbol
+        tickers = tickers.order_by("-is_favorite", "symbol")
         serializer = TickerSerializer(tickers, many=True)
         return Response(serializer.data)
 

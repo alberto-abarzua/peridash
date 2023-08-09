@@ -1,21 +1,29 @@
-import { Box } from '@mui/material';
-
 import PropTypes from 'prop-types';
-
-import StockInfo from './StockInfo';
+import UserTicker from './UserTicker';
+import SegmentIcon from '@mui/icons-material/Segment';
+import Notification from '@/components/general/notification/Notification';
+import useNotification from '@/components/general/notification/useNotification';
+import CheckIcon from '@mui/icons-material/Check';
 
 const UserTickers = ({ userTickers, getUserTickers }) => {
     return (
-        <Box>
-            {userTickers &&
-                userTickers.map(result => (
-                    <StockInfo
-                        key={result.id}
-                        getUserTickers={getUserTickers}
-                        result={result}
-                    />
-                ))}
-        </Box>
+        <div className="mx-auto w-full sm:w-1/2">
+            <div className="text-3xl text-white">
+                <SegmentIcon className="mr-2 text-4xl"></SegmentIcon>
+                My Tickers
+            </div>
+            <br />
+            <div className="flex flex-col">
+                {userTickers &&
+                    userTickers.map(result => (
+                        <UserTicker
+                            key={result.id}
+                            getUserTickers={getUserTickers}
+                            result={result}
+                        />
+                    ))}
+            </div>
+        </div>
     );
 };
 

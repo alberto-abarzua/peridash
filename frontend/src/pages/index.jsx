@@ -2,23 +2,35 @@ import TickerContainerBig from '@/components/tickers/TickerContainerBig';
 import TickerContainerSmall from '@/components/tickers/TickerContainerSmall';
 import api from '@/utils/api';
 import { withAuth } from '@/utils/auth';
-import { Grid } from '@mui/material';
-
+import useNotification from '@/components/general/notification/useNotification';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { useEffect, useState } from 'react';
+import { ClipLoader } from 'react-spinners';
+import TickerStatsInfo from '@/components/tickers/TickerStatsInfo';
+
 const DashPage = () => {
     const [tickerData, setTickerData] = useState([]);
-
+    const [loading, setLoading] = useState(false);
+    const { showNotification, renderNotification } = useNotification();
+    const NUM_DAYS = 7;
     useEffect(() => {
+        setLoading(true);
         const get_time_series = async () => {
             let response = await api.get(
-                '/ticker/time_series/?symbols=__ALL_USER__&days=7'
+                '/ticker/time_series/?symbols=__ALL_USER__&days=' + NUM_DAYS
             );
             if (response.status === 200) {
-                console.log(response.data);
+                setLoading(false);
 
                 setTickerData(response.data);
             } else {
-                alert('Error fetching time series');
+                showNotification(
+                    'Failed to get Ticker Data!',
+                    <ReportProblemIcon className=" text-red-500" />,
+                    'bg-red-100'
+                );
+
+                setLoading(false);
             }
         };
 
@@ -63,40 +75,47 @@ const DashPage = () => {
         favorite_tickers.length
     );
 
+    if (loading) {
+        return (
+            <div className="container mx-auto px-4">
+                <div className="flex min-h-screen items-center justify-center">
+                    <ClipLoader color="rgba(0, 193, 46, 0.8)" size={70} />
+                </div>
+            </div>
+        );
+    }
     return (
-        <div>
-            <Grid container spacing={2}>
-                <Grid item xs={14} sm={12} md={3}>
+        <div className="container mx-auto px-4">
+            {renderNotification()}
+            <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
+                <div className="flex-1 flex flex-col space-y-2">
                     {favorite_tickers_1.map((ticker, index) => (
                         <TickerContainerBig key={index} ticker_data={ticker} />
                     ))}
-                </Grid>
-
-                <Grid item xs={12} sm={12} md={3}>
+                </div>
+    
+                <div className="flex-1 flex flex-col space-y-2">
                     {favorite_tickers_2.map((ticker, index) => (
                         <TickerContainerBig key={index} ticker_data={ticker} />
                     ))}
-                </Grid>
-                <Grid item xs={12} sm={12} md={3}>
+                </div>
+    
+                <div className="flex-1 flex flex-col space-y-2">
                     {not_favorite_tickers_1.map((ticker, index) => (
-                        <TickerContainerSmall
-                            key={index}
-                            ticker_data={ticker}
-                        />
+                        <TickerContainerSmall key={index} ticker_data={ticker} />
                     ))}
-                </Grid>
-                <Grid item xs={12} sm={12} md={3}>
+                </div>
+    
+                <div className="flex-1 flex flex-col space-y-2">
                     {not_favorite_tickers_2.map((ticker, index) => (
-                        <TickerContainerSmall
-                            key={index}
-                            ticker_data={ticker}
-                        />
+                        <TickerContainerSmall key={index} ticker_data={ticker} />
                     ))}
-                </Grid>
-            </Grid>
+                </div>
+            </div>
+            <TickerStatsInfo stats={{ num_days: NUM_DAYS }} />
         </div>
     );
-};
+                    };
 export const getServerSideProps = withAuth();
 
 export default DashPage;

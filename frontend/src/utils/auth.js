@@ -3,12 +3,20 @@ import api from '@/utils/api';
 import axios from 'axios';
 import cookie from 'js-cookie';
 const createToken = async (email, password) => {
-    const response = await api.post('/user/token/', { email, password });
-    if (response.status === 200 && response.data && response.data.token) {
-        setToken(response.data.token);
-        return true;
+    try {
+        const response = await api.post('/user/token/', { email, password });
+        if (response.status === 200 && response.data && response.data.token) {
+            setToken(response.data.token);
+            return true;
+        }
+    } catch (error) {
+        console.error('Error during token creation:', error);
+        if (error.response && error.response.status === 400) {
+            // Handle 400 error. Maybe set some state here or trigger a notification.
+            console.log('Bad Request:', error.response.data);
+        }
+        return false;
     }
-    return false;
 };
 
 const setToken = token => {
