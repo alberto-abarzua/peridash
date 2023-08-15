@@ -127,7 +127,7 @@ class TickerApiTests(APITestCase):
         self.ticker_settings.user_tickers.add(ticker)
         url = reverse("ticker:user-tickers-detail", args=[ticker.id])
         response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertIn("Ticker removed from settings.", response.data["detail"])
         self.assertEqual(self.ticker_settings.user_tickers.count(), 0)
 
@@ -155,7 +155,7 @@ class TickerApiTests(APITestCase):
         # remove ticker
         url = reverse("ticker:user-tickers-detail", args=[ticker.id])
         response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertIn("Ticker removed from settings.", response.data["detail"])
         self.assertEqual(self.ticker_settings.user_tickers.count(), 0)
         # add ticker again
