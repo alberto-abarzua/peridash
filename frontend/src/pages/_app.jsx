@@ -12,7 +12,7 @@ export default function MainApp({ Component, pageProps }) {
         nav = null;
     }
     return (
-        <div>
+        <div className="box-border min-h-screen bg-darker-900  ">
             {nav}
             <Component {...pageProps} />
         </div>

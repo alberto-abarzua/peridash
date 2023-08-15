@@ -9,7 +9,7 @@ const TickerContainerSmall = ({ ticker_data }) => {
     }, [ticker_data]);
 
     return (
-        <div className="rounded bg-slate-700 p-0 text-white">
+        <div className="rounded bg-darker-600 p-0 text-white">
             <TickerCoreInfo ticker_data={ticker_data}></TickerCoreInfo>
         </div>
     );

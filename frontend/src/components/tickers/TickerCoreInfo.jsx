@@ -2,6 +2,7 @@ import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 
 import PropTypes from 'prop-types';
+import colors from '@/utils/colors';
 
 const TickerCoreInfo = ({ ticker_data }) => {
     let currentPrice = ticker_data.cur_price.toFixed(2);
@@ -10,13 +11,13 @@ const TickerCoreInfo = ({ ticker_data }) => {
     let isPositive = ticker_data.price_dif > 0;
 
     let arrowIcon = isPositive ? (
-        <NorthEastIcon className="text-2xl text-green-700" />
+        <NorthEastIcon className="text-2xl text-green-400" />
     ) : (
-        <SouthEastIcon className="text-2xl text-red-700" />
+        <SouthEastIcon className="text-2xl text-red-400" />
     );
 
     return (
-        <div className="flex items-center justify-between p-2">
+        <div className="h-18 flex items-center justify-between p-2">
             <div>
                 <h4 className="text-lg">{ticker_data.ticker.symbol.symbol}</h4>
                 <h6 className="text-sm">{ticker_data.ticker.symbol.exchange}</h6>

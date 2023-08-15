@@ -5,6 +5,7 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
+import colors from '@/utils/colors';
 
 Chart.register(...registerables);
 Chart.register(annotationPlugin);
@@ -15,9 +16,10 @@ const TickerContainerBig = ({ ticker_data }) => {
 
     let currentPrice = ticker_data.cur_price.toFixed(2);
     let isPositive = ticker_data.price_dif > 0;
-    let main_color = isPositive ? 'rgba(5, 150, 105, 1)' : 'rgba(220, 38, 38, 0.1)'; // green-600 and red-600 in rgba format
-    let main_color_light = isPositive ? 'rgba(0, 255, 61, 0.8)' : 'rgba(255, 25, 25, 0.8)'; // green-300 and red-300 in rgba format
-
+    // let main_color = isPositive ? 'rgba(5, 150, 105, 1)' : 'rgba(220, 38, 38, 0.1)'; // green-600 and red-600 in rgba format
+    let main_color = isPositive ? colors.green[500] : colors.red[500];
+    // let main_color_light = isPositive ? 'rgba(0, 255, 61, 0.8)' : 'rgba(255, 25, 25, 0.8)'; // green-300 and red-300 in rgba format
+    let main_color_light = isPositive ? colors.green[700] : colors.red[700];
     let rawData = Object.entries(ticker_data.df.datetime).map(([, date], index) => ({
         date: new Date(date),
         value: ticker_data.df.close[index],
@@ -37,7 +39,7 @@ const TickerContainerBig = ({ ticker_data }) => {
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, main_color_light);
     gradient.addColorStop(0.04, main_color_light);
-    gradient.addColorStop(0.9, 'rgba(0, 0, 0, 0)');
+    gradient.addColorStop(0.4, 'rgba(0, 0, 0, 0)');
     gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
     const chartData = {
@@ -134,7 +136,7 @@ const TickerContainerBig = ({ ticker_data }) => {
 
     return (
         <div className=" max-h-96">
-            <div className="rounded bg-slate-700 p-0 text-white ">
+            <div className="rounded bg-darker-600 p-0 text-white ">
                 <TickerCoreInfo ticker_data={ticker_data}></TickerCoreInfo>
                 <div>
                     <Line className="m-0 p-0" data={chartData} options={options} />

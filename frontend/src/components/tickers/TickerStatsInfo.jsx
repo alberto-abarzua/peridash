@@ -7,7 +7,6 @@ const TickerStatsInfo = ({ stats }) => {
     const [currentTime, setCurrentTime] = useState(null);
 
     useEffect(() => {
-        // Initialize currentTime when the component mounts (this happens on the client)
         setCurrentTime(new Date());
 
         const interval = setInterval(() => {
@@ -17,17 +16,19 @@ const TickerStatsInfo = ({ stats }) => {
         return () => clearInterval(interval);
     }, []);
 
-    if (!currentTime) return null; // Don't render until we have a time value
+    if (!currentTime) return null;
 
     return (
-        <div className="absolute right-10 top-0 m-auto flex w-72 rounded-sm bg-transparent p-2 text-white">
-            <div className="mr-10 mt-2 flex-shrink self-center">
+        <div className="al absolute right-10 top-2 m-auto hidden w-72 justify-center rounded-sm bg-transparent p-2 text-white md:flex md:flex-row">
+            <div className="mr-10  flex-shrink self-center">
                 <span className="text-3xl"> {currentTime.toLocaleTimeString()}</span>
             </div>
-            <div className="flex-shrink self-center text-3xl">
-                <CalendarMonthIcon></CalendarMonthIcon>
+            <div className="flex ">
+                <div className="flex flex-shrink self-center pr-2 text-3xl">
+                    <CalendarMonthIcon></CalendarMonthIcon>
+                </div>
+                <div className="flex-shrink self-center text-2xl">{stats.num_days}</div>
             </div>
-            <div className="flex-shrink self-center text-2xl">{stats.num_days}</div>
         </div>
     );
 };
