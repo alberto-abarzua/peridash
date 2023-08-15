@@ -1,11 +1,11 @@
 import TickerCoreInfo from '@/components/tickers/TickerCoreInfo';
+import colors from '@/utils/colors';
 
 import { Chart, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
-import colors from '@/utils/colors';
 
 Chart.register(...registerables);
 Chart.register(annotationPlugin);

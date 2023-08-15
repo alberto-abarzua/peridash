@@ -1,17 +1,24 @@
 import { useState, useEffect, useCallback } from 'react';
-import Notification from './Notification';
 import { v4 as uuidv4 } from 'uuid';
+
+import Notification from './Notification';
 
 const useNotification = () => {
     const [notifications, setNotifications] = useState([]);
 
-    const showNotification = useCallback((message, icon, className, duration = 3000, onTimeout = () => {}) => {
-        const id = uuidv4(); // Unique ID for the notification
-        setNotifications(prevNotifications => [...prevNotifications, { id, message, icon, className, duration, onTimeout }]);
-    }, []);
+    const showNotification = useCallback(
+        (message, icon, className, duration = 3000, onTimeout = () => {}) => {
+            const id = uuidv4(); // Unique ID for the notification
+            setNotifications(prevNotifications => [
+                ...prevNotifications,
+                { id, message, icon, className, duration, onTimeout },
+            ]);
+        },
+        []
+    );
 
     const renderNotification = () => {
-        return notifications.map((notification) => (
+        return notifications.map(notification => (
             <Notification
                 key={notification.id}
                 message={notification.message}
@@ -23,8 +30,10 @@ const useNotification = () => {
         ));
     };
 
-    const handleTimeout = (id) => {
-        setNotifications(notifications => notifications.filter(notification => notification.id !== id));
+    const handleTimeout = id => {
+        setNotifications(notifications =>
+            notifications.filter(notification => notification.id !== id)
+        );
     };
 
     useEffect(() => {

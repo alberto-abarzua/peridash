@@ -33,8 +33,7 @@ const UserTicker = ({ result, getUserTickers }) => {
     const handleDelete = async () => {
         await api.delete(`/ticker/user-tickers/${result.id}/`);
 
-        getUserTickers();        
-
+        getUserTickers();
     };
     useEffect(() => {
         const updateTicker = async () => {
@@ -69,8 +68,6 @@ const UserTicker = ({ result, getUserTickers }) => {
             className={`relative mb-1  box-border  rounded border border-gray-400  bg-slate-100  pl-3 shadow-2xl transition-all duration-200 ${
                 favorite ? 'h-36' : 'h-16'
             }`}
-        
-        
         >
             {renderNotification()}
             <div className="flex-col">

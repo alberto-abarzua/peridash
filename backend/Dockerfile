@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-RUN python -m pip install pdm==2.8.0
+RUN python -m pip install pdm==2.8.2
 
 COPY pyproject.toml /app/.
 COPY pdm.lock /app/.

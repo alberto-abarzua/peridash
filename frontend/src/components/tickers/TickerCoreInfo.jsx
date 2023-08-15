@@ -2,7 +2,6 @@ import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 
 import PropTypes from 'prop-types';
-import colors from '@/utils/colors';
 
 const TickerCoreInfo = ({ ticker_data }) => {
     let currentPrice = ticker_data.cur_price.toFixed(2);
