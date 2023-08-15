@@ -124,4 +124,4 @@ class UserTickerViewSet(viewsets.ModelViewSet):
         settings.user_tickers.remove(ticker)
         ticker.delete()
         settings.save()
-        return Response({"detail": "Ticker removed from settings."}, status=200)
+        return Response({"detail": "Ticker removed from settings."}, status=204)

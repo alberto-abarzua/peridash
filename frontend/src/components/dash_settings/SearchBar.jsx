@@ -54,7 +54,7 @@ const SearchBar = ({ getUserTickers }) => {
             showNotification(
                 'Ticker Added',
                 <CheckIcon className=" text-green-500" />,
-                'bg-green-100'
+                'bg-green-200'
             );
             getUserTickers();
         }

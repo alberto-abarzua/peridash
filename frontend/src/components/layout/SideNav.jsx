@@ -14,7 +14,7 @@ function SideNavBar() {
         <div
             ref={sideNavRef}
             className={
-                'absolute z-50 h-screen w-64 transform flex-col bg-gray-800 p-4 opacity-90 duration-300 ' +
+                'absolute z-50 h-screen w-64 transform flex-col bg-darker-500 p-4 opacity-90 duration-300 ' +
                 (isVisible ? 'translate-x-0' : '-translate-x-64')
             }
         >
@@ -45,7 +45,7 @@ function SideNavBar() {
     const toolbar = (
         <div
             onClick={() => setIsVisible(!isVisible)}
-            className="flex cursor-pointer rounded px-4 py-2 text-white hover:text-gray-400 "
+            className="flex cursor-pointer rounded px-4 py-3 text-white hover:text-gray-400 "
         >
             <StackedLineChartIcon className="text-5xl " />
             <h1 className="pl-2 text-4xl">Peridash</h1>

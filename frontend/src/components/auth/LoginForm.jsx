@@ -26,7 +26,7 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="mt-20 flex min-h-screen flex-col items-center">
+        <div className="flex flex-col  items-center pt-20">
             {renderNotification()}
             <div className="mt-8 w-full max-w-xs rounded bg-white p-6 shadow-md">
                 <h1 className="mb-4 text-lg font-medium">Please Login</h1>

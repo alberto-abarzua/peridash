@@ -27,7 +27,7 @@ const UserInfoCard = () => {
     }
 
     return (
-        <div className="flex w-full rounded-md bg-gray-800 p-4">
+        <div className="flex w-full rounded-md bg-darker-600 p-4">
             <div className="flex-grow self-center text-2xl text-white ">
                 {user ? user.email : 'No User'}
             </div>
