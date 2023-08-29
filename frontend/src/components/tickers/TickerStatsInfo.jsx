@@ -1,8 +1,7 @@
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 const TickerStatsInfo = ({ stats }) => {
     const [currentTime, setCurrentTime] = useState(null);
 
@@ -19,13 +18,13 @@ const TickerStatsInfo = ({ stats }) => {
     if (!currentTime) return null;
 
     return (
-        <div className="al absolute right-10 top-2 m-auto hidden w-72 justify-center rounded-sm bg-transparent p-2 text-white md:flex md:flex-row">
+        <div className="absolute right-10 top-3 m-auto hidden w-72 justify-center rounded-lg bg-darker-700 p-2 text-white md:flex md:flex-row">
             <div className="mr-10  flex-shrink self-center">
-                <span className="text-3xl"> {currentTime.toLocaleTimeString()}</span>
+                <span className="text-2xl "> {currentTime.toLocaleTimeString()}</span>
             </div>
             <div className="flex ">
-                <div className="flex flex-shrink self-center pr-2 text-3xl">
-                    <CalendarMonthIcon></CalendarMonthIcon>
+                <div className="flex flex-shrink self-center pr-2 text-xl">
+                    <CalendarTodayIcon></CalendarTodayIcon>
                 </div>
                 <div className="flex-shrink self-center text-2xl">{stats.num_days}</div>
             </div>

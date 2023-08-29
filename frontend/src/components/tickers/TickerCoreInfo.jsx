@@ -14,21 +14,30 @@ const TickerCoreInfo = ({ ticker_data }) => {
     ) : (
         <SouthEastIcon className="text-2xl text-red-400" />
     );
+    let formattedPrice = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    }).format(currentPrice);
+
+    let formattedPriceVariation = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    }).format(priceVariation);
 
     return (
         <div className="h-18 flex items-center justify-between p-2">
             <div>
-                <h4 className="text-lg">{ticker_data.ticker.symbol.symbol}</h4>
-                <h6 className="text-sm">{ticker_data.ticker.symbol.exchange}</h6>
+                <h4 className="text-lg font-bold">{ticker_data.ticker.symbol.symbol}</h4>
+                <h6 className="text-xs italic">{ticker_data.ticker.symbol.exchange}</h6>
             </div>
             <div className="text-right">
                 <div className="flex items-center justify-end">
-                    <h4 className="mr-2 text-lg">{currentPrice}</h4>
+                    <h4 className="mr-2 text-lg">{percentageVariation}%</h4>
                     {arrowIcon}
                 </div>
                 <div className="flex items-center justify-end">
-                    <h5 className="text-md mr-2">{priceVariation}</h5>
-                    <h5 className="text-md mr-2">{percentageVariation}%</h5>
+                    <h5 className="text-md mr-4">{formattedPriceVariation}</h5>
+                    <h5 className="text-md mr-2">{formattedPrice}</h5>
                 </div>
             </div>
         </div>
