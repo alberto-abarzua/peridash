@@ -1,7 +1,7 @@
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 const TickerStatsInfo = ({ stats }) => {
     const [currentTime, setCurrentTime] = useState(null);
 
