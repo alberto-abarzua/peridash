@@ -133,6 +133,7 @@ users:
                 print("Applying kustomization")
                 subprocess.check_call(
                     ["kubectl", "apply", "-k", kustomization_dir])
+                print("Kustomization applied")
 
     def handle_rollout(self, args):
         kustomization_dir = self.KUSTOMIZATION_DIR / args.dir
@@ -207,11 +208,6 @@ users:
                     f.write(f"{var_name}={var_value}\n")
                     print(
                         f"Writing {var_name} to {env_file_name}.env")
-
-    def cleanup_temp_files(self, kustomization_dir: Path) -> None:
-        file_to_delete = kustomization_dir / self.ENVS_TEMP_DIR
-        if os.path.exists(file_to_delete):
-            shutil.rmtree(file_to_delete)
 
     def read_kustomization_yaml(self, kustomization_dir: Path) -> dict:
         with open(kustomization_dir / "kustomization.yaml", "r") as f:

@@ -7,10 +7,6 @@ configMapGenerator:
   - ./envs/NEXT.env
   - ./envs/GLOBAL.env
   name: frontend-env
-- envs:
-  - ./envs/POSTGRES.env
-  - ./envs/GLOBAL.env
-  name: db-env
 images:
 - name: backend_image
   newName: uintuser/peridash-backend
