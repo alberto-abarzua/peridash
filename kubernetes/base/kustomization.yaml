@@ -1,7 +1,6 @@
 resources:
   - backend.yaml
   - frontend.yaml
-  - db.yaml
   - memcached.yaml
   - ingress.yaml
   - ci-service-account.yaml

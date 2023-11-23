@@ -33,22 +33,17 @@ class DeployTool:
         secret_name = secret_name.strip("'")
         token = subprocess.run(
             ["kubectl", "get", "secret", secret_name, "-n", namespace, "-o", "jsonpath='{.data.token}'"], capture_output=True, text=True)
-        error = token.stderr
-        error = token.stderr
         token = token.stdout.strip("'")
         token = base64.b64decode(token).decode("utf-8")
         ca_cert = subprocess.run(
             ["kubectl", "get", "secret", secret_name, "-n", namespace, "-o", "jsonpath='{.data.ca\\.crt}'"], capture_output=True, text=True)
-        error = ca_cert.stderr
         ca_cert = ca_cert.stdout.strip("'")
 
         cluster_name = subprocess.run(
             ["kubectl", "config", "view", "-o", "jsonpath='{.clusters[0].name}'"], capture_output=True, text=True)
-        error = cluster_name.stderr
         cluster_name = cluster_name.stdout.strip("'")
         server = subprocess.run(
             ["kubectl", "config", "view", "-o", "jsonpath='{.clusters[0].cluster.server}'"], capture_output=True, text=True)
-        error = server.stderr
         server = server.stdout.strip("'")
 
         kubeconfig = f"""
