@@ -17,7 +17,10 @@ class TickerInfo:
         self.symbol = symbol
         self.cur_price, self.eod_price = self.get_prices()
         self.price_dif = self.cur_price - self.eod_price
-        self.price_dif_percent = (self.price_dif / self.eod_price) * 100
+        try:
+            self.price_dif_percent = (self.price_dif / self.eod_price) * 100
+        except ZeroDivisionError:
+            self.price_dif_percent = 0
         self.ticker: Optional[Ticker] = None
 
     def get_prices(self) -> Tuple[float, float]:
@@ -25,7 +28,16 @@ class TickerInfo:
         daily_closes = daily_closes.resample("D")["close"].last()
         daily_closes = daily_closes.sort_index(ascending=False)
         daily_closes = daily_closes[daily_closes.notna()]
-        return float(daily_closes.iloc[0]), float(daily_closes.iloc[min(1, len(daily_closes))])
+        print(daily_closes)
+        try:
+            cur_price = float(daily_closes.iloc[0])
+        except IndexError:
+            cur_price = 0
+        try:
+            eod_price = float(daily_closes.iloc[min(1, len(daily_closes))])
+        except IndexError:
+            eod_price = 0
+        return cur_price, eod_price
 
     def gen_df(self, time_series_dicts: List[Dict[str, Any]]) -> pd.DataFrame:
         df = pd.DataFrame(time_series_dicts)
