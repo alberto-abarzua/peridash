@@ -1,23 +1,15 @@
-# Dockerfile
-# Use the official Node.js base image
-FROM node:alpine
+FROM node:20.2.0-alpine3.16
 
-# Set the working directory
 WORKDIR /app
 
-#  package.json and package-lock.json files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+RUN npm install --verbose
 
-# Copy the application files
 COPY . .
 
-# Build the Next.js app
 RUN npm run build
 
-# Expose the port the app will run on
 EXPOSE 3000
 
 
