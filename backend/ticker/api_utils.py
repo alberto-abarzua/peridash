@@ -28,7 +28,6 @@ class TickerInfo:
         daily_closes = daily_closes.resample("D")["close"].last()
         daily_closes = daily_closes.sort_index(ascending=False)
         daily_closes = daily_closes[daily_closes.notna()]
-        print(daily_closes)
         try:
             cur_price = float(daily_closes.iloc[0])
         except IndexError:
@@ -153,7 +152,7 @@ class TwelveDataCore:
                 not_cached_symbols.append(symbol)
 
         not_cached_symbols_chunks = [
-            not_cached_symbols[i : i + 10] for i in range(0, len(not_cached_symbols), 10)
+            not_cached_symbols[i: i + 10] for i in range(0, len(not_cached_symbols), 10)
         ]
 
         ticker_info_results: List[TickerInfo] = []
