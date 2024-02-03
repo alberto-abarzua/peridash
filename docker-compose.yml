@@ -1,63 +1,19 @@
 version: '3.8'
 
 services:
-  db:
-    image: postgres:15.2
-    environment:
-      - POSTGRES_DB
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-
-  backend:
-    build: ./backend
-    volumes:
-      - ./backend/user:/app/user
-      - ./backend/ticker:/app/ticker
-      - ./backend/peridash:/app/peridash
-      - ./backend/pyproject.toml:/app/pyproject.toml
-      - ./backend/pdm.lock:/app/pdm.lock
-      - ./backend/coverage:/app/htmlcov
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-      - memcached
-    environment:
-      - BACKEND_DJANGO_DEUBG
-      - BACKEND_DJANGO_SECRET_KEY
-      - BACKEND_DJANGO_ALLOWED_HOSTS
-      - BACKEND_DJANGO_CORS_ORIGIN_WHITELIST
-      - BACKEND_POSTGRES_USER
-      - BACKEND_POSTGRES_PASSWORD
-      - BACKEND_POSTGRES_DB
-      - BACKEND_POSTGRES_HOSTNAME
-      - BACKEND_POSTGRES_PORT
-      - BACKEND_CACHE_HOSTNAME
-      - BACKEND_CACHE_PORT
-      - BACKEND_TWELVE_DATA_API_KEY
-      - GLOBAL_RUN_ENV
-
-  memcached:
-    image: memcached:1.6.19-bullseye
-    command: memcached -m 128
-
   frontend:
-    build: ./frontend
+    build: ./frontend 
+    stop_grace_period: 5s
     volumes:
       - ./frontend/src:/app/src
+      - ./frontend/index.html:/app/index.html
       - ./frontend/package.json:/app/package.json
       - ./frontend/package-lock.json:/app/package-lock.json
-      - ./frontend/coverage:/app/coverage
       - ./frontend/tailwind.config.js:/app/tailwind.config.js
+      - ./frontend/components.json:/app/components.json
       - ./frontend/postcss.config.js:/app/postcss.config.js
-
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_BACKEND_URL
-      - NEXT_PRIVATE_BACKEND_URL
-      - GLOBAL_RUN_ENV
-volumes:
-  postgres_data:
+      - VITE_SUPABASE_URL
+      - VITE_SUPABASE_KEY
