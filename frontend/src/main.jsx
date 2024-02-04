@@ -6,7 +6,7 @@ import ErrorPage from '@/error-page';
 import About from '@/routes/about';
 import Contact from '@/routes/contact';
 import SupabaseContext from '@/utils/supabase/context';
-import supabase from "@/utils/supabase/supabaseClient"
+import supabase from '@/utils/supabase/supabaseClient';
 
 const router = createBrowserRouter([
     {
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <SupabaseContext.Provider value = {supabase}>
+    <SupabaseContext.Provider value={supabase}>
         <React.StrictMode>
             <RouterProvider router={router} />
         </React.StrictMode>
