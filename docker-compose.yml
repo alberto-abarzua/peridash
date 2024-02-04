@@ -17,3 +17,14 @@ services:
     environment:
       - VITE_SUPABASE_URL
       - VITE_SUPABASE_KEY
+
+  db:
+    build: ./db 
+    volumes:
+      - ./db/src:/app/src
+      - ./db/package.json:/app/package.json
+      - ./db/package-lock.json:/app/package-lock.json
+      - ./supabase/migrations:/supabase/migrations
+
+
+

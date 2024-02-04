@@ -9,6 +9,7 @@ const Login = () => {
     const [session, setSession] = useState(null);
 
     useEffect(() => {
+
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session);
         });
@@ -23,18 +24,22 @@ const Login = () => {
     }, []);
 
     if (!session) {
+        // providers={['google', 'apple']}
         return (
             <div className="bg-gray-900 p-4 rounded-md">
                 <Auth
                     supabaseClient={supabase}
                     appearance={{ theme: ThemeSupa }}
-                    providers={['google', 'apple']}
+                    providers={[]}
                     theme={'dark'}
                 />
             </div>
         );
     } else {
-        return <div>Logged in!</div>;
+        return <div>
+            <h1>Logged in</h1>
+            <button className='bg-red-600 px-4 py-2 hover:bg-red-500 text-white rounded-sm border-gray-600 ' onClick={() => supabase.auth.signOut()}>Log out</button>
+            </div>;
     }
 };
 
