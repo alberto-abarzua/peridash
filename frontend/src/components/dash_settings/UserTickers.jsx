@@ -16,7 +16,7 @@ const UserTickers = ({ userTickers, getUserTickers }) => {
                 {userTickers &&
                     userTickers.map(result => (
                         <UserTicker
-                            key={result.id}
+                            key={result.ticker.id}
                             getUserTickers={getUserTickers}
                             result={result}
                         />

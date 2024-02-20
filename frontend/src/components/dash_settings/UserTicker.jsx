@@ -4,16 +4,19 @@ import AddIcon from '@mui/icons-material/Add';
 import AttachMoneySharpIcon from '@mui/icons-material/AttachMoneySharp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { useContext } from 'react';
+import { SessionContext } from '@/utils/supabase/context';
 
 import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from 'react';
 
 const UserTicker = ({ result, getUserTickers }) => {
-
-    const [favorite, setFavorite] = useState(result.is_favorite);
-    const [buy, setBuy] = useState(result.buy);
-    const [gain, setGain] = useState(result.gain);
-    const [loss, setLoss] = useState(result.loss);
+    console.log('Rendering UserTicker');
+    const { session } = useContext(SessionContext);
+    const [favorite, setFavorite] = useState(result.ticker.is_favorite);
+    const [buy, setBuy] = useState(result.ticker.buy || 0);
+    const [gain, setGain] = useState(result.ticker.gain || 0);
+    const [loss, setLoss] = useState(result.ticker.loss || 0);
     const isFirstRender = useRef(true);
 
     const handleBuyChange = event => {
@@ -28,18 +31,38 @@ const UserTicker = ({ result, getUserTickers }) => {
         setLoss(event.target.value);
     };
     const handleDelete = async () => {
-        await api.delete(`/ticker/user-tickers/${result.id}/`);
+        await api.delete(`/user_ticker/tickers/`, {
+            headers: {
+                Authorization: `Bearer ${session.access_token}`,
+                'Content-Type': 'application/json',
+            },
+            params: {
+                ticker_id: result.ticker.id,
+            },
+        });
 
         getUserTickers();
     };
     useEffect(() => {
         const updateTicker = async () => {
-            let response = await api.patch(`/ticker/user-tickers/${result.id}/`, {
-                is_favorite: favorite,
-                buy: buy,
-                gain: gain,
-                loss: loss,
-            });
+            let response = await api.put(
+                `/user_ticker/tickers/`,
+                JSON.stringify({
+                    ticker_id: result.ticker.id,
+                    ticker_info: {
+                        is_favorite: favorite,
+                        buy: buy,
+                        gain: gain,
+                        loss: loss,
+                    },
+                }),
+                {
+                    headers: {
+                        Authorization: `Bearer ${session.access_token}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
             if (response.status === 200) {
                 getUserTickers();
             }
@@ -49,7 +72,7 @@ const UserTicker = ({ result, getUserTickers }) => {
             return;
         }
         updateTicker();
-    }, [favorite, buy, gain, loss, getUserTickers, result.id, ]);
+    }, [favorite, buy, gain, loss, getUserTickers, result.id]);
 
     const handleFavorite = () => {
         setFavorite(!favorite);
@@ -64,11 +87,13 @@ const UserTicker = ({ result, getUserTickers }) => {
             <div className="flex-col">
                 <div className="flex h-full w-full pt-1">
                     <div className="flex-grow self-center">
-                        <h5 className="text-lg ">{result.symbol.name}</h5>
+                        <h5 className="text-lg ">
+                            {result.symbol.symbol + ':' + result.symbol.exchange}
+                        </h5>
                     </div>
                     <div className="z-20 flex-shrink-0 self-center">
                         <button onClick={handleFavorite}>
-                            {result.is_favorite ? (
+                            {favorite ? (
                                 <div className="text-5xl text-yellow-500">★</div>
                             ) : (
                                 <div className="transform text-5xl text-gray-500 transition-all duration-100  hover:text-yellow-500">

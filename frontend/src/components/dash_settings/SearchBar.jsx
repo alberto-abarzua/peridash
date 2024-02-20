@@ -32,7 +32,6 @@ const SearchBar = ({ getUserTickers }) => {
         });
         console.log(response.data.data);
         setSearchResults(response.data.data);
-        // setSearchResults(response.data);
         if (response.data.data.length > 0) {
             setIsModalOpen(true); // Open the modal once we have the results
         } else {
@@ -50,10 +49,6 @@ const SearchBar = ({ getUserTickers }) => {
         setSearchResults([]);
         setSearchTerm('');
         setIsModalOpen(false);
-        let data = {
-            symbol: symbol,
-            exchange: exchange,
-        };
         let response = await api.post(
             '/user_ticker/tickers/',
 
@@ -62,7 +57,7 @@ const SearchBar = ({ getUserTickers }) => {
                 headers: { Authorization: `Bearer ${session?.access_token}` },
             }
         );
-        if (response.status === 201) {
+        if (response.status === 200) {
             getUserTickers();
         }
     };

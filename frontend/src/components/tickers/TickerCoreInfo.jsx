@@ -4,6 +4,11 @@ import SouthEastIcon from '@mui/icons-material/SouthEast';
 import PropTypes from 'prop-types';
 
 const TickerCoreInfo = ({ ticker_data }) => {
+    const {values:time_series,meta} = ticker_data.symbol.price_data;
+    
+
+    console.log('Rendering TickerCoreInfo',ticker_data);
+
     let currentPrice = ticker_data.cur_price.toFixed(2);
     let priceVariation = ticker_data.price_dif.toFixed(2);
     let percentageVariation = ticker_data.price_dif_percent.toFixed(2);

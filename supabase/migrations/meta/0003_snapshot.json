@@ -1,6 +1,6 @@
 {
-  "id": "1b07c395-ae3b-43ee-a6db-3c6a14eb4db3",
-  "prevId": "a0c8a337-a92e-418e-bfe6-9bcd35e57408",
+  "id": "7c8b8d7e-b751-4406-be79-2e7ab326fde9",
+  "prevId": "1b07c395-ae3b-43ee-a6db-3c6a14eb4db3",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -32,6 +32,19 @@
           "type": "json",
           "primaryKey": false,
           "notNull": false
+        },
+        "eod_data": {
+          "name": "eod_data",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "eod_updated_at": {
+          "name": "eod_updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
