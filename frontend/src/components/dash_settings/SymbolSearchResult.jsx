@@ -1,12 +1,18 @@
 import PropTypes from 'prop-types';
 
-const TickerSearchResult = ({ result, onClick }) => {
-    const isBasicPlan =
-        result.access.plan.toLowerCase() === 'basic' || result.access.plan.toLowerCase() === 'grow';
+const SymbolSearchResult = ({ result, onClick }) => {
+    // const isBasicPlan =
+    //     result.access.plan.toLowerCase() === 'basic' || result.access.plan.toLowerCase() === 'grow';
     let thisOnClick = () => {
         onClick(result.symbol, result.exchange);
     };
 
+    const isBasicPlan = true;
+
+    // <div className="flex-1 pl-2">
+    //     <p className="mb-2 text-gray-600">Access - Global: {result.access.global}</p>
+    //     <p className="text-gray-600">Access - Plan: {result.access.plan}</p>
+    // </div>
     return (
         <div
             className={`rounded-lg border border-black p-4 shadow-xl ${
@@ -30,16 +36,12 @@ const TickerSearchResult = ({ result, onClick }) => {
                     <h6 className="mb-2 text-lg font-bold">Currency: {result.currency}</h6>
                     <p className="text-gray-600">Country: {result.country}</p>
                 </div>
-                <div className="flex-1 pl-2">
-                    <p className="mb-2 text-gray-600">Access - Global: {result.access.global}</p>
-                    <p className="text-gray-600">Access - Plan: {result.access.plan}</p>
-                </div>
             </div>
         </div>
     );
 };
 
-TickerSearchResult.propTypes = {
+SymbolSearchResult.propTypes = {
     result: PropTypes.shape({
         symbol: PropTypes.string,
         instrument_name: PropTypes.string,
@@ -49,12 +51,12 @@ TickerSearchResult.propTypes = {
         instrument_type: PropTypes.string,
         country: PropTypes.string,
         currency: PropTypes.string,
-        access: PropTypes.shape({
-            global: PropTypes.string,
-            plan: PropTypes.string,
-        }),
+        // access: PropTypes.shape({
+        //     global: PropTypes.string,
+        //     plan: PropTypes.string,
+        // }),
     }).isRequired,
     onClick: PropTypes.func.isRequired,
 };
 
-export default TickerSearchResult;
+export default SymbolSearchResult;
