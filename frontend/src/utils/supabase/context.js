@@ -1,6 +1,6 @@
 import {createContext} from "react";
 
-const SupabaseContext = createContext();
+export const SupabaseContext = createContext();
+export const SessionContext = createContext();
 
 export default SupabaseContext;
-

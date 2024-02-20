@@ -5,8 +5,10 @@ import Root from '@/routes/root';
 import ErrorPage from '@/error-page';
 import About from '@/routes/about';
 import Contact from '@/routes/contact';
-import SupabaseContext from '@/utils/supabase/context';
+import {SupabaseContext, SessionContext } from '@/utils/supabase/context';
 import supabase from '@/utils/supabase/supabaseClient';
+import Dashboard from '@/routes/Dashboard';
+
 
 const router = createBrowserRouter([
     {
@@ -19,8 +21,13 @@ const router = createBrowserRouter([
                 element: <About />,
             },
             {
-                path: 'contact',
+                path: 'settings',
                 element: <Contact />,
+            },
+
+            {
+                path: 'dashboard',
+                element: <Dashboard />,
             },
         ],
     },
@@ -29,9 +36,9 @@ const router = createBrowserRouter([
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <SupabaseContext.Provider value={supabase}>
-        <React.StrictMode>
-            <RouterProvider router={router} />
-        </React.StrictMode>
-    </SupabaseContext.Provider>
+        <SupabaseContext.Provider value={supabase}>
+            <React.StrictMode>
+                <RouterProvider router={router} />
+            </React.StrictMode>
+        </SupabaseContext.Provider>
 );
