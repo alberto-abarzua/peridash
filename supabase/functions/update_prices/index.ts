@@ -31,15 +31,52 @@ interface StockData {
         type: string;
     };
     status: string;
-    values: StockValue[]; // Replace 'any' with a more specific type if you know the structure of the items in this array
+    values: StockValue[];
 }
+
+const update_eod = async (
+    db: PostgresJsDatabase,
+): Promise<boolean> => {
+    const symbols = await db.select().from(symbol).orderBy(symbol.eod_updated_at)
+        .limit(30);
+    const first = symbols[0];
+    if (
+        first.eod_updated_at &&
+        first.eod_updated_at > new Date(new Date().getTime() - 4 * 60 * 60 * 1000)
+    ) {
+        return false;
+    }
+    const symbolsArray = symbols.map((s) => `${s.symbol}:${s.exchange}`);
+
+    const { data } = await axiod.get("https://api.twelvedata.com/eod", {
+        params: {
+            symbol: symbolsArray.join(","),
+            apikey: Deno.env.get("TWELVEDATA_API_KEY") || "",
+        },
+    });
+
+    if (data) {
+        for (const [_, _info] of Object.entries(data)) {
+            const info = _info as StockData;
+            const { meta: { symbol: symbol_str, exchange } } = info;
+            const symbolRecord = await get_or_create_symbol(symbol_str, exchange, db);
+            db.update(symbol).set({ eod_data: info, eod_updated_at: new Date() })
+                .where(
+                    eq(symbol.id, symbolRecord.id),
+                );
+        }
+    }
+
+    return true;
+};
 
 const update_prices = async (
     _req: Request,
     db: PostgresJsDatabase,
 ): Promise<Response> => {
     const headers = new Headers({ ...corsHeaders });
-    const symbols = await db.select().from(symbol).orderBy(symbol.updated_at).limit(30);
+    const symbols = await db.select().from(symbol).orderBy(symbol.updated_at)
+        .limit(30);
     const symbolsArray = symbols.map((s) => `${s.symbol}:${s.exchange}`);
     const datetime_end = new Date();
     const datetime_start = new Date();
@@ -48,12 +85,19 @@ const update_prices = async (
     const start = datetime_start.toISOString();
     const end = datetime_end.toISOString();
 
+    const eod_updated = await update_eod(db);
+    if (eod_updated) {
+        return new Response(JSON.stringify({ eod_updated: true }), {
+            status: 200,
+            headers,
+        });
+    }
+
     const { data } = await axiod.get("https://api.twelvedata.com/time_series", {
         params: {
             symbol: symbolsArray.join(","),
             timezone: "America/New_York",
             interval: "15min",
-            previous_close: true,
             start_date: start,
             end_date: end,
             apikey: Deno.env.get("TWELVEDATA_API_KEY") || "",
@@ -62,15 +106,15 @@ const update_prices = async (
     for (const [_, _info] of Object.entries(data)) {
         const info = _info as StockData;
         const { meta: { symbol: symbol_str, exchange } } = info;
-
         const symbolRecord = await get_or_create_symbol(symbol_str, exchange, db);
-        console.log(symbolRecord, symbolRecord.id);
-        const ouptput = db.update(symbol).set({ price_data: info, updated_at: new Date() }).where(
+        db.update(symbol).set({ price_data: info, updated_at: new Date() }).where(
             eq(symbol.id, symbolRecord.id),
-        ).execute();
-        console.log(ouptput);
+        );
     }
-    return new Response(JSON.stringify({ data, symbolsArray }), { status: 200, headers });
+    return new Response(JSON.stringify({ data, symbolsArray }), {
+        status: 200,
+        headers,
+    });
 };
 
 async function handler(req: Request): Promise<Response> {
@@ -96,7 +140,7 @@ async function handler(req: Request): Promise<Response> {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        return new Response(JSON.stringify({ error: "Unauthorized!" }), {
             status: 401,
             headers,
         });

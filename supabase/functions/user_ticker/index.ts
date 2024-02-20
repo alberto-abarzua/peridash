@@ -13,11 +13,9 @@ import {
     get_or_create_user_ticker,
     get_or_create_user_ticker_settings,
     get_user_list_of_tickers,
-    NewTickerSettingsToTicker,
     update_user_ticker,
 } from "../_shared/db.ts";
 
-import { tickerSettingsToTicker } from "../_shared/schema.ts";
 // ===============================
 // ===============================
 //
@@ -47,8 +45,15 @@ const endpoint_get_user_tickers = async (
             headers,
         });
     }
+    // call the update_prices edge function
+    let response = await api.get("/update_prices/", {
+        headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+        },
+    });
 
     const tickers = await get_user_list_of_tickers(user.id, db);
+
     return new Response(JSON.stringify(tickers), { status: 200, headers });
 };
 
@@ -67,20 +72,25 @@ const endpoint_post_add_user_ticker = async (
         });
     }
 
-    const userSettings = await get_or_create_user_ticker_settings(user.id, db);
-
     const body = await req.json();
 
     const { symbol, exchange } = body.ticker_info;
 
     const found_symbol = await get_or_create_symbol(symbol, exchange, db);
 
-    const new_ticker = await get_or_create_user_ticker(user.id, found_symbol.id, db);
+    const new_ticker = await get_or_create_user_ticker(
+        user.id,
+        found_symbol.id,
+        db,
+    );
 
-    return new Response(JSON.stringify({ message: "Ticker added", ticker: new_ticker }), {
-        status: 200,
-        headers,
-    });
+    return new Response(
+        JSON.stringify({ message: "Ticker added", ticker: new_ticker }),
+        {
+            status: 200,
+            headers,
+        },
+    );
 };
 
 const endpoint_delete_user_ticker = async (
@@ -102,7 +112,10 @@ const endpoint_delete_user_ticker = async (
     const ticker_id = url.searchParams.get("ticker_id") || "";
 
     await delete_user_ticker(user.id, ticker_id, db);
-    return new Response(JSON.stringify({ message: "Ticker deleted" }), { status: 200, headers });
+    return new Response(JSON.stringify({ message: "Ticker deleted" }), {
+        status: 200,
+        headers,
+    });
 };
 
 const endpoint_put_user_ticker = async (
@@ -122,7 +135,10 @@ const endpoint_put_user_ticker = async (
     const body = await req.json();
     const { ticker_id, ticker_info } = body;
     await update_user_ticker(user.id, ticker_id, ticker_info, db);
-    return new Response(JSON.stringify({ message: "Ticker updated" }), { status: 200, headers });
+    return new Response(JSON.stringify({ message: "Ticker updated" }), {
+        status: 200,
+        headers,
+    });
 };
 // ------------------------------------
 const endpoint_get_search_ticker = async (
@@ -142,7 +158,10 @@ const endpoint_get_search_ticker = async (
     const { data } = await axiod.get("https://api.twelvedata.com/symbol_search", {
         params: { symbol: search },
     });
-    return new Response(JSON.stringify(data), { status: 200, headers: new Headers({ ...corsHeaders }) });
+    return new Response(JSON.stringify(data), {
+        status: 200,
+        headers: new Headers({ ...corsHeaders }),
+    });
 };
 // ---------- ENDPOINT  ---------------
 
@@ -197,10 +216,13 @@ async function handler(req: Request): Promise<Response> {
                     case "PUT":
                         return await endpoint_put_user_ticker(req, supabase, db);
                     default:
-                        return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
-                            status: 405,
-                            headers,
-                        });
+                        return new Response(
+                            JSON.stringify({ error: "Method Not Allowed" }),
+                            {
+                                status: 405,
+                                headers,
+                            },
+                        );
                 }
             }
 
@@ -209,10 +231,13 @@ async function handler(req: Request): Promise<Response> {
                     case "GET":
                         return await endpoint_get_search_ticker(req, supabase, db);
                     default:
-                        return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
-                            status: 405,
-                            headers,
-                        });
+                        return new Response(
+                            JSON.stringify({ error: "Method Not Allowed" }),
+                            {
+                                status: 405,
+                                headers,
+                            },
+                        );
                 }
             }
             default:
