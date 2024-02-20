@@ -11,13 +11,14 @@ function SideNavBar() {
     const [isVisible, setIsVisible] = useState(false);
     const sideNavRef = useRef(null);
     const supabase = useContext(SupabaseContext);
-    const {session,setSession} = useContext(SessionContext);
+    const {setSession} = useContext(SessionContext);
     
 
     const logout = async () => {
         console.log('logging out');
         setSession(null);
-        await supabase.auth.signOut();
+        const result = await supabase.auth.signOut();
+        console.log(result);
     }
 
     const navigation = (

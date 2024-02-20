@@ -1,0 +1,1 @@
+ALTER TABLE "peridash"."symbol" ADD COLUMN "price_data" json;

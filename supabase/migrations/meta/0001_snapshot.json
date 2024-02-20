@@ -1,6 +1,6 @@
 {
-    "id": "d412c431-6306-4bfd-b65b-16118584f19d",
-    "prevId": "00000000-0000-0000-0000-000000000000",
+    "id": "a0c8a337-a92e-418e-bfe6-9bcd35e57408",
+    "prevId": "d412c431-6306-4bfd-b65b-16118584f19d",
     "version": "5",
     "dialect": "pg",
     "tables": {
@@ -24,6 +24,12 @@
                 "exchange": {
                     "name": "exchange",
                     "type": "varchar(64)",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "price_data": {
+                    "name": "price_data",
+                    "type": "json",
                     "primaryKey": false,
                     "notNull": false
                 }

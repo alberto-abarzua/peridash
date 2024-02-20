@@ -4,7 +4,9 @@ import {
   boolean,
   integer,
   doublePrecision,
+  json,
   pgSchema,
+  timestamp,
   uuid,
 } from 'drizzle-orm/pg-core';
 
@@ -33,6 +35,8 @@ export const symbol = peridashSchema.table('symbol', {
   id: uuid('id').defaultRandom().primaryKey(),
   symbol: varchar('symbol', { length: 64 }),
   exchange: varchar('exchange', { length: 64 }),
+  price_data: json('price_data'),
+  updated_at: timestamp('updated_at').defaultNow(),
 });
 
 // ---------------------

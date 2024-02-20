@@ -1,0 +1,26 @@
+{
+    "tasks": {
+        "test": "deno test --allow-read",
+        "fmt": "deno fmt --indent-width 4",
+        "start": "denon run --allow-net --allow-env --allow-read edge_function.ts",
+        "lint": "deno lint"
+    },
+    "fmt": {
+        "indentWidth": 4,
+        "useTabs": false,
+        "lineWidth": 110,
+        "singleQuote": false,
+        "include": ["."]
+    },
+    "compilerOptions": {
+        "lib": ["dom", "deno.ns", "deno.window"],
+        "allowJs": true,
+        "strict": true
+    },
+    "imports": {
+        "drizzle-orm": "npm:drizzle-orm@0.29.1",
+        "supabase": "npm:@supabase/supabase-js@2.39.6",
+        "drizzle-orm/": "npm:/drizzle-orm@0.29.1/",
+        "postgres": "npm:postgres@3.4.3"
+    }
+}
