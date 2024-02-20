@@ -1,0 +1,1 @@
+ALTER TABLE "peridash"."symbol" ADD COLUMN "updated_at" timestamp DEFAULT now();

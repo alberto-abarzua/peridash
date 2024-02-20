@@ -24,7 +24,7 @@ export default function Root() {
     return (
         <SessionContext.Provider value={{ session, setSession }}>
             <SideNav />
-            <div className="flex h-full w-full flex-col items-center justify-center">
+            <div className="flex   w-full flex-col items-center justify-center">
                 <div className="">
                     {Outlet && session != null ? (
                         Outlet

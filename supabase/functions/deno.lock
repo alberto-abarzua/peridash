@@ -1,0 +1,135 @@
+{
+  "version": "3",
+  "packages": {
+    "specifiers": {
+      "npm:@supabase/supabase-js": "npm:@supabase/supabase-js@2.39.7",
+      "npm:@supabase/supabase-js@2.39.6": "npm:@supabase/supabase-js@2.39.6",
+      "npm:@supabase/supabase-js@2.39.7": "npm:@supabase/supabase-js@2.39.7",
+      "npm:drizzle-orm@0.29.1": "npm:drizzle-orm@0.29.1_postgres@3.4.3",
+      "npm:postgres@3.4.3": "npm:postgres@3.4.3"
+    },
+    "npm": {
+      "@supabase/functions-js@2.1.5": {
+        "integrity": "sha512-BNzC5XhCzzCaggJ8s53DP+WeHHGT/NfTsx2wUSSGKR2/ikLFQTBCDzMvGz/PxYMqRko/LwncQtKXGOYp1PkPaw==",
+        "dependencies": {
+          "@supabase/node-fetch": "@supabase/node-fetch@2.6.15"
+        }
+      },
+      "@supabase/gotrue-js@2.62.2": {
+        "integrity": "sha512-AP6e6W9rQXFTEJ7sTTNYQrNf0LCcnt1hUW+RIgUK+Uh3jbWvcIST7wAlYyNZiMlS9+PYyymWQ+Ykz/rOYSO0+A==",
+        "dependencies": {
+          "@supabase/node-fetch": "@supabase/node-fetch@2.6.15"
+        }
+      },
+      "@supabase/node-fetch@2.6.15": {
+        "integrity": "sha512-1ibVeYUacxWYi9i0cf5efil6adJ9WRyZBLivgjs+AUpewx1F3xPi7gLgaASI2SmIQxPoCEjAsLAzKPgMJVgOUQ==",
+        "dependencies": {
+          "whatwg-url": "whatwg-url@5.0.0"
+        }
+      },
+      "@supabase/postgrest-js@1.9.2": {
+        "integrity": "sha512-I6yHo8CC9cxhOo6DouDMy9uOfW7hjdsnCxZiaJuIVZm1dBGTFiQPgfMa9zXCamEWzNyWRjZvupAUuX+tqcl5Sw==",
+        "dependencies": {
+          "@supabase/node-fetch": "@supabase/node-fetch@2.6.15"
+        }
+      },
+      "@supabase/realtime-js@2.9.3": {
+        "integrity": "sha512-lAp50s2n3FhGJFq+wTSXLNIDPw5Y0Wxrgt44eM5nLSA3jZNUUP3Oq2Ccd1CbZdVntPCWLZvJaU//pAd2NE+QnQ==",
+        "dependencies": {
+          "@supabase/node-fetch": "@supabase/node-fetch@2.6.15",
+          "@types/phoenix": "@types/phoenix@1.6.4",
+          "@types/ws": "@types/ws@8.5.10",
+          "ws": "ws@8.16.0"
+        }
+      },
+      "@supabase/storage-js@2.5.5": {
+        "integrity": "sha512-OpLoDRjFwClwc2cjTJZG8XviTiQH4Ik8sCiMK5v7et0MDu2QlXjCAW3ljxJB5+z/KazdMOTnySi+hysxWUPu3w==",
+        "dependencies": {
+          "@supabase/node-fetch": "@supabase/node-fetch@2.6.15"
+        }
+      },
+      "@supabase/supabase-js@2.39.6": {
+        "integrity": "sha512-HlflDzem0+l3KYYTqHV0UsqkDooV9my5UcBCV2zvvTrl77UtW97uKTZWn9lSWMuiy+ZvRLsiuG+WTiBuKMQl0Q==",
+        "dependencies": {
+          "@supabase/functions-js": "@supabase/functions-js@2.1.5",
+          "@supabase/gotrue-js": "@supabase/gotrue-js@2.62.2",
+          "@supabase/node-fetch": "@supabase/node-fetch@2.6.15",
+          "@supabase/postgrest-js": "@supabase/postgrest-js@1.9.2",
+          "@supabase/realtime-js": "@supabase/realtime-js@2.9.3",
+          "@supabase/storage-js": "@supabase/storage-js@2.5.5"
+        }
+      },
+      "@supabase/supabase-js@2.39.7": {
+        "integrity": "sha512-1vxsX10Uhc2b+Dv9pRjBjHfqmw2N2h1PyTg9LEfICR3x2xwE24By1MGCjDZuzDKH5OeHCsf4it6K8KRluAAEXA==",
+        "dependencies": {
+          "@supabase/functions-js": "@supabase/functions-js@2.1.5",
+          "@supabase/gotrue-js": "@supabase/gotrue-js@2.62.2",
+          "@supabase/node-fetch": "@supabase/node-fetch@2.6.15",
+          "@supabase/postgrest-js": "@supabase/postgrest-js@1.9.2",
+          "@supabase/realtime-js": "@supabase/realtime-js@2.9.3",
+          "@supabase/storage-js": "@supabase/storage-js@2.5.5"
+        }
+      },
+      "@types/node@18.16.19": {
+        "integrity": "sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==",
+        "dependencies": {}
+      },
+      "@types/phoenix@1.6.4": {
+        "integrity": "sha512-B34A7uot1Cv0XtaHRYDATltAdKx0BvVKNgYNqE4WjtPUa4VQJM7kxeXcVKaH+KS+kCmZ+6w+QaUdcljiheiBJA==",
+        "dependencies": {}
+      },
+      "@types/ws@8.5.10": {
+        "integrity": "sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==",
+        "dependencies": {
+          "@types/node": "@types/node@18.16.19"
+        }
+      },
+      "drizzle-orm@0.29.1_postgres@3.4.3": {
+        "integrity": "sha512-yItc4unfHnk8XkDD3/bdC63vdboTY7e7I03lCF1OJYABXSIfQYU9BFTQJXMMovVeb3T1/OJWwfW/70T1XPnuUA==",
+        "dependencies": {
+          "postgres": "postgres@3.4.3"
+        }
+      },
+      "postgres@3.4.3": {
+        "integrity": "sha512-iHJn4+M9vbTdHSdDzNkC0crHq+1CUdFhx+YqCE+SqWxPjm+Zu63jq7yZborOBF64c8pc58O5uMudyL1FQcHacA==",
+        "dependencies": {}
+      },
+      "tr46@0.0.3": {
+        "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==",
+        "dependencies": {}
+      },
+      "webidl-conversions@3.0.1": {
+        "integrity": "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==",
+        "dependencies": {}
+      },
+      "whatwg-url@5.0.0": {
+        "integrity": "sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==",
+        "dependencies": {
+          "tr46": "tr46@0.0.3",
+          "webidl-conversions": "webidl-conversions@3.0.1"
+        }
+      },
+      "ws@8.16.0": {
+        "integrity": "sha512-HS0c//TP7Ina87TfiPUz1rQzMhHrl/SG2guqRcTOIUYD2q8uhUdNHZYJUaQ8aTGPzCh+c6oawMKW35nFl1dxyQ==",
+        "dependencies": {}
+      }
+    }
+  },
+  "redirects": {
+    "https://deno.land/x/axiod/mod.ts": "https://deno.land/x/axiod@0.26.2/mod.ts"
+  },
+  "remote": {
+    "https://deno.land/x/axiod@0.26.2/helpers.ts": "467f2ca75608f368c8092e800eab0d6d79b3fa42346372be62a5b93acf50fe7e",
+    "https://deno.land/x/axiod@0.26.2/interfaces.ts": "1b5a7b70b1e7faecd2f251ad080bd87188fba585e2de667af472c4d72abf636e",
+    "https://deno.land/x/axiod@0.26.2/mod.ts": "1175ec90a040d764b9940753f8d8e3f37a2328a0536eed48e411a8f1a3e9e5cb",
+    "https://deno.land/x/axiod@0.26.2/mods/url-join.ts": "c925b2dd0bd490093d084bd4c74a9502260e014d5e760a4951b3e7c8ab3ca43f",
+    "https://deno.land/x/url_join@1.0.0/mod.ts": "d3c7007e3ab15594e54d5b90dce623b3e274a726e0cdf57858e7ecab77a0166c"
+  },
+  "workspace": {
+    "dependencies": [
+      "npm:@supabase/supabase-js@2.39.6",
+      "npm:drizzle-orm@0.29.1",
+      "npm:postgres@3.4.3"
+    ]
+  }
+}
