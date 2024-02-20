@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const my_colors = require('./src/utils/colors');
 module.exports = {
     darkMode: ['class'],
     content: [
@@ -21,7 +22,8 @@ module.exports = {
                 noise: "url('/images/tailwind/noise.png')",
             },
             fontFamily: {
-                sans: ['ui-monospace', 'SFMono-Regular'],
+                sans: ['PT Sans', 'ui-sans-serif', 'system-ui'],
+                serif: ['PT Sans', 'ui-serif', 'Georgia'],
             },
             colors: {
                 border: 'hsl(var(--border))',
@@ -57,6 +59,7 @@ module.exports = {
                     DEFAULT: 'hsl(var(--card))',
                     foreground: 'hsl(var(--card-foreground))',
                 },
+                ...my_colors,
             },
             borderRadius: {
                 lg: 'var(--radius)',
