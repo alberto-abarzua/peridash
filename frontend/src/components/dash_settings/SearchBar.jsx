@@ -1,37 +1,42 @@
 import PrimaryButton from '@/components/general/buttons/PrimaryButton';
-import useNotification from '@/components/general/notification/useNotification';
 import api from '@/utils/api';
-import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import SearchIcon from '@mui/icons-material/Search';
+import { useContext } from 'react';
+import { SessionContext } from '@/utils/supabase/context';
 
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
-import TickerSearchResult from './SymbolSearchResult';
+import SymbolSearchResult from './SymbolSearchResult';
 
 const SearchBar = ({ getUserTickers }) => {
+    const { session } = useContext(SessionContext);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { showNotification, renderNotification } = useNotification();
     const handleSearchInputChange = event => {
         setSearchTerm(event.target.value);
     };
 
     const handleSearch = async () => {
-        let params = { q: searchTerm };
-        let response = await api.get('/ticker/search/', { params });
-        setSearchResults(response.data);
-        if (response.data.length > 0) {
+        console.log('searching');
+        console.log(session);
+        let response = await api.get('/user_ticker/tickers/search/', {
+            headers: {
+                Authorization: `Bearer ${session?.access_token}`,
+            },
+            params: {
+                search: searchTerm,
+            },
+        });
+        console.log(response.data.data);
+        setSearchResults(response.data.data);
+        // setSearchResults(response.data);
+        if (response.data.data.length > 0) {
             setIsModalOpen(true); // Open the modal once we have the results
         } else {
-            showNotification(
-                'No Results Found!',
-                <ReportProblemIcon className="text-yellow-500" />,
-                'bg-yellow-100'
-            );
+            //show noti
         }
     };
 
@@ -49,13 +54,15 @@ const SearchBar = ({ getUserTickers }) => {
             symbol: symbol,
             exchange: exchange,
         };
-        let response = await api.post('/ticker/user-tickers/', data);
+        let response = await api.post(
+            '/user_ticker/tickers/',
+
+            JSON.stringify({ ticker_info: { symbol, exchange } }),
+            {
+                headers: { Authorization: `Bearer ${session?.access_token}` },
+            }
+        );
         if (response.status === 201) {
-            showNotification(
-                'Ticker Added',
-                <CheckIcon className=" text-green-500" />,
-                'bg-green-200'
-            );
             getUserTickers();
         }
     };
@@ -95,7 +102,7 @@ const SearchBar = ({ getUserTickers }) => {
                 }`}
             >
                 {searchResults.map((result, index) => (
-                    <TickerSearchResult
+                    <SymbolSearchResult
                         result={result}
                         key={index}
                         onClick={handleSearchResultClick}
@@ -131,7 +138,6 @@ const SearchBar = ({ getUserTickers }) => {
             </div>
             {backdrop}
             {resultsModal}
-            {renderNotification()}
         </div>
     );
 };

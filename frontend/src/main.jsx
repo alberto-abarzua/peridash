@@ -4,9 +4,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from '@/routes/root';
 import ErrorPage from '@/error-page';
 import About from '@/routes/about';
-import Contact from '@/routes/contact';
-import {SupabaseContext, SessionContext } from '@/utils/supabase/context';
+import {SupabaseContext} from '@/utils/supabase/context';
 import supabase from '@/utils/supabase/supabaseClient';
+import Settings from '@/routes/Settings';
 import Dashboard from '@/routes/Dashboard';
 
 
@@ -22,7 +22,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'settings',
-                element: <Contact />,
+                element: <Settings />,
             },
 
             {

@@ -1,9 +1,7 @@
 import InconTextInput from '@/components/general/inputs/IconTextInput';
-import useNotification from '@/components/general/notification/useNotification';
 import api from '@/utils/api';
 import AddIcon from '@mui/icons-material/Add';
 import AttachMoneySharpIcon from '@mui/icons-material/AttachMoneySharp';
-import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveIcon from '@mui/icons-material/Remove';
 
@@ -11,7 +9,6 @@ import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from 'react';
 
 const UserTicker = ({ result, getUserTickers }) => {
-    const { showNotification, renderNotification } = useNotification();
 
     const [favorite, setFavorite] = useState(result.is_favorite);
     const [buy, setBuy] = useState(result.buy);
@@ -45,11 +42,6 @@ const UserTicker = ({ result, getUserTickers }) => {
             });
             if (response.status === 200) {
                 getUserTickers();
-                showNotification(
-                    'Ticker Updated',
-                    <CheckIcon className=" text-green-500" />,
-                    'bg-green-100'
-                );
             }
         };
         if (isFirstRender.current) {
@@ -57,7 +49,7 @@ const UserTicker = ({ result, getUserTickers }) => {
             return;
         }
         updateTicker();
-    }, [favorite, buy, gain, loss, getUserTickers, result.id, showNotification]);
+    }, [favorite, buy, gain, loss, getUserTickers, result.id, ]);
 
     const handleFavorite = () => {
         setFavorite(!favorite);
@@ -69,7 +61,6 @@ const UserTicker = ({ result, getUserTickers }) => {
                 favorite ? 'h-36' : 'h-16'
             }`}
         >
-            {renderNotification()}
             <div className="flex-col">
                 <div className="flex h-full w-full pt-1">
                     <div className="flex-grow self-center">
