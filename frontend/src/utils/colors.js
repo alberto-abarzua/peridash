@@ -1,4 +1,3 @@
-
 const colors = {
     green: {
         50: '#edfde8',

@@ -1,5 +1,4 @@
 import { eq } from "drizzle-orm";
-import { createClient } from "npm:@supabase/supabase-js@2.39.7";
 import axiod from "https://deno.land/x/axiod/mod.ts";
 import express from "npm:express@4.18.2";
 import { drizzle } from "npm:drizzle-orm@0.29.1/postgres-js";
@@ -8,7 +7,7 @@ import postgres from "postgres";
 import { symbol } from "../_shared/schema.ts";
 import { Request, Response } from "npm:@types/express@4.17.21";
 import { get_or_create_symbol, StockData, update_eod } from "../_shared/db.ts";
-import { getSupabaseClient, preFlightMiddleware } from "../_shared/express_utils.ts";
+import {getSupabaseAdmin, preFlightMiddleware } from "../_shared/express_utils.ts";
 
 // ==========================================
 //                   Express server
@@ -24,8 +23,8 @@ app.use(express.json());
 app.use(preFlightMiddleware);
 
 app.get("/update_prices/", async (req: Request, res: Response) => {
-    const [_supabase, user] = await getSupabaseClient(req, res);
-    if (!user) {
+    const supabase = getSupabaseAdmin(req, res);
+    if (!supabase) {
         return;
     }
     const symbols = await db.select().from(symbol).orderBy(symbol.updated_at)

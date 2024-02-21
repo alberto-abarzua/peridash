@@ -1,12 +1,8 @@
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 
-import PropTypes from 'prop-types';
-
 const TickerCoreInfo = ({ ticker_data }) => {
     const { values: time_series, meta } = ticker_data.symbol.price_data;
-
-    console.log('Rendering TickerCoreInfo', ticker_data);
 
     let currentPrice = parseFloat(time_series[0].close);
     let eodPrice = parseFloat(ticker_data.symbol.eod_data.close);
@@ -24,12 +20,12 @@ const TickerCoreInfo = ({ ticker_data }) => {
     );
     let formattedPrice = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: meta.currency || "USD",
+        currency: meta.currency || 'USD',
     }).format(currentPrice);
 
     let formattedPriceVariation = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: meta.currency || "USD",
+        currency: meta.currency || 'USD',
     }).format(priceVariation);
 
     return (

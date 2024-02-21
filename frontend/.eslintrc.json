@@ -20,18 +20,7 @@
         "react/react-in-jsx-scope": "off",
         "react/jsx-filename-extension": [1, { "extensions": [".jsx"] }],
         "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "warn",
-        "import/order": [
-            "error",
-            {
-                "groups": [["builtin", "external", "internal", "parent", "sibling", "index"]],
-                "newlines-between": "always",
-                "alphabetize": {
-                    "order": "asc",
-                    "caseInsensitive": true
-                }
-            }
-        ]
+        "react-hooks/exhaustive-deps": "warn"
     },
     "settings": {
         "react": {

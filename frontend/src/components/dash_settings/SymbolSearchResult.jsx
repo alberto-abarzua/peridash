@@ -4,9 +4,8 @@ const SymbolSearchResult = ({ result, onClick }) => {
     const isBasicPlan =
         result.access.plan.toLowerCase() === 'basic' || result.access.plan.toLowerCase() === 'grow';
     let thisOnClick = () => {
-        onClick(result.symbol, result.exchange,result.mic_code);
+        onClick(result.symbol, result.exchange, result.mic_code);
     };
-
 
     // <div className="flex-1 pl-2">
     //     <p className="mb-2 text-gray-600">Access - Global: {result.access.global}</p>

@@ -31,3 +31,19 @@ export const getSupabaseClient = async (
     }
     return [supabase, user];
 };
+
+export const getSupabaseAdmin = (
+    req: Request,
+    res: Response,
+): SupabaseClient => {
+    const supabase = createClient(
+        Deno.env.get("SUPABASE_URL") ?? "",
+        req.headers.authorization?.split(" ")[1]!,
+    );
+    const adminAuthClient = supabase.auth.admin;
+    if (!adminAuthClient) {
+        res.status(401).json({ error: "Unauthorized Get" }).end();
+        throw new Error("Unauthorized Get");
+    }
+    return supabase;
+}

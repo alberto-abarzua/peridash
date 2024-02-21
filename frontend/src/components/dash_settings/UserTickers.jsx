@@ -1,13 +1,10 @@
 import SegmentIcon from '@mui/icons-material/Segment';
 
-import PropTypes from 'prop-types';
-
 import UserTicker from './UserTicker';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const UserTickers = () => {
     const userTickers = useSelector(state => state.ticker.userTickers);
-    console.log(userTickers);
 
     return (
         <div className="w-full sm:w-1/2">
@@ -19,10 +16,7 @@ const UserTickers = () => {
             <div className="flex flex-col">
                 {userTickers &&
                     userTickers.map(result => (
-                        <UserTicker
-                            key={result.ticker.id}
-                            result={result}
-                        />
+                        <UserTicker key={result.ticker.id} result={result} />
                     ))}
             </div>
         </div>

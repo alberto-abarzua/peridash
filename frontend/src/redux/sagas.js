@@ -4,6 +4,7 @@ import { tickerSliceActions } from './tickerSlice';
 
 function* updateUserTickers() {
     try {
+        console.log('Calling update user tickers');
         const response = yield call(api.get, '/user_ticker/tickers/');
         yield put(tickerSliceActions.setUserTickers(response.data));
     } catch (error) {
@@ -17,18 +18,10 @@ function* watchCallUpdateTickers() {
     }
 }
 
-function* watchCallEdgeUpdateTickers() {
-    while (true) {
-        // yield call(api.get, '/update_prices/');
-        yield delay(1000 * 60); // every minute
-    }
-}
-
 function* watchUpdateTickers() {
     yield takeLatest(tickerSliceActions.updateTickers, updateUserTickers);
 }
-console.log('rootSaga');
 
 export default function* rootSaga() {
-    yield all([call(watchCallUpdateTickers), call(watchUpdateTickers), call(watchCallEdgeUpdateTickers)]);
+    yield all([call(watchCallUpdateTickers), call(watchUpdateTickers)]);
 }

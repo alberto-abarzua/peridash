@@ -14,9 +14,7 @@ export default function Root() {
     useEffect(() => {
         const getSession = async () => {
             const { data, error } = await supabase.auth.getSession();
-            console.log(data);
             if (data.session == null) {
-                console.log('No session');
                 setLoading(false);
                 return;
             }

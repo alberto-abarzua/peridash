@@ -5,13 +5,12 @@ import { ClipLoader } from 'react-spinners';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Dashboard = () => {
-    const dispatch = useDispatch();
     let tickerData = useSelector(state => state.ticker.userTickers);
     const loading = useSelector(state => state.ticker.loading);
-    console.log(tickerData);
 
-    // filter the items in tickerdata where symbol.price_data is null
-    tickerData = tickerData.filter(ticker => (ticker.symbol.price_data !== null && ticker.symbol.eod_data !== null));
+    tickerData = tickerData.filter(
+        ticker => ticker.symbol.price_data !== null && ticker.symbol.eod_data !== null
+    );
 
     let favorite_tickers = tickerData.filter(ticker => ticker.ticker.is_favorite);
 
@@ -26,7 +25,6 @@ const Dashboard = () => {
         not_favorite_tickers.length
     );
 
-    //split favorite in 2 arrays
     let favorite_tickers_1 = favorite_tickers.slice(0, Math.ceil(favorite_tickers.length / 2));
     let favorite_tickers_2 = favorite_tickers.slice(
         Math.ceil(favorite_tickers.length / 2),

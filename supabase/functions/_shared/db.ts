@@ -209,9 +209,7 @@ export const update_user_ticker = async (
     if (!found_ticker) {
         throw new Error("Ticker not found");
     }
-    const response = await db.update(ticker).set(new_ticker_info).where(eq(ticker.id, ticker_id)).returning();
-    console.log(response);
-    console.log(new_ticker_info);
+    await db.update(ticker).set(new_ticker_info).where(eq(ticker.id, ticker_id)).execute();
 };
 
 export const get_eod = (data: StockValue[]): [number, number] => {

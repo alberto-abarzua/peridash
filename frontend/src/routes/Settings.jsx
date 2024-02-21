@@ -4,7 +4,6 @@ import UserTickers from '@/components/dash_settings/UserTickers';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import SettingsIcon from '@mui/icons-material/Settings';
 
-
 const Settings = () => {
     return (
         <div className="box-border flex w-screen flex-col ">

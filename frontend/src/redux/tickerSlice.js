@@ -5,15 +5,10 @@ export const tickerSlice = createSlice({
     initialState: {
         userTickers: [],
         loading: true,
-     
     },
     reducers: {
-        updateTickers: (_state, _action) => {
-            console.log('update tickres action called! <---');
-            // used to trigger the saga to update the tickers
-        },
+        updateTickers: (_state, _action) => {},
         setUserTickers: (state, action) => {
-            console.log('setUserTickers', action.payload);
             state.userTickers = action.payload;
             state.loading = false;
         },

@@ -13,7 +13,7 @@ function parseValues(inputArray) {
         return {
             ...item,
             close: parseFloat(item.close),
-            datetime: new Date(item.datetime).getTime(),    
+            datetime: new Date(item.datetime).getTime(),
             high: parseFloat(item.high),
             low: parseFloat(item.low),
             open: parseFloat(item.open),
@@ -39,7 +39,6 @@ const TickerContainerBig = ({ ticker_data }) => {
 
     let date_labels = time_series.map(item => item.datetime);
     let data = time_series.map(item => item.close);
-
 
     const canvas = document.createElement('canvas');
 
@@ -72,8 +71,6 @@ const TickerContainerBig = ({ ticker_data }) => {
     minHighValue -= minHighValue * 0.03;
     let maxHighValue = Math.max(...highValues);
     maxHighValue += maxHighValue * 0.03;
-    console.log('Min High Value', minHighValue);
-    console.log('Max High Value', maxHighValue);
 
     const options = {
         scales: {

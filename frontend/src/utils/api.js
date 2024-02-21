@@ -9,6 +9,8 @@ api.interceptors.request.use(request => {
     const token = localStorage.getItem('access_token');
     if (token) {
         request.headers.Authorization = `Bearer ${token}`;
+    } else {
+        throw new Error('No token found');
     }
     return request;
 });

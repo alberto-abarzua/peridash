@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 
 const TickerContainerSmall = ({ ticker_data }) => {
-    useEffect(() => {
-    }, [ticker_data]);
+    useEffect(() => {}, [ticker_data]);
 
     return (
         <div className="rounded bg-darker-600 p-0 text-white">
@@ -13,6 +12,5 @@ const TickerContainerSmall = ({ ticker_data }) => {
         </div>
     );
 };
-
 
 export default TickerContainerSmall;
