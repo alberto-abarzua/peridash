@@ -25,7 +25,6 @@ const SearchBar = () => {
                 search: searchTerm,
             },
         });
-        console.log(response.data.data);
         setSearchResults(response.data.data);
         if (response.data.data.length > 0) {
             setIsModalOpen(true); // Open the modal once we have the results
@@ -40,14 +39,13 @@ const SearchBar = () => {
         }
     };
 
-    const handleSearchResultClick = async (symbol, exchange,mic_code) => {
+    const handleSearchResultClick = async (symbol, exchange, mic_code) => {
         setSearchResults([]);
         setSearchTerm('');
         setIsModalOpen(false);
-        let response = await api.post(
-            '/user_ticker/tickers/',
-            JSON.stringify({ ticker_info: { symbol, exchange,mic_code } }),
-        );
+        let response = await api.post('/user_ticker/tickers/', {
+            ticker_info: { symbol, exchange, mic_code },
+        });
         if (response.status === 200) {
             dispatch(tickerSliceActions.updateTickers());
         }

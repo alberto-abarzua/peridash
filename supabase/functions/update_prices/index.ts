@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(preFlightMiddleware);
 
 app.get("/update_prices/", async (req: Request, res: Response) => {
-    const [_supabase,user] =await getSupabaseClient(req,res);
+    const [_supabase, user] = await getSupabaseClient(req, res);
     if (!user) {
         return;
     }

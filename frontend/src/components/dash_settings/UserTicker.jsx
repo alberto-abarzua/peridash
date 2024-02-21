@@ -19,18 +19,15 @@ const UserTicker = ({ result }) => {
     const dispatch = useDispatch();
 
     const updateTicker = useCallback(async () => {
-        let response = await api.put(
-            `/user_ticker/tickers/`,
-            {
-                ticker_id: result.ticker.id,
-                ticker_info: {
-                    is_favorite: favorite,
-                    buy: buy,
-                    gain: gain,
-                    loss: loss,
-                },
-            }
-        );
+        let response = await api.put(`/user_ticker/tickers/`, {
+            ticker_id: result.ticker.id,
+            ticker_info: {
+                is_favorite: favorite,
+                buy: buy,
+                gain: gain,
+                loss: loss,
+            },
+        });
 
         if (response.status === 200) {
             dispatch(tickerSliceActions.updateTickers());
@@ -42,25 +39,25 @@ const UserTicker = ({ result }) => {
             setBuy(event.target.value);
         },
         [setBuy, updateTicker]
-    ); 
+    );
 
     const handleGainChange = useCallback(
         event => {
             setGain(event.target.value);
         },
         [setGain, updateTicker]
-    ); 
+    );
 
     const handleLossChange = useCallback(
         event => {
             setLoss(event.target.value);
         },
         [setLoss, updateTicker]
-    ); 
+    );
 
     const handleFavorite = useCallback(async () => {
         setFavorite(prev => !prev);
-    }, [ setFavorite, updateTicker]);
+    }, [setFavorite, updateTicker]);
 
     useEffect(() => {
         if (firstRender) {
@@ -70,14 +67,8 @@ const UserTicker = ({ result }) => {
         updateTicker();
     }, [favorite, buy, gain, loss]);
 
-
-
     const handleDelete = useCallback(async () => {
         await api.delete(`/user_ticker/tickers/`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json',
-            },
             params: {
                 ticker_id: result.ticker.id,
             },
@@ -85,7 +76,6 @@ const UserTicker = ({ result }) => {
 
         dispatch(tickerSliceActions.updateTickers());
     }, [result.ticker.id, dispatch]);
-
 
     return (
         <div
