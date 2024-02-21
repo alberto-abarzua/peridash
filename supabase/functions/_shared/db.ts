@@ -16,11 +16,36 @@ export type TickerSettingsToTicker = typeof tickerSettingsToTicker.$inferSelect;
 export type NewTickerSettingsToTicker = typeof tickerSettingsToTicker.$inferInsert;
 export type NewTicker = typeof ticker.$inferInsert;
 
-type TickerWithSettings = {
+export type TickerWithSettings = {
     ticker: Ticker;
     ticker_settings_to_ticker: TickerSettingsToTicker;
     symbol: Symbol;
 };
+
+export interface StockMeta {
+    currency: string;
+    exchange: string;
+    exchange_timezone: string;
+    interval: string;
+    mic_code: string;
+    symbol: string;
+    type: string;
+}
+export interface StockData {
+    meta: StockMeta;
+    status: string;
+    values: StockValue[];
+}
+
+export interface StockValue {
+    close: number;
+    datetime: string;
+    high: number;
+    low: number;
+    open: number;
+    previous_close: number;
+    volume: number;
+}
 
 // ===============================
 // ===============================
@@ -187,4 +212,62 @@ export const update_user_ticker = async (
     const response = await db.update(ticker).set(new_ticker_info).where(eq(ticker.id, ticker_id)).returning();
     console.log(response);
     console.log(new_ticker_info);
+};
+
+export const get_eod = (data: StockValue[]): [number, number] => {
+    // Group data by date
+    const groupedByDate = data.reduce((acc: Record<string, StockValue[]>, curr: StockValue) => {
+        const date = curr.datetime.split(" ")[0]; // Extract date part
+        if (!acc[date]) acc[date] = [];
+        acc[date].push(curr);
+        return acc;
+    }, {});
+
+    // For each group, sort by datetime and take the last (most recent) entry
+    const lastCloseByDate = Object.keys(groupedByDate).map((date) => {
+        const sorted = groupedByDate[date].sort((a, b) =>
+            new Date(b.datetime).getTime() - new Date(a.datetime).getTime()
+        );
+        return sorted[0].close; // Take the most recent close price, no need to parseFloat as the type is already number
+    });
+
+    // Ensure the dates are sorted to find the last two distinct dates
+    const sortedDates = Object.keys(groupedByDate).sort((a, b) =>
+        new Date(b).getTime() - new Date(a).getTime()
+    );
+
+    // Get the most recent close price and the previous session's EOD close price
+    const curPrice = lastCloseByDate[0] || 0; // Most recent
+    const eodPrice = sortedDates.length > 1 ? lastCloseByDate[1] : 0; // Previous session
+
+    return [curPrice, eodPrice];
+};
+
+export const update_eod = async (
+    db: PostgresJsDatabase,
+): Promise<boolean> => {
+    const symbols = await db.select().from(symbol).orderBy(symbol.eod_updated_at)
+        .limit(30);
+
+    if (!symbols || symbols.length === 0) {
+        return false;
+    }
+    symbols.forEach(async (s) => {
+        const { symbol: symbol_str, exchange, mic_code } = s;
+        if (!symbol_str || !exchange || !mic_code) {
+            console.error("Invalid symbol or exchange or mic_code, while updating eod data!");
+            return;
+        }
+        const priceData = s.price_data as StockData;
+        if (!priceData) {
+            console.error("No price data found, while updating eod data!");
+            return;
+        }
+
+        const [_, eod] = get_eod(priceData.values);
+        await db.update(symbol).set({ eod_data: { close: eod }, eod_updated_at: new Date() }).where(
+            eq(symbol.id, s.id),
+        ).execute();
+    });
+    return true;
 };

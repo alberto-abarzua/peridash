@@ -21,7 +21,7 @@ const UserTicker = ({ result }) => {
     const updateTicker = useCallback(async () => {
         let response = await api.put(
             `/user_ticker/tickers/`,
-            JSON.stringify({
+            {
                 ticker_id: result.ticker.id,
                 ticker_info: {
                     is_favorite: favorite,
@@ -29,10 +29,8 @@ const UserTicker = ({ result }) => {
                     gain: gain,
                     loss: loss,
                 },
-            })
+            }
         );
-
-        console.log("update",response);
 
         if (response.status === 200) {
             dispatch(tickerSliceActions.updateTickers());
