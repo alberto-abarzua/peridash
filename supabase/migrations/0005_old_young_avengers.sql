@@ -1,0 +1,1 @@
+ALTER TABLE "peridash"."symbol" ADD COLUMN "mic_code" varchar(64);

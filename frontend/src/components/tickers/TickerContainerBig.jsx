@@ -3,40 +3,50 @@ import colors from '@/utils/colors';
 
 import { Chart, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 
 Chart.register(...registerables);
 Chart.register(annotationPlugin);
+
+function parseValues(inputArray) {
+    return inputArray.map(item => {
+        return {
+            ...item,
+            close: parseFloat(item.close),
+            datetime: new Date(item.datetime).getTime(),    
+            high: parseFloat(item.high),
+            low: parseFloat(item.low),
+            open: parseFloat(item.open),
+            volume: parseFloat(item.volume, 10), // Assuming volume should be an integer
+        };
+    });
+}
 const TickerContainerBig = ({ ticker_data }) => {
-    useEffect(() => {
-        // here update the chart
-    }, [ticker_data]);
+    let { values: time_series } = ticker_data.symbol.price_data;
 
-    let currentPrice = ticker_data.cur_price.toFixed(2);
-    let isPositive = ticker_data.price_dif > 0;
-    // let main_color = isPositive ? 'rgba(5, 150, 105, 1)' : 'rgba(220, 38, 38, 0.1)'; // green-600 and red-600 in rgba format
+    let currentPrice = parseFloat(time_series[0].close);
+    let eodPrice = ticker_data.symbol.eod_data.close;
+    let priceVariation = currentPrice - eodPrice;
+
+    let isPositive = priceVariation > 0;
+
+    // Colors
     let main_color = isPositive ? colors.green[500] : colors.red[500];
-    // let main_color_light = isPositive ? 'rgba(0, 255, 61, 0.8)' : 'rgba(255, 25, 25, 0.8)'; // green-300 and red-300 in rgba format
     let main_color_light = isPositive ? colors.green[700] : colors.red[700];
-    let rawData = Object.entries(ticker_data.df.datetime).map(([, date], index) => ({
-        date: new Date(date),
-        value: ticker_data.df.close[index],
-    }));
 
-    // Sort the data by date
-    rawData.sort((a, b) => a.date - b.date);
+    time_series = parseValues(time_series);
+    time_series.sort((a, b) => a.datetime - b.datetime);
 
-    // Split back into separate arrays for the labels and data
-    let date_labels = rawData.map(item => item.date);
-    let data = rawData.map(item => item.value);
+    let date_labels = time_series.map(item => item.datetime);
+    let data = time_series.map(item => item.close);
+
 
     const canvas = document.createElement('canvas');
 
     const ctx = canvas.getContext('2d');
 
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+
     gradient.addColorStop(0, main_color_light);
     gradient.addColorStop(0.04, main_color_light);
     gradient.addColorStop(0.4, 'rgba(0, 0, 0, 0)');
@@ -51,20 +61,21 @@ const TickerContainerBig = ({ ticker_data }) => {
                 fill: 'origin',
                 backgroundColor: gradient,
                 borderColor: main_color,
-                pointRadius: 0, // This line hides the data points
+                pointRadius: 1, // This line hides the data points
                 borderWidth: 1,
                 tension: 1.2,
             },
         ],
     };
-    const highValues = Object.values(ticker_data.df.high);
+    let highValues = time_series.map(item => item.high);
     let minHighValue = Math.min(...highValues);
     minHighValue -= minHighValue * 0.03;
     let maxHighValue = Math.max(...highValues);
     maxHighValue += maxHighValue * 0.03;
+    console.log('Min High Value', minHighValue);
+    console.log('Max High Value', maxHighValue);
 
     const options = {
-        // maintainAspectRatio: false,
         scales: {
             y: {
                 min: minHighValue,
@@ -144,26 +155,6 @@ const TickerContainerBig = ({ ticker_data }) => {
             </div>
         </div>
     );
-};
-
-TickerContainerBig.propTypes = {
-    ticker_data: PropTypes.shape({
-        cur_price: PropTypes.number.isRequired,
-        price_dif: PropTypes.number.isRequired,
-        price_dif_percent: PropTypes.number.isRequired,
-        df: PropTypes.object.isRequired,
-        ticker: PropTypes.shape({
-            symbol: PropTypes.PropTypes.shape({
-                name: PropTypes.string.isRequired,
-                symbol: PropTypes.string.isRequired,
-                exchange: PropTypes.string.isRequired,
-            }),
-            is_favorite: PropTypes.bool.isRequired,
-            buy: PropTypes.number.isRequired,
-            gain: PropTypes.number.isRequired,
-            loss: PropTypes.number.isRequired,
-        }),
-    }),
 };
 
 export default TickerContainerBig;

@@ -8,7 +8,6 @@ const Link = React.forwardRef(({ onClick, href, children, ...rest }, ref) => {
             style={{ textDecoration: 'none', color: 'inherit' }}
             to={href}
             onClick={onClick}
-            ref={ref}
             {...rest}
         >
             {children}

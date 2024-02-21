@@ -39,7 +39,10 @@ const Login = () => {
                 <h1>Logged in</h1>
                 <button
                     className="rounded-sm border-gray-600 bg-red-600 px-4 py-2 text-white hover:bg-red-500 "
-                    onClick={() => supabase.auth.signOut()}
+                    onClick={() => {
+                        supabase.auth.signOut();
+                        LocalStorage.removeItem('access_token');
+                    }}
                 >
                     Log out
                 </button>

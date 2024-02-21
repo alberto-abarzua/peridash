@@ -62,19 +62,21 @@ export const get_or_create_user_ticker_settings = async (
 export const get_or_create_symbol = async (
     symbol_str: string,
     exchange_str: string,
+    mic_code: string,
     db: PostgresJsDatabase,
 ): Promise<Symbol> => {
-    let found_symbol = await db.select().from(symbol).where(
-        and(eq(symbol.symbol, symbol_str), eq(symbol.exchange, exchange_str)),
+    const found_symbol = await db.select().from(symbol).where(
+        and(eq(symbol.symbol, symbol_str), eq(symbol.mic_code, mic_code)),
     );
 
     if (found_symbol.length === 0) {
         const new_symbol: NewSymbol = {
-            symbol: symbol_str,
             exchange: exchange_str,
+            symbol: symbol_str,
+            mic_code: mic_code,
         };
-        found_symbol = await db.insert(symbol).values(new_symbol);
-        return get_or_create_symbol(symbol_str, exchange_str, db);
+        await db.insert(symbol).values(new_symbol);
+        return get_or_create_symbol(symbol_str, exchange_str, mic_code, db);
     }
     return found_symbol[0];
 };
@@ -164,7 +166,7 @@ export const delete_user_ticker = async (
         );
     }
 
-    await db.delete(ticker).where(eq(ticker.id, ticker_id));
+    await db.delete(ticker).where(eq(ticker.id, ticker_id)).execute();
 };
 
 // =========================--
@@ -178,11 +180,11 @@ export const update_user_ticker = async (
     db: PostgresJsDatabase,
 ) => {
     const user_tickers = await get_user_list_of_tickers(user_id, db);
-    console.log("user_tickers", user_tickers);
-    console.log("ticker_id", ticker_id);
     const found_ticker = user_tickers.find((ticker) => ticker.ticker.id === ticker_id);
     if (!found_ticker) {
         throw new Error("Ticker not found");
     }
-    await db.update(ticker).set(new_ticker_info).where(eq(ticker.id, ticker_id));
+    const response = await db.update(ticker).set(new_ticker_info).where(eq(ticker.id, ticker_id)).returning();
+    console.log(response);
+    console.log(new_ticker_info);
 };

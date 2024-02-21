@@ -1,59 +1,22 @@
 import TickerContainerBig from '@/components/tickers/TickerContainerBig';
 import TickerContainerSmall from '@/components/tickers/TickerContainerSmall';
 import TickerStatsInfo from '@/components/tickers/TickerStatsInfo';
-import api from '@/utils/api';
-import { SessionContext} from '@/utils/supabase/context';
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-
-import { useEffect, useState,useContext } from 'react';
 import { ClipLoader } from 'react-spinners';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Dashboard = () => {
-    const [tickerData, setTickerData] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const  {session} = useContext(SessionContext);
-    const NUM_DAYS = 7;
+    const dispatch = useDispatch();
+    let tickerData = useSelector(state => state.ticker.userTickers);
+    const loading = useSelector(state => state.ticker.loading);
+    console.log(tickerData);
 
-    useEffect(() => {
-        setLoading(true);
-        const get_time_series = async () => {
-            console.log(session)
-            console.log(session?.access_token);
-            let response = await api.get(
-                "user_ticker/tickers/"
-                ,{
-                    headers: {
-                        Authorization: `Bearer ${session?.access_token}`,
-
-                    },
-                }
-            );
-            if (response.status === 200) {
-                setLoading(false);
-
-                setTickerData(response.data);
-            } else {
-
-                setLoading(false);
-            }
-        };
-
-        // call it immediately
-        get_time_series();
-
-        // setup the interval
-        const interval = setInterval(() => {
-            get_time_series();
-        }, 30000); // fetches every 30 seconds
-
-        // return a cleanup function to clear the interval when the component is unmounted
-        console.log(tickerData)
-        return () => clearInterval(interval);
-    }, [setTickerData, ]);
+    // filter the items in tickerdata where symbol.price_data is null
+    tickerData = tickerData.filter(ticker => (ticker.symbol.price_data !== null && ticker.symbol.eod_data !== null));
 
     let favorite_tickers = tickerData.filter(ticker => ticker.ticker.is_favorite);
+
     let not_favorite_tickers = tickerData.filter(ticker => !ticker.ticker.is_favorite);
-    //Divide not_favorite_tickers into 3 arrays of equal size
+
     let not_favorite_tickers_1 = not_favorite_tickers.slice(
         0,
         Math.ceil(not_favorite_tickers.length / 2)
@@ -106,7 +69,7 @@ const Dashboard = () => {
                     ))}
                 </div>
             </div>
-            <TickerStatsInfo stats={{ num_days: NUM_DAYS }} />
+            <TickerStatsInfo stats={{ num_days: 7 }} />
         </div>
     );
 };

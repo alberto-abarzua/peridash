@@ -35,6 +35,7 @@ export const symbol = peridashSchema.table('symbol', {
   id: uuid('id').defaultRandom().primaryKey(),
   symbol: varchar('symbol', { length: 64 }),
   exchange: varchar('exchange', { length: 64 }),
+  mic_code: varchar('mic_code', { length: 64 }),
   price_data: json('price_data'),
   eod_data: json('eod_data'),   
   eod_updated_at: timestamp('eod_updated_at').default(new Date(0)),

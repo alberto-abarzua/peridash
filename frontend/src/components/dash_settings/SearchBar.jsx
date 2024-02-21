@@ -2,30 +2,25 @@ import PrimaryButton from '@/components/general/buttons/PrimaryButton';
 import api from '@/utils/api';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
-import { useContext } from 'react';
-import { SessionContext } from '@/utils/supabase/context';
 
-import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
 import SymbolSearchResult from './SymbolSearchResult';
+import { useDispatch } from 'react-redux';
+import { tickerSliceActions } from '@/redux/tickerSlice';
 
-const SearchBar = ({ getUserTickers }) => {
-    const { session } = useContext(SessionContext);
+const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const dispatch = useDispatch();
+
     const handleSearchInputChange = event => {
         setSearchTerm(event.target.value);
     };
 
     const handleSearch = async () => {
-        console.log('searching');
-        console.log(session);
         let response = await api.get('/user_ticker/tickers/search/', {
-            headers: {
-                Authorization: `Bearer ${session?.access_token}`,
-            },
             params: {
                 search: searchTerm,
             },
@@ -45,20 +40,16 @@ const SearchBar = ({ getUserTickers }) => {
         }
     };
 
-    const handleSearchResultClick = async (symbol, exchange) => {
+    const handleSearchResultClick = async (symbol, exchange,mic_code) => {
         setSearchResults([]);
         setSearchTerm('');
         setIsModalOpen(false);
         let response = await api.post(
             '/user_ticker/tickers/',
-
-            JSON.stringify({ ticker_info: { symbol, exchange } }),
-            {
-                headers: { Authorization: `Bearer ${session?.access_token}` },
-            }
+            JSON.stringify({ ticker_info: { symbol, exchange,mic_code } }),
         );
         if (response.status === 200) {
-            getUserTickers();
+            dispatch(tickerSliceActions.updateTickers());
         }
     };
 
@@ -110,8 +101,9 @@ const SearchBar = ({ getUserTickers }) => {
             </div>
         </div>
     );
+
     return (
-        <div>
+        <>
             <div className="box-border flex w-full ">
                 <div className="relative -right-2 z-10 m-0 flex h-12 w-full rounded-l-md bg-white p-0 shadow-lg ">
                     <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 transform text-gray-400" />
@@ -133,11 +125,8 @@ const SearchBar = ({ getUserTickers }) => {
             </div>
             {backdrop}
             {resultsModal}
-        </div>
+        </>
     );
 };
 
-SearchBar.propTypes = {
-    getUserTickers: PropTypes.func.isRequired,
-};
 export default SearchBar;

@@ -4,36 +4,80 @@ import AddIcon from '@mui/icons-material/Add';
 import AttachMoneySharpIcon from '@mui/icons-material/AttachMoneySharp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { useContext } from 'react';
-import { SessionContext } from '@/utils/supabase/context';
 
-import PropTypes from 'prop-types';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { tickerSliceActions } from '@/redux/tickerSlice';
 
-const UserTicker = ({ result, getUserTickers }) => {
-    console.log('Rendering UserTicker');
-    const { session } = useContext(SessionContext);
+const UserTicker = ({ result }) => {
     const [favorite, setFavorite] = useState(result.ticker.is_favorite);
     const [buy, setBuy] = useState(result.ticker.buy || 0);
     const [gain, setGain] = useState(result.ticker.gain || 0);
     const [loss, setLoss] = useState(result.ticker.loss || 0);
-    const isFirstRender = useRef(true);
+    const [firstRender, setFirstRender] = useState(true);
 
-    const handleBuyChange = event => {
-        setBuy(event.target.value);
-    };
+    const dispatch = useDispatch();
 
-    const handleGainChange = event => {
-        setGain(event.target.value);
-    };
+    const updateTicker = useCallback(async () => {
+        let response = await api.put(
+            `/user_ticker/tickers/`,
+            JSON.stringify({
+                ticker_id: result.ticker.id,
+                ticker_info: {
+                    is_favorite: favorite,
+                    buy: buy,
+                    gain: gain,
+                    loss: loss,
+                },
+            })
+        );
 
-    const handleLossChange = event => {
-        setLoss(event.target.value);
-    };
-    const handleDelete = async () => {
+        console.log("update",response);
+
+        if (response.status === 200) {
+            dispatch(tickerSliceActions.updateTickers());
+        }
+    });
+
+    const handleBuyChange = useCallback(
+        event => {
+            setBuy(event.target.value);
+        },
+        [setBuy, updateTicker]
+    ); 
+
+    const handleGainChange = useCallback(
+        event => {
+            setGain(event.target.value);
+        },
+        [setGain, updateTicker]
+    ); 
+
+    const handleLossChange = useCallback(
+        event => {
+            setLoss(event.target.value);
+        },
+        [setLoss, updateTicker]
+    ); 
+
+    const handleFavorite = useCallback(async () => {
+        setFavorite(prev => !prev);
+    }, [ setFavorite, updateTicker]);
+
+    useEffect(() => {
+        if (firstRender) {
+            setFirstRender(false);
+            return;
+        }
+        updateTicker();
+    }, [favorite, buy, gain, loss]);
+
+
+
+    const handleDelete = useCallback(async () => {
         await api.delete(`/user_ticker/tickers/`, {
             headers: {
-                Authorization: `Bearer ${session.access_token}`,
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`,
                 'Content-Type': 'application/json',
             },
             params: {
@@ -41,42 +85,9 @@ const UserTicker = ({ result, getUserTickers }) => {
             },
         });
 
-        getUserTickers();
-    };
-    useEffect(() => {
-        const updateTicker = async () => {
-            let response = await api.put(
-                `/user_ticker/tickers/`,
-                JSON.stringify({
-                    ticker_id: result.ticker.id,
-                    ticker_info: {
-                        is_favorite: favorite,
-                        buy: buy,
-                        gain: gain,
-                        loss: loss,
-                    },
-                }),
-                {
-                    headers: {
-                        Authorization: `Bearer ${session.access_token}`,
-                        'Content-Type': 'application/json',
-                    },
-                }
-            );
-            if (response.status === 200) {
-                getUserTickers();
-            }
-        };
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
-        }
-        updateTicker();
-    }, [favorite, buy, gain, loss, getUserTickers, result.id]);
+        dispatch(tickerSliceActions.updateTickers());
+    }, [result.ticker.id, dispatch]);
 
-    const handleFavorite = () => {
-        setFavorite(!favorite);
-    };
 
     return (
         <div
@@ -143,23 +154,6 @@ const UserTicker = ({ result, getUserTickers }) => {
             </div>
         </div>
     );
-};
-
-UserTicker.propTypes = {
-    result: PropTypes.shape({
-        id: PropTypes.string,
-        is_favorite: PropTypes.bool,
-        buy: PropTypes.number,
-        gain: PropTypes.number,
-        loss: PropTypes.number,
-        symbol: PropTypes.shape({
-            name: PropTypes.string,
-            exchange: PropTypes.string,
-            id: PropTypes.string,
-            symbol: PropTypes.string,
-        }).isRequired,
-    }).isRequired,
-    getUserTickers: PropTypes.func.isRequired,
 };
 
 export default UserTicker;

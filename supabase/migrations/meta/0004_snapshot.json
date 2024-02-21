@@ -1,0 +1,251 @@
+{
+  "id": "83ef9cd2-95a7-4b22-9662-80e40ccc3424",
+  "prevId": "7c8b8d7e-b751-4406-be79-2e7ab326fde9",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "symbol": {
+      "name": "symbol",
+      "schema": "peridash",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "symbol": {
+          "name": "symbol",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "exchange": {
+          "name": "exchange",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "price_data": {
+          "name": "price_data",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "eod_data": {
+          "name": "eod_data",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "eod_updated_at": {
+          "name": "eod_updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'1970-01-01 00:00:00.000'"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "ticker": {
+      "name": "ticker",
+      "schema": "peridash",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "is_favorite": {
+          "name": "is_favorite",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "symbol_id": {
+          "name": "symbol_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "buy": {
+          "name": "buy",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gain": {
+          "name": "gain",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "loss": {
+          "name": "loss",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "ticker_settings": {
+      "name": "ticker_settings",
+      "schema": "peridash",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "plot_range": {
+          "name": "plot_range",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stats_range": {
+          "name": "stats_range",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ticker_settings_user_id_users_id_fk": {
+          "name": "ticker_settings_user_id_users_id_fk",
+          "tableFrom": "ticker_settings",
+          "tableTo": "users",
+          "schemaTo": "peridash",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "ticker_settings_to_ticker": {
+      "name": "ticker_settings_to_ticker",
+      "schema": "peridash",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "ticker_id": {
+          "name": "ticker_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ticker_settings_id": {
+          "name": "ticker_settings_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ticker_settings_to_ticker_ticker_id_ticker_id_fk": {
+          "name": "ticker_settings_to_ticker_ticker_id_ticker_id_fk",
+          "tableFrom": "ticker_settings_to_ticker",
+          "tableTo": "ticker",
+          "schemaTo": "peridash",
+          "columnsFrom": [
+            "ticker_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ticker_settings_to_ticker_ticker_settings_id_ticker_settings_id_fk": {
+          "name": "ticker_settings_to_ticker_ticker_settings_id_ticker_settings_id_fk",
+          "tableFrom": "ticker_settings_to_ticker",
+          "tableTo": "ticker_settings",
+          "schemaTo": "peridash",
+          "columnsFrom": [
+            "ticker_settings_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "schema": "peridash",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "supabase_user_id": {
+          "name": "supabase_user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "peridash": "peridash"
+  },
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

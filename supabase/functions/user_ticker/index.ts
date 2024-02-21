@@ -45,12 +45,6 @@ const endpoint_get_user_tickers = async (
             headers,
         });
     }
-    // call the update_prices edge function
-    let response = await api.get("/update_prices/", {
-        headers: {
-            Authorization: `Bearer ${session?.access_token}`,
-        },
-    });
 
     const tickers = await get_user_list_of_tickers(user.id, db);
 
@@ -74,9 +68,9 @@ const endpoint_post_add_user_ticker = async (
 
     const body = await req.json();
 
-    const { symbol, exchange } = body.ticker_info;
+    const { symbol, exchange, mic_code } = body.ticker_info;
 
-    const found_symbol = await get_or_create_symbol(symbol, exchange, db);
+    const found_symbol = await get_or_create_symbol(symbol, exchange, mic_code, db);
 
     const new_ticker = await get_or_create_user_ticker(
         user.id,
@@ -112,6 +106,7 @@ const endpoint_delete_user_ticker = async (
     const ticker_id = url.searchParams.get("ticker_id") || "";
 
     await delete_user_ticker(user.id, ticker_id, db);
+
     return new Response(JSON.stringify({ message: "Ticker deleted" }), {
         status: 200,
         headers,
@@ -156,7 +151,7 @@ const endpoint_get_search_ticker = async (
     }
 
     const { data } = await axiod.get("https://api.twelvedata.com/symbol_search", {
-        params: { symbol: search },
+        params: { symbol: search, show_plan: "true" },
     });
     return new Response(JSON.stringify(data), {
         status: 200,
@@ -205,7 +200,6 @@ async function handler(req: Request): Promise<Response> {
                     { status: 200, headers },
                 );
             case "/tickers/": {
-                console.log(req.method);
                 switch (req.method) {
                     case "GET":
                         return await endpoint_get_user_tickers(req, supabase, db);

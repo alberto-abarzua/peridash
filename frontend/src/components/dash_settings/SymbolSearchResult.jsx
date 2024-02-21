@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
 
 const SymbolSearchResult = ({ result, onClick }) => {
-    // const isBasicPlan =
-    //     result.access.plan.toLowerCase() === 'basic' || result.access.plan.toLowerCase() === 'grow';
+    const isBasicPlan =
+        result.access.plan.toLowerCase() === 'basic' || result.access.plan.toLowerCase() === 'grow';
     let thisOnClick = () => {
-        onClick(result.symbol, result.exchange);
+        onClick(result.symbol, result.exchange,result.mic_code);
     };
 
-    const isBasicPlan = true;
 
     // <div className="flex-1 pl-2">
     //     <p className="mb-2 text-gray-600">Access - Global: {result.access.global}</p>
@@ -35,6 +34,10 @@ const SymbolSearchResult = ({ result, onClick }) => {
                 <div className="flex-1 px-2">
                     <h6 className="mb-2 text-lg font-bold">Currency: {result.currency}</h6>
                     <p className="text-gray-600">Country: {result.country}</p>
+                </div>
+                <div className="flex-1 px-2">
+                    <h6 className="mb-2 text-lg font-bold">Plan: {result.access.plan}</h6>
+                    <p className="text-gray-600">Global: {result.access.global}</p>
                 </div>
             </div>
         </div>

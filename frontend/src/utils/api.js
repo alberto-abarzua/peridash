@@ -1,17 +1,16 @@
-
 import axios from 'axios';
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const baseUrl = supabaseUrl + '/functions/v1/';
-console.log('baseUrl', baseUrl);
+const baseUrl = import.meta.env.VITE_SUPABASE_URL + '/functions/v1/';
 
 const api = axios.create({
     baseURL: baseUrl,
 });
 
-axios.interceptors.request.use(request => {
-    console.log('Starting Request', JSON.stringify(request, null, 2))
-    return request
+api.interceptors.request.use(request => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+        request.headers.Authorization = `Bearer ${token}`;
+    }
+    return request;
 });
 
 export default api;

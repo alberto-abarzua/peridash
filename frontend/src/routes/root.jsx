@@ -1,9 +1,9 @@
 import { useOutlet } from 'react-router-dom';
 import Login from '@/components/auth/Login';
-import { SupabaseContext, SessionContext } from '@/utils/supabase/context';
+import { SupabaseContext } from '@/utils/supabase/context';
 import { useContext, useState, useEffect } from 'react';
 import SideNav from '@/components/layout/SideNav';
-import {ClipLoader} from 'react-spinners';
+import { ClipLoader } from 'react-spinners';
 
 export default function Root() {
     let Outlet = useOutlet();
@@ -15,29 +15,33 @@ export default function Root() {
         const getSession = async () => {
             const { data, error } = await supabase.auth.getSession();
             if (error) {
-                console.error('Error getting session:', error);
                 return;
             }
-            setSession(data.session);
+            localStorage.setItem('access_token', data.session.access_token);
+            setSession(data);
+
             setLoading(false);
         };
         getSession();
-    }, []);
+    }, [setSession, supabase.auth]);
+
     return (
-        <SessionContext.Provider value={{ session, setSession }}>
-            <SideNav />
-            {loading && <div className="flex h-screen items-center justify-center"><ClipLoader color="#ffffff" loading={loading} size={150} /></div>}
-            <div className="flex   w-full flex-col items-center justify-center">
-                <div className="">
-                    {Outlet && session != null ? (
-                        Outlet
-                    ) : (
-                        <div className="mt-20 flex h-full flex-col items-center  ">
-                            <Login />
-                        </div>
-                    )}
+        <>
+            {loading && (
+                <div className="flex h-screen items-center justify-center">
+                    <ClipLoader color="#ffffff" loading={loading} size={150} />
                 </div>
+            )}
+            <div className="h-full min-h-screen w-full">
+                {session != null && <SideNav />}
+                {Outlet && session != null ? (
+                    <div className="h-full w-full">{Outlet}</div>
+                ) : (
+                    <div className="flex h-full justify-center pt-40  ">
+                        <Login />
+                    </div>
+                )}
             </div>
-        </SessionContext.Provider>
+        </>
     );
 }

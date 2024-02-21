@@ -11,14 +11,11 @@ function SideNavBar() {
     const [isVisible, setIsVisible] = useState(false);
     const sideNavRef = useRef(null);
     const supabase = useContext(SupabaseContext);
-    const {setSession} = useContext(SessionContext);
     
 
     const logout = async () => {
-        console.log('logging out');
-        setSession(null);
-        const result = await supabase.auth.signOut();
-        console.log(result);
+        localStorage.removeItem('access_token');
+        await supabase.auth.signOut();
     }
 
     const navigation = (
@@ -36,7 +33,7 @@ function SideNavBar() {
             <div className="m-auto mb-10 h-10 w-full self-center border-b border-b-gray-400 align-middle"></div>
             <NavLink
                 text="Dashboard"
-                path="/"
+                path="/dashboard/"
                 icon={<SpaceDashboardIcon className="text-3xl text-white" />}
             ></NavLink>
             <NavLink

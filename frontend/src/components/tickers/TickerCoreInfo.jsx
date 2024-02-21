@@ -4,15 +4,18 @@ import SouthEastIcon from '@mui/icons-material/SouthEast';
 import PropTypes from 'prop-types';
 
 const TickerCoreInfo = ({ ticker_data }) => {
-    const {values:time_series,meta} = ticker_data.symbol.price_data;
-    
+    const { values: time_series, meta } = ticker_data.symbol.price_data;
 
-    console.log('Rendering TickerCoreInfo',ticker_data);
+    console.log('Rendering TickerCoreInfo', ticker_data);
 
-    let currentPrice = ticker_data.cur_price.toFixed(2);
-    let priceVariation = ticker_data.price_dif.toFixed(2);
-    let percentageVariation = ticker_data.price_dif_percent.toFixed(2);
-    let isPositive = ticker_data.price_dif > 0;
+    let currentPrice = parseFloat(time_series[0].close);
+    let eodPrice = parseFloat(ticker_data.symbol.eod_data.close);
+    let priceVariation = currentPrice - eodPrice;
+    let percentageVariation = (priceVariation / eodPrice) * 100;
+    let isPositive = priceVariation > 0;
+    currentPrice = currentPrice.toFixed(2);
+    priceVariation = priceVariation.toFixed(2);
+    percentageVariation = percentageVariation.toFixed(2);
 
     let arrowIcon = isPositive ? (
         <NorthEastIcon className="text-2xl text-green-400" />
@@ -21,19 +24,19 @@ const TickerCoreInfo = ({ ticker_data }) => {
     );
     let formattedPrice = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD',
+        currency: meta.currency || "USD",
     }).format(currentPrice);
 
     let formattedPriceVariation = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD',
+        currency: meta.currency || "USD",
     }).format(priceVariation);
 
     return (
         <div className="h-18 flex items-center justify-between p-2">
             <div>
-                <h4 className="text-lg font-bold">{ticker_data.ticker.symbol.symbol}</h4>
-                <h6 className="text-xs italic">{ticker_data.ticker.symbol.exchange}</h6>
+                <h4 className="text-lg font-bold">{ticker_data.symbol.symbol}</h4>
+                <h6 className="text-xs italic">{ticker_data.symbol.exchange}</h6>
             </div>
             <div className="text-right">
                 <div className="flex items-center justify-end">
@@ -49,23 +52,4 @@ const TickerCoreInfo = ({ ticker_data }) => {
     );
 };
 
-TickerCoreInfo.propTypes = {
-    ticker_data: PropTypes.shape({
-        cur_price: PropTypes.number.isRequired,
-        price_dif: PropTypes.number.isRequired,
-        price_dif_percent: PropTypes.number.isRequired,
-        df: PropTypes.object.isRequired,
-        ticker: PropTypes.shape({
-            symbol: PropTypes.PropTypes.shape({
-                name: PropTypes.string.isRequired,
-                symbol: PropTypes.string.isRequired,
-                exchange: PropTypes.string.isRequired,
-            }),
-            is_favorite: PropTypes.bool.isRequired,
-            buy: PropTypes.number.isRequired,
-            gain: PropTypes.number.isRequired,
-            loss: PropTypes.number.isRequired,
-        }),
-    }),
-};
 export default TickerCoreInfo;

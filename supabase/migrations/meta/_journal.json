@@ -29,6 +29,20 @@
       "when": 1708429975798,
       "tag": "0003_chunky_ulik",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1708445965762,
+      "tag": "0004_first_enchantress",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1708476259398,
+      "tag": "0005_old_young_avengers",
+      "breakpoints": true
     }
   ]
 }
