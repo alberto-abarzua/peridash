@@ -16,7 +16,7 @@ import { getSupabaseClient, preFlightMiddleware } from "../_shared/express_utils
 
 const app = express();
 
-const connectionString = Deno.env.get("SUPABASE_DB_URL") ?? "";
+const connectionString = Deno.env.get("FIXED_DB_URL") ?? "";
 const client = postgres(connectionString, { prepare: false });
 const db = drizzle(client);
 
@@ -31,15 +31,26 @@ app.get("/update_prices/", async (req: Request, res: Response) => {
     const symbols = await db.select().from(symbol).orderBy(symbol.updated_at)
         .limit(30);
 
+
     if (symbols.length === 0) {
         return res.status(200).json({ msg: "No symbols found!" });
+    }
+
+    const first = symbols[0];
+    if (!first || !first.updated_at) {
+        return res.status(200).json({ msg: "No symbols found!" });
+    }
+    const now = new Date();
+    const diff = now.getTime() - first.updated_at?.getTime();
+    if (diff < 60000) {
+        return res.status(200).json({ msg: "Prices updated recently!" });
     }
 
     const symbolsArray = symbols.map((s) => `${s.symbol}:${s.exchange}`);
     const datetime_end = new Date();
     const datetime_start = new Date();
 
-    datetime_start.setDate(datetime_start.getDate() - 15);
+    datetime_start.setDate(datetime_start.getDate() - 8);
 
     const start = datetime_start.toISOString();
     const end = datetime_end.toISOString();
@@ -48,7 +59,7 @@ app.get("/update_prices/", async (req: Request, res: Response) => {
         params: {
             symbol: symbolsArray.join(","),
             timezone: "America/New_York",
-            interval: "5min",
+            interval: "15min",
             start_date: start,
             end_date: end,
             apikey: Deno.env.get("TWELVEDATA_API_KEY") || "",

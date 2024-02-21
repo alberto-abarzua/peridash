@@ -18,9 +18,11 @@ import { getSupabaseClient, preFlightMiddleware } from "../_shared/express_utils
 
 const app = express();
 
-const connectionString = Deno.env.get("SUPABASE_DB_URL") ?? "";
+const connectionString = Deno.env.get("FIXED_DB_URL") ?? "";
 const client = postgres(connectionString, { prepare: false });
 const db = drizzle(client);
+console.log(connectionString);
+console.log("Connected to database");
 
 app.use(express.json());
 app.use(preFlightMiddleware);
@@ -32,7 +34,9 @@ app.get(
         res: Response,
     ) => {
         const [_supabase, user] = await getSupabaseClient(req, res);
+        console.log(user);
         if (!user) {
+            res.status(404).json([]).end();
             return;
         }
         const userSettings = await get_or_create_user_ticker_settings(user.id, db);
