@@ -6,29 +6,33 @@ import SettingsIcon from '@mui/icons-material/Settings';
 
 const Settings = () => {
     return (
-        <div className="box-border flex w-screen flex-col ">
-            <div className="my-10 flex  flex-col sm:flex-row">
-                <div className="flex items-center justify-center p-3 text-7xl text-white sm:w-1/2 ">
+        <div className="mx-auto flex w-full flex-col items-start  lg:w-[80%] ">
+            <div className=" flex flex-col gap-10 px-10 text-white  lg:flex-row">
+                <div className="flex items-center justify-center">
                     <SettingsIcon className="mr-5 scale-150 transform text-white" />
-                    <span className="text-4xl">Dash Settings</span>
+                    <span className="whitespace-nowrap text-4xl">Settings</span>
                 </div>
-                <div className="w-full self-center sm:w-1/2">
+                <div className="w-full">
                     <UserInfoCard />
                 </div>
             </div>
 
-            <div className="m-auto mb-10 w-3/4 border-b border-b-slate-400 shadow-lg shadow-white"></div>
+            <div className=" my-10 flex w-full flex-col gap-5 lg:flex-row">
+                <div className="flex w-full flex-col gap-5">
+                    <div className=" flex w-full flex-col gap-10 rounded-md border border-gray-500 bg-gray-700 bg-opacity-85 px-10 py-5 shadow-sm shadow-gray-600 ">
+                        <div className=" text-3xl text-white">
+                            <QueryStatsIcon className="mr-3 text-5xl text-white"></QueryStatsIcon>
+                            Add Ticker
+                        </div>
 
-            <div className=" w-full flex-col justify-start px-10 lg:w-4/5">
-                <div className=" mb-10 w-full lg:w-3/4 ">
-                    <div className="mb-10 text-3xl text-white">
-                        <QueryStatsIcon className="mr-3 text-5xl text-white"></QueryStatsIcon>
-                        Add Ticker
+                        <SearchBar />
                     </div>
 
-                    <SearchBar getUserTickers />
-
                     <UserTickers />
+                </div>
+                <div className=" flex h-fit w-full flex-col gap-10 rounded-md border border-gray-500 bg-gray-700 bg-opacity-85 px-10 py-5 shadow-sm shadow-gray-600 ">
+                    <h1 className="text-3xl text-white">Stocks Settings</h1>
+                    <p className="italic text-gray-200">More settings coming soon!</p>
                 </div>
             </div>
         </div>

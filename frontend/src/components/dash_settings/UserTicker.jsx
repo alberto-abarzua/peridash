@@ -67,7 +67,6 @@ const UserTicker = ({ result }) => {
         updateTicker();
     }, [favorite, buy, gain, loss]);
 
-
     const handleDelete = useCallback(async () => {
         await api.delete(`/user_ticker/tickers/`, {
             params: {
@@ -80,21 +79,21 @@ const UserTicker = ({ result }) => {
 
     return (
         <div
-            className={`relative mb-1  box-border  rounded border border-gray-400  bg-slate-100  pl-3 shadow-2xl transition-all duration-200 ${
-                favorite ? 'h-36' : 'h-16'
-            }`}
+            className={`group relative w-full rounded-sm border-gray-400 bg-white bg-opacity-90 px-4 py-2 shadow-sm shadow-gray-600  `}
         >
             <div className="flex-col">
                 <div className="flex h-full w-full pt-1">
                     <div className="flex-grow self-center">
-                        <h5 className="text-lg ">
+                        <h5 className="text-lg group-hover:font-semibold ">
                             {result.symbol.symbol + ':' + result.symbol.exchange}
                         </h5>
                     </div>
                     <div className="z-20 flex-shrink-0 self-center">
                         <button onClick={handleFavorite}>
                             {favorite ? (
-                                <div className="text-5xl text-yellow-500">★</div>
+                                <div className="text-5xl text-yellow-500 hover:text-yellow-300">
+                                    ★
+                                </div>
                             ) : (
                                 <div className="transform text-5xl text-gray-500 transition-all duration-100  hover:text-yellow-500">
                                     ☆
@@ -113,10 +112,8 @@ const UserTicker = ({ result }) => {
                 </div>
 
                 <div
-                    className={`absolute left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2 transform items-start px-2 pb-5 duration-150 ${
-                        favorite
-                            ? 'translate-y-0 opacity-100'
-                            : ' -z-10  h-20 -translate-y-4 opacity-0'
+                    className={`w-full transform items-start transition-all duration-500 ${
+                        favorite ? 'flex' : 'hidden'
                     }`}
                 >
                     <div className="m-auto box-border flex w-full space-x-2">

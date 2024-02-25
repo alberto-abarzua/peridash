@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const tickerSlice = createSlice({
-    name: 'counter',
+    name: 'ticker',
     initialState: {
         userTickers: [],
         loading: true,

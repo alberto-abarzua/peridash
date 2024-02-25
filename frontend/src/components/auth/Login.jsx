@@ -4,9 +4,13 @@ import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { useContext } from 'react';
 import SupabaseContext from '@/utils/supabase/context';
 import PropTypes from 'prop-types';
+import { Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { tickerSliceActions } from '@/redux/tickerSlice';
 
 const Login = ({ session, setSession }) => {
     const supabase = useContext(SupabaseContext);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
@@ -15,16 +19,29 @@ const Login = ({ session, setSession }) => {
 
         const {
             data: { subscription },
-        } = supabase.auth.onAuthStateChange((_event, session) => {
+        } = supabase.auth.onAuthStateChange((event, session) => {
+            if (event == 'SIGNED_OUT') {
+                localStorage.removeItem('access_token');
+                setSession(null);
+                return;
+            }
+
+            if (event == 'SIGNED_IN') {
+                dispatch(tickerSliceActions.updateTickers());
+            }
+
             const token = session?.access_token;
 
             if (!token) {
                 localStorage.removeItem('access_token');
             }
+
             const localToken = localStorage.getItem('access_token');
+
             if (token && token !== localToken) {
                 localStorage.setItem('access_token', token);
             }
+
             setSession(session);
         });
 
@@ -43,8 +60,7 @@ const Login = ({ session, setSession }) => {
             </div>
         );
     } else {
-        window.location.href = '/dashboard';
-        return <div></div>;
+        return <Navigate to="/dashboard" />;
     }
 };
 

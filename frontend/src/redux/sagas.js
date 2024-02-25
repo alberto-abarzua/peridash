@@ -4,7 +4,6 @@ import { tickerSliceActions } from './tickerSlice';
 
 function* updateUserTickers() {
     try {
-        console.log('Calling update user tickers');
         const response = yield call(api.get, '/user_ticker/tickers/');
         yield put(tickerSliceActions.setUserTickers(response.data));
     } catch (error) {

@@ -81,7 +81,7 @@ const SearchBar = () => {
     const resultsModal = (
         <div className={`w-full  z-30${isModalOpen ? 'block' : 'hidden'}`}>
             <div
-                className={`absolute left-1/2 top-10 z-30 -translate-x-1/2 transform flex-col space-y-2 rounded-xl bg-gray-200 bg-opacity-60 px-16 py-16 transition duration-200 ${
+                className={`absolute left-1/2 top-10  z-30 flex -translate-x-1/2 transform flex-col  gap-y-3 space-y-2 rounded-xl bg-gray-700 bg-opacity-60 px-16 py-16 transition duration-200 ${
                     isModalOpen ? 'block' : 'hidden'
                 }`}
             >
@@ -93,8 +93,8 @@ const SearchBar = () => {
                     />
                 ))}
 
-                <div className="absolute -right-0 -top-0" onClick={() => handleModalClose()}>
-                    <CloseIcon className="cursor-pointer rounded-full p-2 text-6xl text-white transition duration-100 hover:scale-105 hover:text-black" />
+                <div className="absolute -top-0 right-1" onClick={() => handleModalClose()}>
+                    <CloseIcon className="scale-110 transform cursor-pointer  text-white  hover:text-black" />
                 </div>
             </div>
         </div>
@@ -114,6 +114,7 @@ const SearchBar = () => {
                         onKeyDown={handleKeyDown}
                     />
                 </div>
+
                 <PrimaryButton
                     text="Search"
                     onClick={handleSearch}

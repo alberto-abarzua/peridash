@@ -1,13 +1,10 @@
 import TickerContainerBig from '@/components/tickers/TickerContainerBig';
 import TickerContainerSmall from '@/components/tickers/TickerContainerSmall';
 import TickerStatsInfo from '@/components/tickers/TickerStatsInfo';
-import { ClipLoader } from 'react-spinners';
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const Dashboard = () => {
     let tickerData = useSelector(state => state.ticker.userTickers);
-    const loading = useSelector(state => state.ticker.loading);
-    console.log(tickerData);
 
     tickerData = tickerData.filter(
         ticker => ticker.symbol.price_data !== null && ticker.symbol.eod_data !== null
@@ -32,15 +29,6 @@ const Dashboard = () => {
         favorite_tickers.length
     );
 
-    if (loading) {
-        return (
-            <div className="container mx-auto px-4">
-                <div className="flex min-h-screen items-center justify-center">
-                    <ClipLoader color="rgba(0, 193, 46, 0.8)" size={70} />
-                </div>
-            </div>
-        );
-    }
     return (
         <div className="container mx-auto px-4">
             <div className="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">

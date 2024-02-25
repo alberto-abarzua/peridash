@@ -10,9 +10,19 @@ api.interceptors.request.use(request => {
     if (token) {
         request.headers.Authorization = `Bearer ${token}`;
     } else {
-        throw new Error('No token found');
+        // window.location.href = '/';
     }
     return request;
 });
+
+api.interceptors.response.use(
+    response => {
+        return response;
+    },
+    error => {
+        localStorage.removeItem('access_token');
+        return Promise.reject(error);
+    }
+);
 
 export default api;

@@ -51,7 +51,6 @@ app.get("/update_prices/", AdminAuthMiddleware, async (req: Request, res: Respon
 
     const start = datetime_start.toISOString();
     const end = datetime_end.toISOString();
-    console.log(Deno.env.get("TWELVEDATA_API_KEY"));
 
     let { data } = await axios.get("https://api.twelvedata.com/time_series", {
         params: {
@@ -63,7 +62,6 @@ app.get("/update_prices/", AdminAuthMiddleware, async (req: Request, res: Respon
             apikey: Deno.env.get("TWELVEDATA_API_KEY") || "",
         },
     });
-    console.log("this is data,\n", data);
 
     if (symbolsArray.length === 1) {
         data = [data];

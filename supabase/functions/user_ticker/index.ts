@@ -104,7 +104,7 @@ app.get(
         }
 
         const { data } = await axios.get("https://api.twelvedata.com/symbol_search", {
-            params: { symbol: search, show_plan: "true" },
+            params: { symbol: search, show_plan: "true" ,outputsize: 10},
         });
 
         res.status(200).json(data).end();

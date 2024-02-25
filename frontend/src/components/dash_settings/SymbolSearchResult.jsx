@@ -13,30 +13,32 @@ const SymbolSearchResult = ({ result, onClick }) => {
     // </div>
     return (
         <div
-            className={`rounded-lg border border-black p-4 shadow-xl ${
-                isBasicPlan ? 'bg-white' : 'pointer-events-none cursor-not-allowed bg-red-300 '
-            } m-auto max-w-4xl transform cursor-pointer hover:translate-x-1 hover:bg-gray-300 `}
+            className={`w-full lg:w-[700px] rounded-lg border border-gray-400 px-4 py-2  ${
+                isBasicPlan
+                    ? 'bg-gray-600 text-white '
+                    : 'pointer-events-none cursor-not-allowed bg-red-200 text-gray-800 '
+            } m-auto max-w-4xl transform cursor-pointer hover:translate-x-4 hover:bg-gray-700 `}
             onClick={thisOnClick}
         >
-            <h6 className="-underline-offset-1 text-2xl font-bold underline">
+            <h6 className="-underline-offset-1 text-2xl font-semibold underline">
                 {result.symbol} - {result.instrument_name}
             </h6>
-            <div className="mt-4 sm:flex">
-                <div className="flex-1 pr-2">
-                    <h6 className="mb-2 text-lg font-bold">Exchange: {result.exchange}</h6>
-                    <p className="text-gray-600">Exchange Timezone: {result.exchange_timezone}</p>
+            <div className="mt-2 flex justify-between">
+                <div className="flex flex-col ">
+                    <span className="text-md  font-semibold">Exchange: </span>
+                    <p className="italic "> {result.exchange}</p>
                 </div>
-                <div className="flex-1 px-2">
-                    <h6 className="mb-2 text-lg font-bold">MIC Code: {result.mic_code}</h6>
-                    <p className="text-gray-600">Instrument Type: {result.instrument_type}</p>
+                <div className="flex flex-col ">
+                    <span className="text-md  font-semibold">Country/Currency </span>
+                    <p className="italic "> {result.country + '/' + result.currency}</p>
                 </div>
-                <div className="flex-1 px-2">
-                    <h6 className="mb-2 text-lg font-bold">Currency: {result.currency}</h6>
-                    <p className="text-gray-600">Country: {result.country}</p>
+                <div className="flex flex-col ">
+                    <span className="text-md font-semibold">Type </span>
+                    <p className="italic "> {result.instrument_type}</p>
                 </div>
-                <div className="flex-1 px-2">
-                    <h6 className="mb-2 text-lg font-bold">Plan: {result.access.plan}</h6>
-                    <p className="text-gray-600">Global: {result.access.global}</p>
+                <div className="flex flex-col ">
+                    <span className="text-md  font-semibold">Plan </span>
+                    <p className="italic "> {result.access.plan + '/' + result.access.global}</p>
                 </div>
             </div>
         </div>

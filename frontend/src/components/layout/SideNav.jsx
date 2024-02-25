@@ -48,7 +48,7 @@ function SideNavBar() {
     const toolbar = (
         <div
             onClick={() => setIsVisible(!isVisible)}
-            className="flex cursor-pointer rounded px-4 py-3 text-white hover:text-gray-400 "
+            className="flex cursor-pointer items-center justify-center rounded-br-full bg-darker-700   px-4 py-2  pr-10 text-white hover:bg-gray-700 hover:text-slate-200 "
         >
             <StackedLineChartIcon className="text-5xl " />
             <h1 className="pl-2 text-4xl">Peridash</h1>

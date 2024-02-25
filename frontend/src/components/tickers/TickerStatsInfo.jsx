@@ -18,7 +18,7 @@ const TickerStatsInfo = ({ stats }) => {
     if (!currentTime) return null;
 
     return (
-        <div className="absolute right-10 top-3 m-auto hidden w-72 justify-center rounded-lg bg-darker-700 p-2 text-white md:flex md:flex-row">
+        <div className="absolute right-0 top-0 m-auto hidden w-72 justify-center rounded-lg rounded-bl-full bg-darker-700 p-2 text-white md:flex md:flex-row">
             <div className="mr-10  flex-shrink self-center">
                 <span className="text-2xl "> {currentTime.toLocaleTimeString()}</span>
             </div>
