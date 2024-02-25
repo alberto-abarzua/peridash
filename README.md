@@ -11,3 +11,6 @@ For package and dependency management, the project uses [PDM](https://pdm.fming.
 The project is currently beign refactored to use React with Vite and Supabase as the backend.
 
 
+
+## Calling the `/update_prices/` edge funtion locally:
+

@@ -38,7 +38,7 @@ export const symbol = peridashSchema.table("symbol", {
     price_data: json("price_data"),
     eod_data: json("eod_data"),
     eod_updated_at: timestamp("eod_updated_at").default(new Date(0)),
-    updated_at: timestamp("updated_at").defaultNow(),
+    updated_at: timestamp("updated_at").default(new Date(0)),
 });
 
 // ---------------------
@@ -74,23 +74,17 @@ export const tickerSettings = peridashSchema.table("ticker_settings", {
     stats_range: integer("stats_range"),
 });
 
-export const tickerSettingsRelations = relations(
-    tickerSettings,
-    ({ many }) => ({
-        tickerSettingsToTicker: many(tickerSettingsToTicker),
-    }),
-);
+export const tickerSettingsRelations = relations(tickerSettings, ({ many }) => ({
+    tickerSettingsToTicker: many(tickerSettingsToTicker),
+}));
 
 // ---------------------
 // --- tickerSettingsToTicker
 // ---------------------
 //
 
-export const tickerSettingsToTicker = peridashSchema.table(
-    "ticker_settings_to_ticker",
-    {
-        id: uuid("id").defaultRandom().primaryKey(),
-        ticker_id: uuid("ticker_id").references(() => ticker.id),
-        ticker_settings_id: uuid("ticker_settings_id").references(() => tickerSettings.id),
-    },
-);
+export const tickerSettingsToTicker = peridashSchema.table("ticker_settings_to_ticker", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    ticker_id: uuid("ticker_id").references(() => ticker.id),
+    ticker_settings_id: uuid("ticker_settings_id").references(() => tickerSettings.id),
+});

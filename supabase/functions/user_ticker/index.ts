@@ -1,10 +1,7 @@
-import { createClient } from "npm:@supabase/supabase-js@2.39.7";
-import axiod from "https://deno.land/x/axiod/mod.ts";
 
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
-import express from "npm:express@4.18.2";
-import { Request, Response } from "npm:@types/express@4.17.21";
+import express from "express";
+import axios from "axios"
+import { Request, Response } from "expressTypes";
 import {
     delete_user_ticker,
     get_or_create_symbol,
@@ -14,16 +11,16 @@ import {
     update_user_ticker,
 } from "../_shared/db.ts";
 
-import { getSupabaseClient, preFlightMiddleware } from "../_shared/express_utils.ts";
+import { AuthMiddleware, preFlightMiddleware } from "../_shared/express_utils.ts";
+
+import { dbClient } from "../_shared/db.ts";
 
 const app = express();
 
-const connectionString = Deno.env.get("FIXED_DB_URL") ?? "";
-const client = postgres(connectionString, { prepare: false });
-const db = drizzle(client);
-
 app.use(express.json());
 app.use(preFlightMiddleware);
+app.use(AuthMiddleware);
+app.locals.db = dbClient;
 
 app.get(
     "/user_ticker/tickers/",
@@ -31,11 +28,8 @@ app.get(
         req: Request,
         res: Response,
     ) => {
-        const [_supabase, user] = await getSupabaseClient(req, res);
-        if (!user) {
-            res.status(404).json([]).end();
-            return;
-        }
+        const user = req.user!;
+        const db = req.app.locals.db;
         const userSettings = await get_or_create_user_ticker_settings(user.id, db);
         if (!userSettings) {
             res.status(404).json([]).end();
@@ -54,10 +48,8 @@ app.post(
         req: Request,
         res: Response,
     ) => {
-        const [_supabase, user] = await getSupabaseClient(req, res);
-        if (!user) {
-            return;
-        }
+        const user = req.user!;
+        const db = req.app.locals.db;
         const { symbol, exchange, mic_code } = req.body.ticker_info;
         const found_symbol = await get_or_create_symbol(symbol, exchange, mic_code, db);
         const new_ticker = await get_or_create_user_ticker(
@@ -75,11 +67,8 @@ app.delete(
         req: Request,
         res: Response,
     ) => {
-        const [_supabase, user] = await getSupabaseClient(req, res);
-        if (!user) {
-            return;
-        }
-
+        const user = req.user!;
+        const db = req.app.locals.db;
         const ticker_id = req.query.ticker_id as string;
 
         await delete_user_ticker(user.id, ticker_id, db);
@@ -94,10 +83,8 @@ app.put(
         req: Request,
         res: Response,
     ) => {
-        const [_supabase, user] = await getSupabaseClient(req, res);
-        if (!user) {
-            return;
-        }
+        const user = req.user!;
+        const db = req.app.locals.db;
         const { ticker_id, ticker_info } = req.body;
         await update_user_ticker(user.id, ticker_id, ticker_info, db);
         res.status(200).json({ message: "Ticker updated" }).end();
@@ -116,7 +103,7 @@ app.get(
             return;
         }
 
-        const { data } = await axiod.get("https://api.twelvedata.com/symbol_search", {
+        const { data } = await axios.get("https://api.twelvedata.com/symbol_search", {
             params: { symbol: search, show_plan: "true" },
         });
 

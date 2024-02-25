@@ -3,19 +3,15 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
-import SupabaseContext, { SessionContext } from '@/utils/supabase/context';
+import SupabaseContext from '@/utils/supabase/context';
 import { useContext } from 'react';
+import { logout } from '@/utils/supabase/auth';
 
 import { useState, useRef } from 'react';
 function SideNavBar() {
     const [isVisible, setIsVisible] = useState(false);
     const sideNavRef = useRef(null);
     const supabase = useContext(SupabaseContext);
-
-    const logout = async () => {
-        localStorage.removeItem('access_token');
-        await supabase.auth.signOut();
-    };
 
     const navigation = (
         <div
@@ -43,7 +39,7 @@ function SideNavBar() {
             <NavLink
                 text="Logout"
                 path="/"
-                onClick={logout}
+                onClick={() => logout(supabase)}
                 icon={<LogoutIcon className="text-3xl text-red-600" />}
             ></NavLink>
         </div>

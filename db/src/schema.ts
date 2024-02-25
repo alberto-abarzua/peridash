@@ -39,7 +39,7 @@ export const symbol = peridashSchema.table('symbol', {
   price_data: json('price_data'),
   eod_data: json('eod_data'),   
   eod_updated_at: timestamp('eod_updated_at').default(new Date(0)),
-  updated_at: timestamp('updated_at').defaultNow(),
+  updated_at: timestamp('updated_at').default(new Date(0)),
 });
 
 // ---------------------

@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { useContext } from 'react';
 import SupabaseContext from '@/utils/supabase/context';
+import PropTypes from 'prop-types';
 
-const Login = () => {
+const Login = ({ session, setSession }) => {
     const supabase = useContext(SupabaseContext);
-    const [session, setSession] = useState(null);
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
@@ -16,11 +16,20 @@ const Login = () => {
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((_event, session) => {
+            const token = session?.access_token;
+
+            if (!token) {
+                localStorage.removeItem('access_token');
+            }
+            const localToken = localStorage.getItem('access_token');
+            if (token && token !== localToken) {
+                localStorage.setItem('access_token', token);
+            }
             setSession(session);
         });
 
         return () => subscription.unsubscribe();
-    }, []);
+    }, [supabase.auth, setSession]);
 
     if (!session) {
         return (
@@ -34,21 +43,13 @@ const Login = () => {
             </div>
         );
     } else {
-        return (
-            <div>
-                <h1>Logged in</h1>
-                <button
-                    className="rounded-sm border-gray-600 bg-red-600 px-4 py-2 text-white hover:bg-red-500 "
-                    onClick={() => {
-                        supabase.auth.signOut();
-                        LocalStorage.removeItem('access_token');
-                    }}
-                >
-                    Log out
-                </button>
-            </div>
-        );
+        window.location.href = '/dashboard';
+        return <div></div>;
     }
 };
 
+Login.propTypes = {
+    session: PropTypes.object,
+    setSession: PropTypes.func,
+};
 export default Login;

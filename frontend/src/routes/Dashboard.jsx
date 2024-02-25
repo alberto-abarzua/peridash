@@ -2,11 +2,12 @@ import TickerContainerBig from '@/components/tickers/TickerContainerBig';
 import TickerContainerSmall from '@/components/tickers/TickerContainerSmall';
 import TickerStatsInfo from '@/components/tickers/TickerStatsInfo';
 import { ClipLoader } from 'react-spinners';
-import { useDispatch, useSelector } from 'react-redux';
+import {  useSelector } from 'react-redux';
 
 const Dashboard = () => {
     let tickerData = useSelector(state => state.ticker.userTickers);
     const loading = useSelector(state => state.ticker.loading);
+    console.log(tickerData);
 
     tickerData = tickerData.filter(
         ticker => ticker.symbol.price_data !== null && ticker.symbol.eod_data !== null

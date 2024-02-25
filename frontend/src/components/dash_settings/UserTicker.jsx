@@ -67,6 +67,7 @@ const UserTicker = ({ result }) => {
         updateTicker();
     }, [favorite, buy, gain, loss]);
 
+
     const handleDelete = useCallback(async () => {
         await api.delete(`/user_ticker/tickers/`, {
             params: {

@@ -15,12 +15,9 @@
     "compilerOptions": {
         "lib": ["dom", "deno.ns", "deno.window"],
         "allowJs": true,
-        "strict": true
+        "strict": true,
+        "importMap": "./import_map.json"
     },
-    "imports": {
-        "drizzle-orm": "npm:drizzle-orm@0.29.1",
-        "supabase": "npm:@supabase/supabase-js@2.39.6",
-        "drizzle-orm/": "npm:/drizzle-orm@0.29.1/",
-        "postgres": "npm:postgres@3.4.3"
-    }
+    "importMap" : "./import_map.json"
+
 }

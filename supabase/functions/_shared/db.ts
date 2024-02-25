@@ -1,8 +1,10 @@
 import { and, eq } from "drizzle-orm";
 
-import { PostgresJsDatabase } from "npm:drizzle-orm@0.29.1/postgres-js";
+import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
-import { symbol, ticker, tickerSettings, tickerSettingsToTicker, users } from "../_shared/schema.ts";
+import { symbol, ticker, tickerSettings, tickerSettingsToTicker, users } from "../_shared/schema/schema.ts";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 
 // ---------- HELPERS  ---------------
 
@@ -46,6 +48,14 @@ export interface StockValue {
     previous_close: number;
     volume: number;
 }
+
+//  DB Client
+let connectionString = Deno.env.get("FIXED_DB_URL")!;
+if (!connectionString) {
+    connectionString = Deno.env.get("SUPABASE_DB_URL")!;
+}
+const client = postgres(connectionString, { prepare: false });
+export const dbClient = drizzle(client);
 
 // ===============================
 // ===============================

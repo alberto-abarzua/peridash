@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from '@/routes/root';
 import ErrorPage from '@/error-page';
-import About from '@/routes/about';
 import { SupabaseContext } from '@/utils/supabase/context';
 import supabase from '@/utils/supabase/supabaseClient';
 import store from '@/redux/store';
@@ -18,10 +17,6 @@ const router = createBrowserRouter([
         element: <Root />,
         errorElement: <ErrorPage />,
         children: [
-            {
-                path: 'about',
-                element: <About />,
-            },
             {
                 path: 'settings',
                 element: <Settings />,

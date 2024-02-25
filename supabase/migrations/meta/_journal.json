@@ -43,6 +43,13 @@
       "when": 1708476259398,
       "tag": "0005_old_young_avengers",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1708892551882,
+      "tag": "0006_talented_dragon_lord",
+      "breakpoints": true
     }
   ]
 }

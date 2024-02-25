@@ -1,35 +1,33 @@
 import { eq } from "drizzle-orm";
-import axiod from "https://deno.land/x/axiod/mod.ts";
-import express from "npm:express@4.18.2";
-import { drizzle } from "npm:drizzle-orm@0.29.1/postgres-js";
+import axios from "axios";
+import express from "express";
+import { symbol } from "../_shared/schema/schema.ts";
 
-import postgres from "postgres";
-import { symbol } from "../_shared/schema.ts";
-import { Request, Response } from "npm:@types/express@4.17.21";
+import { Request, Response } from "expressTypes";
 import { get_or_create_symbol, StockData, update_eod } from "../_shared/db.ts";
-import {getSupabaseAdmin, preFlightMiddleware } from "../_shared/express_utils.ts";
+import { AdminAuthMiddleware, preFlightMiddleware } from "../_shared/express_utils.ts";
+import { Symbol } from "../_shared/db.ts";
 
+import { dbClient } from "../_shared/db.ts";
 // ==========================================
 //                   Express server
 // ==========================================
 
 const app = express();
 
-const connectionString = Deno.env.get("FIXED_DB_URL") ?? "";
-const client = postgres(connectionString, { prepare: false });
-const db = drizzle(client);
-
 app.use(express.json());
 app.use(preFlightMiddleware);
+app.locals.db = dbClient;
 
-app.get("/update_prices/", async (req: Request, res: Response) => {
-    const supabase = getSupabaseAdmin(req, res);
-    if (!supabase) {
-        return;
+app.get("/update_prices/", AdminAuthMiddleware, async (req: Request, res: Response) => {
+    const db = req.app.locals.db;
+    let symbols: Symbol[] = [];
+    try {
+        symbols = await db.select().from(symbol).orderBy(symbol.updated_at)
+            .limit(30);
+    } catch (e) {
+        console.log(e);
     }
-    const symbols = await db.select().from(symbol).orderBy(symbol.updated_at)
-        .limit(30);
-
 
     if (symbols.length === 0) {
         return res.status(200).json({ msg: "No symbols found!" });
@@ -53,8 +51,9 @@ app.get("/update_prices/", async (req: Request, res: Response) => {
 
     const start = datetime_start.toISOString();
     const end = datetime_end.toISOString();
+    console.log(Deno.env.get("TWELVEDATA_API_KEY"));
 
-    let { data } = await axiod.get("https://api.twelvedata.com/time_series", {
+    let { data } = await axios.get("https://api.twelvedata.com/time_series", {
         params: {
             symbol: symbolsArray.join(","),
             timezone: "America/New_York",
@@ -64,6 +63,7 @@ app.get("/update_prices/", async (req: Request, res: Response) => {
             apikey: Deno.env.get("TWELVEDATA_API_KEY") || "",
         },
     });
+    console.log("this is data,\n", data);
 
     if (symbolsArray.length === 1) {
         data = [data];

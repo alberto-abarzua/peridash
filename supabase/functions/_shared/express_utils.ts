@@ -1,9 +1,16 @@
 import { corsHeaders } from "./cors.ts";
 
-import { RequestHandler } from "npm:@types/express@4.17.21";
-import { Request, Response } from "npm:@types/express@4.17.21";
-import type { SupabaseClient, User } from "npm:@supabase/supabase-js@2.39.7";
-import { createClient } from "npm:@supabase/supabase-js@2.39.7";
+import  { Request, RequestHandler, Response } from "expressTypes";
+import type { SupabaseClient, User } from "supabase";
+import { createClient } from "supabase";
+
+declare global {
+    namespace Express {
+        interface Request {
+            user?: User;
+        }
+    }
+}
 
 export const preFlightMiddleware: RequestHandler = (req, res, next) => {
     for (const [key, value] of Object.entries(corsHeaders)) {
@@ -46,4 +53,23 @@ export const getSupabaseAdmin = (
         throw new Error("Unauthorized Get");
     }
     return supabase;
-}
+};
+
+export const AuthMiddleware: RequestHandler = async (req, res, next) => {
+    const [_supabase, user] = await getSupabaseClient(req, res);
+    if (!user) {
+        res.status(401).send("User is not Authed").end();
+        return;
+    }
+    req.user = user;
+    return next();
+};
+
+export const AdminAuthMiddleware: RequestHandler = (req, res, next) => {
+    const supabase = getSupabaseAdmin(req, res);
+    if (!supabase.auth.admin) {
+        res.status(401).send("Not an Admin account!").end();
+        return;
+    }
+    return next();
+};

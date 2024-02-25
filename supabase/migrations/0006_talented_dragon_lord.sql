@@ -1,0 +1,1 @@
+ALTER TABLE "peridash"."symbol" ALTER COLUMN "updated_at" SET DEFAULT '1970-01-01 00:00:00.000';
