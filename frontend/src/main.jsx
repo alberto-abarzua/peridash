@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from '@/routes/root';
 import ErrorPage from '@/error-page';
-import store, {persistor} from '@/redux/store';
+import store, { persistor } from '@/redux/store';
 import Settings from '@/routes/Settings';
 import Dashboard from '@/routes/Dashboard';
 

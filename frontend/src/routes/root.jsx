@@ -18,8 +18,12 @@ export default function Root() {
                 <SideNav />
                 {session ? (
                     !loading ? (
-                        (Outlet ? Outlet : (<Navigate to="/dashboard" replace={true} /> ) )): (
-
+                        Outlet ? (
+                            Outlet
+                        ) : (
+                            <Navigate to="/dashboard" replace={true} />
+                        )
+                    ) : (
                         <div className="flex h-full min-h-screen flex-col items-center justify-center">
                             <ClipLoader
                                 className="relative bottom-20"

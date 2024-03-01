@@ -70,7 +70,7 @@ function SideNavBar() {
                 {backdrop}
                 {toolbar}
             </div>
-            <div className='w-full h-20'></div>
+            <div className="h-20 w-full"></div>
         </>
     );
 }
