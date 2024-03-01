@@ -39,8 +39,8 @@ app.get("/update_prices/", AdminAuthMiddleware, async (req: Request, res: Respon
     }
     const now = new Date();
     const diff = now.getTime() - first.updated_at?.getTime();
-    if (diff < 60000) {
-        return res.status(200).json({ msg: "Prices updated recently!" });
+    if (diff < 50000) {
+        return res.status(208).json({ msg: "Prices updated recently!" });
     }
 
     const symbolsArray = symbols.map((s) => `${s.symbol}:${s.exchange}`);
