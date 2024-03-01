@@ -3,12 +3,11 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from '@/routes/root';
 import ErrorPage from '@/error-page';
-import { SupabaseContext } from '@/utils/supabase/context';
-import supabase from '@/utils/supabase/supabaseClient';
-import store from '@/redux/store';
+import store, {persistor} from '@/redux/store';
 import Settings from '@/routes/Settings';
 import Dashboard from '@/routes/Dashboard';
 
+import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 
 const router = createBrowserRouter([
@@ -34,10 +33,10 @@ import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
-        <SupabaseContext.Provider value={supabase}>
+        <PersistGate loading={null} persistor={persistor}>
             <React.StrictMode>
                 <RouterProvider router={router} />
             </React.StrictMode>
-        </SupabaseContext.Provider>
+        </PersistGate>
     </Provider>
 );

@@ -3,15 +3,14 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
-import SupabaseContext from '@/utils/supabase/context';
-import { useContext } from 'react';
-import { logout } from '@/utils/supabase/auth';
+import { useDispatch } from 'react-redux';
 
+import { userSliceActions } from '@/redux/userSlice';
 import { useState, useRef } from 'react';
 function SideNavBar() {
     const [isVisible, setIsVisible] = useState(false);
+    const dispatch = useDispatch();
     const sideNavRef = useRef(null);
-    const supabase = useContext(SupabaseContext);
 
     const navigation = (
         <div
@@ -39,7 +38,7 @@ function SideNavBar() {
             <NavLink
                 text="Logout"
                 path="/"
-                onClick={() => logout(supabase)}
+                onClick={() => dispatch(userSliceActions.logout())}
                 icon={<LogoutIcon className="text-3xl text-red-600" />}
             ></NavLink>
         </div>
@@ -65,11 +64,14 @@ function SideNavBar() {
     );
 
     return (
-        <div className="flex">
-            {navigation}
-            {backdrop}
-            {toolbar}
-        </div>
+        <>
+            <div className="fixed z-50">
+                {navigation}
+                {backdrop}
+                {toolbar}
+            </div>
+            <div className='w-full h-20'></div>
+        </>
     );
 }
 

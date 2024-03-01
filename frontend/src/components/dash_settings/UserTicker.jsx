@@ -5,9 +5,11 @@ import AttachMoneySharpIcon from '@mui/icons-material/AttachMoneySharp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { toast } from 'sonner';
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { tickerSliceActions } from '@/redux/tickerSlice';
+import PropTypes from 'prop-types';
 
 const UserTicker = ({ result }) => {
     const [favorite, setFavorite] = useState(result.ticker.is_favorite);
@@ -31,6 +33,9 @@ const UserTicker = ({ result }) => {
 
         if (response.status === 200) {
             dispatch(tickerSliceActions.updateTickers());
+            toast.success(`Updated Ticker ${result.symbol.symbol}`);
+        } else {
+            toast.error('Error updating ticker');
         }
     });
 
@@ -140,6 +145,10 @@ const UserTicker = ({ result }) => {
             </div>
         </div>
     );
+};
+
+UserTicker.propTypes = {
+    result: PropTypes.object,
 };
 
 export default UserTicker;

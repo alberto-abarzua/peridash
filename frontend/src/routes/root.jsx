@@ -1,35 +1,44 @@
 import { useOutlet } from 'react-router-dom';
 import SideNav from '@/components/layout/SideNav';
-import SupabaseAuth from '@/components/auth/SupabaseAuth';
 import { useSelector } from 'react-redux';
 import { ClipLoader } from 'react-spinners'; // Import ClipLoader from react-spinners
+import Login from '@/components/auth/Login';
+import { Toaster } from '@/components/ui/sonner';
+import { Navigate } from 'react-router-dom';
 
 export default function Root() {
     let Outlet = useOutlet();
+    const { session } = useSelector(state => state.user);
     let loading = useSelector(state => state.ticker.loading);
-
-    const token = localStorage.getItem('access_token');
-    loading = token ? loading : false;
-
+    console.log('loading', loading);
 
     return (
         <>
-            <div className="h-full min-h-screen w-full">
+            <div className="h-full  min-h-screen w-full">
                 <SideNav />
-                {loading ? (
-                    <div className="flex flex-col h-full min-h-screen items-center justify-center">
-                        <ClipLoader
-                            className="relative bottom-20"
-                            color="white"
-                            size={50}
-                            loading={loading}
-                        />
-                        <p className='relative bottom-16 text-white italic text-lg'>Loading your tickers...</p>
-                    </div>
+                {session ? (
+                    !loading ? (
+                        (Outlet ? Outlet : (<Navigate to="/dashboard" replace={true} /> ) )): (
+
+                        <div className="flex h-full min-h-screen flex-col items-center justify-center">
+                            <ClipLoader
+                                className="relative bottom-20"
+                                color="white"
+                                size={50}
+                                loading={loading}
+                            />
+                            <p className="relative bottom-16 text-lg italic text-white">
+                                Loading your tickers...
+                            </p>
+                        </div>
+                    )
                 ) : (
-                    <SupabaseAuth Outlet={Outlet}></SupabaseAuth>
+                    <div className="flex justify-center">
+                        <Login />
+                    </div>
                 )}
             </div>
+            <Toaster />
         </>
     );
 }

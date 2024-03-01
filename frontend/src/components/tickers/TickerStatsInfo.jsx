@@ -3,6 +3,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 const TickerStatsInfo = ({ stats }) => {
+    console.log('stats', stats);
     const [currentTime, setCurrentTime] = useState(null);
 
     useEffect(() => {
@@ -20,7 +21,12 @@ const TickerStatsInfo = ({ stats }) => {
     return (
         <div className="absolute right-0 top-0 m-auto hidden w-72 justify-center rounded-lg rounded-bl-full bg-darker-700 p-2 text-white md:flex md:flex-row">
             <div className="mr-10  flex-shrink self-center">
-                <span className="text-2xl "> {currentTime.toLocaleTimeString()}</span>
+                <div className="flex flex-col items-center justify-center">
+                    <div className="self-center text-sm">
+                        {new Date(stats.last_updated).toLocaleString()}
+                    </div>
+                    <span className="text-2xl "> {currentTime.toLocaleTimeString()}</span>
+                </div>
             </div>
             <div className="flex ">
                 <div className="flex flex-shrink self-center pr-2 text-xl">
@@ -35,6 +41,7 @@ const TickerStatsInfo = ({ stats }) => {
 TickerStatsInfo.propTypes = {
     stats: PropTypes.shape({
         num_days: PropTypes.number.isRequired,
+        last_updated: PropTypes.string.isRequired,
     }),
 };
 
