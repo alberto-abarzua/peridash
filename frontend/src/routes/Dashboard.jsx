@@ -32,10 +32,10 @@ const Dashboard = () => {
     const big_ticker_slides = chunkArray(big_tickers, 4);
     const small_ticker_slides = chunkArray(small_tickers, 12);
     const big_tickers_favorite_slides = chunkArray(big_tickers_favorite, 2);
-    const small_tickers_favorite_slides = chunkArray(small_tickers_favorite, 6);
+    const small_tickers_favorite_slides = chunkArray(small_tickers_favorite, 8);
 
     return (
-        <div className="mt-10 grid grid-cols-12 grid-rows-12 gap-3 px-4">
+        <div className="mt-2 grid grid-cols-12 grid-rows-12 gap-3 px-4">
             <Carousel
                 className="col-span-12 row-span-4 lg:col-span-7"
                 loop={true}
