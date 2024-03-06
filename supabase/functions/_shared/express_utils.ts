@@ -1,6 +1,6 @@
 import { corsHeaders } from "./cors.ts";
 
-import  { Request, RequestHandler, Response } from "expressTypes";
+import { Request, RequestHandler, Response } from "expressTypes";
 import type { SupabaseClient, User } from "supabase";
 import { createClient } from "supabase";
 

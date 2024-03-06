@@ -116,6 +116,17 @@ export const get_or_create_symbol = async (
     return found_symbol[0];
 };
 
+export const update_user_ticker_settings = async (
+    user_id: string,
+    new_settings: TickerSettings,
+    db: PostgresJsDatabase,
+) => {
+    const userTickerSettings = await get_or_create_user_ticker_settings(user_id, db);
+    await db.update(tickerSettings).set(new_settings).where(
+        eq(tickerSettings.id, userTickerSettings.id),
+    ).execute();
+};
+
 export const get_or_create_user_ticker = async (
     user_id: string,
     symbol_id: string,

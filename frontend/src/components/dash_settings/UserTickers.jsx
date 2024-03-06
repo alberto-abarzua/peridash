@@ -14,15 +14,13 @@ const UserTickers = () => {
                 My Tickers
             </div>
 
-            <div className="flex flex-col items-center justify-center gap-5">
-                <ScrollArea className="h-[800px] w-full">
-                    {userTickers &&
-                        userTickers.map(result => (
-                            <UserTicker key={result.ticker.id} result={result} />
-                        ))}
-                    <ScrollBar />
-                </ScrollArea>
-            </div>
+            <ScrollArea className="flex h-[800px] w-full flex-col items-center justify-center gap-5">
+                {userTickers &&
+                    userTickers.map(result => (
+                        <UserTicker key={result.ticker.id} result={result} />
+                    ))}
+                <ScrollBar />
+            </ScrollArea>
         </div>
     );
 };

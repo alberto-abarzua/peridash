@@ -64,6 +64,20 @@
       "when": 1709750874008,
       "tag": "0008_safe_tyger_tiger",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1709762283385,
+      "tag": "0009_mature_karen_page",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1709764494819,
+      "tag": "0010_overrated_archangel",
+      "breakpoints": true
     }
   ]
 }

@@ -72,8 +72,8 @@ export const tickerRelations = relations(ticker, ({one,many}) => ({
 export const tickerSettings = peridashSchema.table('ticker_settings', {
   id: uuid('id').defaultRandom().primaryKey(),
   user_id: uuid('user_id').references(()=>users.id),
-  plot_range: integer('plot_range'),
-  stats_range: integer('stats_range'),
+  plot_range: integer('plot_range').default(7),
+  carousel_time: integer('carousel_time').default(8),
 
 });
 

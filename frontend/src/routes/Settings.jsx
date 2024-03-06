@@ -1,5 +1,6 @@
 import UserInfoCard from '@/components/auth/UserInfoCard';
 import SearchBar from '@/components/dash_settings/SearchBar';
+import UserSettingsForm from '@/components/dash_settings/UserSettingsForm';
 import UserTickers from '@/components/dash_settings/UserTickers';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -32,7 +33,7 @@ const Settings = () => {
                 </div>
                 <div className=" flex h-fit w-full flex-col gap-10 rounded-md border border-gray-500 bg-gray-700 bg-opacity-85 px-10 py-5 shadow-sm shadow-gray-600 ">
                     <h1 className="text-3xl text-white">Stocks Settings</h1>
-                    <p className="italic text-gray-200">More settings coming soon!</p>
+                    <UserSettingsForm />
                 </div>
             </div>
         </div>

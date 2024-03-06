@@ -24,7 +24,7 @@ app.get("/update_prices/", AdminAuthMiddleware, async (req: Request, res: Respon
     let symbols: Symbol[] = [];
     try {
         symbols = await db.select().from(symbol).orderBy(symbol.updated_at)
-            .limit(30);
+            .limit(25);
     } catch (e) {
         console.log(e);
     }
@@ -47,7 +47,7 @@ app.get("/update_prices/", AdminAuthMiddleware, async (req: Request, res: Respon
     const datetime_end = new Date();
     const datetime_start = new Date();
 
-    datetime_start.setDate(datetime_start.getDate() - 8);
+    datetime_start.setDate(datetime_start.getDate() - 30);
 
     const start = datetime_start.toISOString();
     const end = datetime_end.toISOString();

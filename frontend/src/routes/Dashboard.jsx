@@ -6,21 +6,16 @@ import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carouse
 import Autoplay from 'embla-carousel-autoplay';
 
 const Dashboard = () => {
-    let tickerData = useSelector(state => state.ticker.userTickers);
-
-    tickerData = tickerData.filter(
-        ticker => ticker.symbol.price_data !== null && ticker.symbol.eod_data !== null
-    );
-
-    if (tickerData.length === 0) {
-        return <div>Loading...</div>;
-    }
+    let {
+        userTickers: tickerData,
+        userSettings: { carousel_time },
+    } = useSelector(state => state.ticker);
 
     let big_tickers = tickerData.filter(ticker => ticker.ticker.show_graph);
     let small_tickers = tickerData.filter(ticker => !ticker.ticker.show_graph);
     let big_tickers_favorite = big_tickers.filter(ticker => ticker.ticker.is_favorite);
     let small_tickers_favorite = small_tickers.filter(ticker => ticker.ticker.is_favorite);
-    //remove the favorite items from the main list
+
     big_tickers = big_tickers.filter(ticker => !ticker.ticker.is_favorite);
     small_tickers = small_tickers.filter(ticker => !ticker.ticker.is_favorite);
 
@@ -39,7 +34,7 @@ const Dashboard = () => {
             <Carousel
                 className="col-span-12 row-span-4 lg:col-span-7"
                 loop={true}
-                plugins={[Autoplay({ playOnInit: true, delay: 8000 })]}
+                plugins={[Autoplay({ playOnInit: true, delay: 1000 * carousel_time })]}
             >
                 <CarouselContent>
                     {big_tickers_favorite_slides.map((slide, slideIndex) => (
@@ -57,7 +52,7 @@ const Dashboard = () => {
             <Carousel
                 className="col-span-12 row-span-4 lg:col-span-5"
                 loop={true}
-                plugins={[Autoplay({ playOnInit: true, delay: 8000 })]}
+                plugins={[Autoplay({ playOnInit: true, delay: 1000 * carousel_time })]}
             >
                 <CarouselContent>
                     {small_tickers_favorite_slides.map((slide, slideIndex) => (
@@ -75,7 +70,7 @@ const Dashboard = () => {
             <Carousel
                 className="col-span-12 row-span-8 lg:col-span-7"
                 loop={true}
-                plugins={[Autoplay({ playOnInit: true, delay: 8000 })]}
+                plugins={[Autoplay({ playOnInit: true, delay: 1000 * carousel_time })]}
             >
                 <CarouselContent>
                     {big_ticker_slides.map((slide, slideIndex) => (
@@ -90,7 +85,11 @@ const Dashboard = () => {
                 </CarouselContent>
             </Carousel>
 
-            <Carousel className="col-span-12 row-span-8 lg:col-span-5" loop={true}>
+            <Carousel
+                className="col-span-12 row-span-8 lg:col-span-5"
+                loop={true}
+                plugins={[Autoplay({ playOnInit: true, delay: 1000 * carousel_time })]}
+            >
                 <CarouselContent>
                     {small_ticker_slides.map((slide, slideIndex) => (
                         <CarouselItem key={slideIndex}>
@@ -104,9 +103,7 @@ const Dashboard = () => {
                 </CarouselContent>
             </Carousel>
 
-            <TickerStatsInfo
-                stats={{ num_days: 7, last_updated: tickerData && tickerData[0].symbol.updated_at }}
-            />
+            <TickerStatsInfo />
         </div>
     );
 };

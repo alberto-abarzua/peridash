@@ -1,0 +1,1 @@
+ALTER TABLE "peridash"."ticker_settings" DROP COLUMN IF EXISTS "stats_range";

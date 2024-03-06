@@ -1,6 +1,5 @@
-
 import express from "express";
-import axios from "axios"
+import axios from "axios";
 import { Request, Response } from "expressTypes";
 import {
     delete_user_ticker,
@@ -9,6 +8,7 @@ import {
     get_or_create_user_ticker_settings,
     get_user_list_of_tickers,
     update_user_ticker,
+    update_user_ticker_settings,
 } from "../_shared/db.ts";
 
 import { AuthMiddleware, preFlightMiddleware } from "../_shared/express_utils.ts";
@@ -31,7 +31,7 @@ app.put(
         const user = req.user!;
         const db = req.app.locals.db;
         const ticker_id = req.params.ticker_id;
-        const {ticker_info} = req.body;
+        const { ticker_info } = req.body;
         await update_user_ticker(user.id, ticker_id, ticker_info, db);
         res.status(200).json({ message: "Ticker updated" }).end();
     },
@@ -53,11 +53,9 @@ app.get(
 
         const tickers = await get_user_list_of_tickers(user.id, db);
 
-        res.status(200).json(tickers).end();
+        res.status(200).json({ tickers, userSettings }).end();
     },
 );
-
-
 
 app.post(
     "/user_ticker/tickers/",
@@ -94,7 +92,6 @@ app.delete(
     },
 );
 
-
 app.get(
     "/user_ticker/tickers/search/",
     async (
@@ -108,10 +105,47 @@ app.get(
         }
 
         const { data } = await axios.get("https://api.twelvedata.com/symbol_search", {
-            params: { symbol: search, show_plan: "true" ,outputsize: 10},
+            params: { symbol: search, show_plan: "true", outputsize: 10 },
         });
 
         res.status(200).json(data).end();
+    },
+);
+
+app.put(
+    "/user_ticker/settings/",
+    async (
+        req: Request,
+        res: Response,
+    ) => {
+        const user = req.user!;
+        const db = req.app.locals.db;
+        const { new_settings } = req.body;
+        await update_user_ticker_settings(user.id, new_settings, db);
+        if (new_settings.plot_range < 1 || new_settings.plot_range > 30) {
+            res.status(400).json({ error: "Invalid plot range" }).end();
+            return;
+        }
+        res.status(200).json({ message: "Settings updated" }).end();
+    },
+);
+
+app.get(
+    "/user_ticker/settings/",
+    async (
+        req: Request,
+        res: Response,
+    ) => {
+        const user = req.user!;
+
+        const db = req.app.locals.db;
+        const userSettings = await get_or_create_user_ticker_settings(user.id, db);
+        if (!userSettings) {
+            res.status(404).json([]).end();
+            return;
+        }
+
+        res.status(200).json(userSettings).end();
     },
 );
 

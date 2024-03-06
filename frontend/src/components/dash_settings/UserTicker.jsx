@@ -14,15 +14,22 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '../ui/input';
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormMessage,
+    FormItem,
+    FormLabel,
+} from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 
 const formSchema = z.object({
     favorite: z.boolean(),
     graph: z.boolean(),
-    buy: z.number().min(0).default(0),
-    gain: z.number().min(0).default(0),
-    loss: z.number().min(0).default(0),
+    buy: z.coerce.number().min(0).default(0),
+    gain: z.coerce.number().min(0).default(0),
+    loss: z.coerce.number().min(0).default(0),
 });
 
 const UserTicker = ({ result }) => {
@@ -144,6 +151,7 @@ const UserTicker = ({ result }) => {
                                                 {...field}
                                             />
                                         </FormControl>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -161,6 +169,7 @@ const UserTicker = ({ result }) => {
                                                 {...field}
                                             />
                                         </FormControl>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -178,6 +187,7 @@ const UserTicker = ({ result }) => {
                                                 {...field}
                                             />
                                         </FormControl>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
