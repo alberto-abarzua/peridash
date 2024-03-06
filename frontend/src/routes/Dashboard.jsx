@@ -72,7 +72,7 @@ const Dashboard = () => {
             </Carousel>
 
             <Carousel
-                className="col-span-12 row-span-4 lg:col-span-7"
+                className="col-span-12 row-span-4 lg:col-span-5"
                 loop={true}
                 plugins={[Autoplay({ palyOnInit: true, delay: 8000 })]}
             >
