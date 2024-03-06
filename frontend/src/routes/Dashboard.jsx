@@ -88,7 +88,7 @@ const Dashboard = () => {
                     ))}
                 </CarouselContent>
             </Carousel>
-            <Carousel className="col-span-12 lg:col-span-5" loop={true}>
+            <Carousel className="col-span-12 row-span-8 lg:col-span-5" loop={true}>
                 <CarouselContent>
                     {small_ticker_slides.map((slide, slideIndex) => (
                         <CarouselItem key={slideIndex}>
