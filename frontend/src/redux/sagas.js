@@ -63,7 +63,7 @@ function* refreshSessionSaga() {
     while (true) {
         try {
             yield call(innerRefreshSessionSaga);
-            yield delay(300000*3); // 5 minutes in milliseconds
+            yield delay(300000 * 3); // 5 minutes in milliseconds
         } catch (error) {
             console.error('Error refreshing session:', error);
             yield delay(30000); // 30 seconds in milliseconds
