@@ -10,7 +10,6 @@ export default function Root() {
     let Outlet = useOutlet();
     const { session } = useSelector(state => state.user);
     let loading = useSelector(state => state.ticker.loading);
-    console.log('loading', loading);
 
     return (
         <>

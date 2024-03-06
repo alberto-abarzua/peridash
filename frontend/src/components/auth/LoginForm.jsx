@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { userSliceActions } from '@/redux/userSlice';
+import { tickerSliceActions } from '@/redux/tickerSlice';
 import supabase from '@/utils/supabase/client';
 
 const formSchema = z.object({
@@ -51,6 +52,7 @@ const LoginForm = () => {
             return;
         }
         dispatch(userSliceActions.setUserSession(data.session));
+        dispatch(tickerSliceActions.updateTickers());
 
         setLoading(false);
     };
@@ -58,11 +60,11 @@ const LoginForm = () => {
     return (
         <Form {...form}>
             <form
-                className=" rounded-md px-10 py-10 shadow-xl"
+                className="rounded-md border border-gray-700 bg-gray-800/30 px-10 py-10 shadow-lg shadow-gray-800 drop-shadow-lg"
                 onSubmit={form.handleSubmit(onSubmit)}
                 id="contactUs"
             >
-                <h1 className=" whitespace-nowrap text-3xl font-bold">Inicia tu Sesión</h1>
+                <h1 className=" whitespace-nowrap text-3xl font-bold">Please Login</h1>
 
                 <div className="flex flex-row items-center justify-center gap-x-10">
                     <div className="mt-10 w-full">
@@ -105,8 +107,12 @@ const LoginForm = () => {
                     </div>
                 </div>
                 <div className="mt-5 flex flex-col gap-y-3">
-                    <Button className={`mt-4 w-full `} disabled={loading} type="submit">
-                        {loading ? 'Cargando...' : 'Inicio de Sesión'}
+                    <Button
+                        className={`mt-4 w-full bg-green-600 hover:bg-green-700 `}
+                        disabled={loading}
+                        type="submit"
+                    >
+                        {loading ? 'Loading...' : 'Login'}
                     </Button>
                 </div>
             </form>

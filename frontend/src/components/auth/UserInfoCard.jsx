@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
 const UserInfoCard = () => {
     const { session } = useSelector(state => state.user);
-    console.log('session', session);
     const user = session?.user;
 
     return (

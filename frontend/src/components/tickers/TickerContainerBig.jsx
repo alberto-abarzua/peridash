@@ -4,6 +4,7 @@ import colors from '@/utils/colors';
 import { Chart, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from 'react-chartjs-2';
+import PropTypes from 'prop-types';
 
 Chart.register(...registerables);
 Chart.register(annotationPlugin);
@@ -152,6 +153,10 @@ const TickerContainerBig = ({ ticker_data }) => {
             </div>
         </div>
     );
+};
+
+TickerContainerBig.propTypes = {
+    ticker_data: PropTypes.object,
 };
 
 export default TickerContainerBig;

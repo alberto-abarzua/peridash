@@ -15,7 +15,7 @@ export default function ErrorPage() {
                     Sorry, an unexpected error has occurred.
                 </p>
                 <p className="text-md mt-2 text-gray-500">
-                    <i>{error.status + " "}</i>
+                    <i>{error.status + ' '}</i>
                     <i>{error.statusText || error.message}</i>
                 </p>
                 <button

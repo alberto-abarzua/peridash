@@ -24,7 +24,7 @@ function SideNavBar() {
                 <StackedLineChartIcon className="text-4xl text-white " />
                 <h2 className="inline-block w-full text-center text-4xl text-white">Peridash</h2>
             </div>
-            <div className="m-auto mb-10 h-10 w-full self-center border-b border-b-gray-400 align-middle"></div>
+            <div className="m-auto mb-10 mt-4  w-full self-center border-b border-b-gray-400 align-middle"></div>
             <NavLink
                 text="Dashboard"
                 path="/dashboard/"

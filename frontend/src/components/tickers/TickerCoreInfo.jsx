@@ -1,5 +1,6 @@
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
+import PropTypes from 'prop-types';
 
 const TickerCoreInfo = ({ ticker_data }) => {
     const { values: time_series, meta } = ticker_data.symbol.price_data;
@@ -46,6 +47,10 @@ const TickerCoreInfo = ({ ticker_data }) => {
             </div>
         </div>
     );
+};
+
+TickerCoreInfo.propTypes = {
+    ticker_data: PropTypes.object,
 };
 
 export default TickerCoreInfo;

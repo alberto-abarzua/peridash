@@ -3,7 +3,6 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 const TickerStatsInfo = ({ stats }) => {
-    console.log('stats', stats);
     const [currentTime, setCurrentTime] = useState(null);
 
     useEffect(() => {

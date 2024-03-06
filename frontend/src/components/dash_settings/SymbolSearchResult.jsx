@@ -7,13 +7,9 @@ const SymbolSearchResult = ({ result, onClick }) => {
         onClick(result.symbol, result.exchange, result.mic_code);
     };
 
-    // <div className="flex-1 pl-2">
-    //     <p className="mb-2 text-gray-600">Access - Global: {result.access.global}</p>
-    //     <p className="text-gray-600">Access - Plan: {result.access.plan}</p>
-    // </div>
     return (
         <div
-            className={`w-full lg:w-[700px] rounded-lg border border-gray-400 px-4 py-2  ${
+            className={`w-full rounded-lg border border-gray-400 px-4 py-2 lg:w-[700px]  ${
                 isBasicPlan
                     ? 'bg-gray-600 text-white '
                     : 'pointer-events-none cursor-not-allowed bg-red-200 text-gray-800 '
@@ -46,21 +42,8 @@ const SymbolSearchResult = ({ result, onClick }) => {
 };
 
 SymbolSearchResult.propTypes = {
-    result: PropTypes.shape({
-        symbol: PropTypes.string,
-        instrument_name: PropTypes.string,
-        exchange: PropTypes.string,
-        mic_code: PropTypes.string,
-        exchange_timezone: PropTypes.string,
-        instrument_type: PropTypes.string,
-        country: PropTypes.string,
-        currency: PropTypes.string,
-        // access: PropTypes.shape({
-        //     global: PropTypes.string,
-        //     plan: PropTypes.string,
-        // }),
-    }).isRequired,
-    onClick: PropTypes.func.isRequired,
+    result: PropTypes.object,
+    onClick: PropTypes.func,
 };
 
 export default SymbolSearchResult;

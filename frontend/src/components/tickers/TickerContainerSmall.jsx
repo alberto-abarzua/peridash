@@ -13,4 +13,8 @@ const TickerContainerSmall = ({ ticker_data }) => {
     );
 };
 
+TickerContainerSmall.propTypes = {
+    ticker_data: PropTypes.object,
+};
+
 export default TickerContainerSmall;

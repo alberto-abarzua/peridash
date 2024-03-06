@@ -7,7 +7,7 @@ import { persistor } from './store';
 
 function* updateUserTickers() {
     try {
-        yield delay(500); // every minute     
+        yield delay(500); // every minute
         const token = yield select(state => state.user.session?.access_token);
         if (!token) {
             console.error('No token found');
@@ -37,7 +37,6 @@ const call_purge = persistor => {
     });
 };
 function* handleLogout() {
-    console.log('Logging out');
     yield call([supabase.auth, supabase.auth.signOut]);
     yield call(call_purge, persistor);
 }
@@ -64,7 +63,7 @@ function* refreshSessionSaga() {
     while (true) {
         try {
             yield call(innerRefreshSessionSaga);
-            yield delay(300000 / 2); // 5 minutes in milliseconds
+            yield delay(300000*3); // 5 minutes in milliseconds
         } catch (error) {
             console.error('Error refreshing session:', error);
             yield delay(30000); // 30 seconds in milliseconds

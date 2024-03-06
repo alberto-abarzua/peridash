@@ -29,8 +29,6 @@ const Dashboard = () => {
         favorite_tickers.length
     );
 
-    console.log(tickerData);
-
     return (
         <div className="container mx-auto px-4">
             <div className="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">

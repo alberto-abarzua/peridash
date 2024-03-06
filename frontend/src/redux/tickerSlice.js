@@ -7,9 +7,11 @@ export const tickerSlice = createSlice({
         loading: true,
     },
     reducers: {
-        updateTickers: (_state, _action) => {},
+        //eslint-disable-next-line
+        updateTickers: (_state, _action) => {
+            // sagas handles this
+        },
         setUserTickers: (state, action) => {
-            console.log('Setting user tickers', action.payload);
             state.userTickers = action.payload;
             state.loading = false;
         },
