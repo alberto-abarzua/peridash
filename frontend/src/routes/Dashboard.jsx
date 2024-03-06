@@ -36,25 +36,23 @@ const Dashboard = () => {
 
     return (
         <div className="mt-10 grid grid-cols-12 grid-rows-12 gap-3 px-4">
-            <div className="col-span-12 row-span-4 lg:col-span-7">
-                <Carousel
-                    className="col-span-12 row-span-8 lg:col-span-7"
-                    loop={true}
-                    plugins={[Autoplay({ palyOnInit: true, delay: 8000 })]}
-                >
-                    <CarouselContent>
-                        {big_tickers_favorite_slides.map((slide, slideIndex) => (
-                            <CarouselItem key={slideIndex}>
-                                <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
-                                    {slide.map((ticker, index) => (
-                                        <TickerContainerBig key={index} ticker_data={ticker} />
-                                    ))}
-                                </div>
-                            </CarouselItem>
-                        ))}
-                    </CarouselContent>
-                </Carousel>
-            </div>
+            <Carousel
+                className="col-span-12 row-span-4 lg:col-span-7"
+                loop={true}
+                plugins={[Autoplay({ palyOnInit: true, delay: 8000 })]}
+            >
+                <CarouselContent>
+                    {big_tickers_favorite_slides.map((slide, slideIndex) => (
+                        <CarouselItem key={slideIndex}>
+                            <div className="grid grid-cols-1 gap-2 rounded-md border border-yellow-500/20  lg:grid-cols-2">
+                                {slide.map((ticker, index) => (
+                                    <TickerContainerBig key={index} ticker_data={ticker} />
+                                ))}
+                            </div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+            </Carousel>
             <Carousel
                 className="col-span-12 row-span-8 lg:col-span-7"
                 loop={true}
@@ -73,25 +71,23 @@ const Dashboard = () => {
                 </CarouselContent>
             </Carousel>
 
-            <div className="col-span-12 row-span-4 lg:col-span-7">
-                <Carousel
-                    className="col-span-12 row-span-8 lg:col-span-7"
-                    loop={true}
-                    plugins={[Autoplay({ palyOnInit: true, delay: 8000 })]}
-                >
-                    <CarouselContent>
-                        {small_tickers_favorite_slides.map((slide, slideIndex) => (
-                            <CarouselItem key={slideIndex}>
-                                <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
-                                    {slide.map((ticker, index) => (
-                                        <TickerContainerSmall key={index} ticker_data={ticker} />
-                                    ))}
-                                </div>
-                            </CarouselItem>
-                        ))}
-                    </CarouselContent>
-                </Carousel>
-            </div>
+            <Carousel
+                className="col-span-12 row-span-4 lg:col-span-7"
+                loop={true}
+                plugins={[Autoplay({ palyOnInit: true, delay: 8000 })]}
+            >
+                <CarouselContent>
+                    {small_tickers_favorite_slides.map((slide, slideIndex) => (
+                        <CarouselItem key={slideIndex}>
+                            <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+                                {slide.map((ticker, index) => (
+                                    <TickerContainerSmall key={index} ticker_data={ticker} />
+                                ))}
+                            </div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+            </Carousel>
             <Carousel className="col-span-12 lg:col-span-5" loop={true}>
                 <CarouselContent>
                     {small_ticker_slides.map((slide, slideIndex) => (
