@@ -2,13 +2,8 @@ import TickerContainerBig from '@/components/tickers/TickerContainerBig';
 import TickerContainerSmall from '@/components/tickers/TickerContainerSmall';
 import TickerStatsInfo from '@/components/tickers/TickerStatsInfo';
 import { useSelector } from 'react-redux';
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-} from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
 
 const Dashboard = () => {
     let tickerData = useSelector(state => state.ticker.userTickers);
@@ -30,8 +25,12 @@ const Dashboard = () => {
     const not_favorite_tickers_slides = chunkArray(not_favorite_tickers, 12);
 
     return (
-        <div className="grid grid-cols-12">
-            <Carousel className="col-span-12 lg:col-span-7" loop={true}>
+        <div className="grid grid-cols-12 gap-3 px-4">
+            <Carousel
+                className="col-span-12 lg:col-span-7"
+                loop={true}
+                plugins={[Autoplay({ palyOnInit: true, delay: 3000 })]}
+            >
                 <CarouselContent>
                     {favorite_tickers_slides.map((slide, slideIndex) => (
                         <CarouselItem key={slideIndex}>
