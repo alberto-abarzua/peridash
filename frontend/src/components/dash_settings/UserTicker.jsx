@@ -77,6 +77,11 @@ const UserTicker = ({ result }) => {
             },
         });
 
+        if (response.status === 200) {
+            dispatch(tickerSliceActions.updateTickers());
+            toast.success(`Deleted Ticker ${result.symbol.symbol}`);
+        }
+
         dispatch(tickerSliceActions.updateTickers());
     }, [result.ticker.id, dispatch]);
 

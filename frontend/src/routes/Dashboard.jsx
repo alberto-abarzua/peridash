@@ -2,60 +2,63 @@ import TickerContainerBig from '@/components/tickers/TickerContainerBig';
 import TickerContainerSmall from '@/components/tickers/TickerContainerSmall';
 import TickerStatsInfo from '@/components/tickers/TickerStatsInfo';
 import { useSelector } from 'react-redux';
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from '@/components/ui/carousel';
 
 const Dashboard = () => {
     let tickerData = useSelector(state => state.ticker.userTickers);
-
+    console.log('tickerData', tickerData);
     tickerData = tickerData.filter(
         ticker => ticker.symbol.price_data !== null && ticker.symbol.eod_data !== null
     );
+    console.log('tickerData', tickerData);
 
     let favorite_tickers = tickerData.filter(ticker => ticker.ticker.is_favorite);
-
     let not_favorite_tickers = tickerData.filter(ticker => !ticker.ticker.is_favorite);
 
-    let not_favorite_tickers_1 = not_favorite_tickers.slice(
-        0,
-        Math.ceil(not_favorite_tickers.length / 2)
-    );
-    let not_favorite_tickers_2 = not_favorite_tickers.slice(
-        Math.ceil(not_favorite_tickers.length / 2),
-        not_favorite_tickers.length
-    );
+    const chunkArray = (arr, size) =>
+        Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
+            arr.slice(i * size, i * size + size)
+        );
 
-    let favorite_tickers_1 = favorite_tickers.slice(0, Math.ceil(favorite_tickers.length / 2));
-    let favorite_tickers_2 = favorite_tickers.slice(
-        Math.ceil(favorite_tickers.length / 2),
-        favorite_tickers.length
-    );
+    const favorite_tickers_slides = chunkArray(favorite_tickers, 4);
+    const not_favorite_tickers_slides = chunkArray(not_favorite_tickers, 12);
 
     return (
-        <div className="container mx-auto px-4">
-            <div className="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
-                <div className="flex flex-1 flex-col space-y-2">
-                    {favorite_tickers_1.map((ticker, index) => (
-                        <TickerContainerBig key={index} ticker_data={ticker} />
+        <div className="grid grid-cols-12">
+            <Carousel className="col-span-12 lg:col-span-7" loop={true}>
+                <CarouselContent>
+                    {favorite_tickers_slides.map((slide, slideIndex) => (
+                        <CarouselItem key={slideIndex}>
+                            <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+                                {slide.map((ticker, index) => (
+                                    <TickerContainerBig key={index} ticker_data={ticker} />
+                                ))}
+                            </div>
+                        </CarouselItem>
                     ))}
-                </div>
+                </CarouselContent>
+            </Carousel>
 
-                <div className="flex flex-1 flex-col space-y-2">
-                    {favorite_tickers_2.map((ticker, index) => (
-                        <TickerContainerBig key={index} ticker_data={ticker} />
+            <Carousel className="col-span-12 lg:col-span-5" loop={true}>
+                <CarouselContent>
+                    {not_favorite_tickers_slides.map((slide, slideIndex) => (
+                        <CarouselItem key={slideIndex}>
+                            <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+                                {slide.map((ticker, index) => (
+                                    <TickerContainerSmall key={index} ticker_data={ticker} />
+                                ))}
+                            </div>
+                        </CarouselItem>
                     ))}
-                </div>
+                </CarouselContent>
+            </Carousel>
 
-                <div className="flex flex-1 flex-col space-y-2">
-                    {not_favorite_tickers_1.map((ticker, index) => (
-                        <TickerContainerSmall key={index} ticker_data={ticker} />
-                    ))}
-                </div>
-
-                <div className="flex flex-1 flex-col space-y-2">
-                    {not_favorite_tickers_2.map((ticker, index) => (
-                        <TickerContainerSmall key={index} ticker_data={ticker} />
-                    ))}
-                </div>
-            </div>
             <TickerStatsInfo
                 stats={{ num_days: 7, last_updated: tickerData && tickerData[0].symbol.updated_at }}
             />
