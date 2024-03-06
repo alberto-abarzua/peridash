@@ -1,4 +1,5 @@
 import SegmentIcon from '@mui/icons-material/Segment';
+import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 
 import UserTicker from './UserTicker';
 import { useSelector } from 'react-redux';
@@ -14,10 +15,13 @@ const UserTickers = () => {
             </div>
 
             <div className="flex flex-col items-center justify-center gap-5">
-                {userTickers &&
-                    userTickers.map(result => (
-                        <UserTicker key={result.ticker.id} result={result} />
-                    ))}
+                <ScrollArea className="h-[800px] w-full">
+                    {userTickers &&
+                        userTickers.map(result => (
+                            <UserTicker key={result.ticker.id} result={result} />
+                        ))}
+                    <ScrollBar />
+                </ScrollArea>
             </div>
         </div>
     );
