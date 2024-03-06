@@ -1,77 +1,68 @@
-import InconTextInput from '@/components/general/inputs/IconTextInput';
 import api from '@/utils/api';
 import AddIcon from '@mui/icons-material/Add';
 import AttachMoneySharpIcon from '@mui/icons-material/AttachMoneySharp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveIcon from '@mui/icons-material/Remove';
 import SaveIcon from '@mui/icons-material/Save';
-
 import { toast } from 'sonner';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { tickerSliceActions } from '@/redux/tickerSlice';
 import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '../ui/input';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Button } from '@/components/ui/button';
+
+const formSchema = z.object({
+    favorite: z.boolean(),
+    graph: z.boolean(),
+    buy: z.number().min(0).default(0),
+    gain: z.number().min(0).default(0),
+    loss: z.number().min(0).default(0),
+});
 
 const UserTicker = ({ result }) => {
-    const [favorite, setFavorite] = useState(result.ticker.is_favorite);
-    const [buy, setBuy] = useState(result.ticker.buy || 0);
-    const [gain, setGain] = useState(result.ticker.gain || 0);
-    const [loss, setLoss] = useState(result.ticker.loss || 0);
-    const [isDirty, setIsDirty] = useState(false);
-
     const dispatch = useDispatch();
 
-    const handleBuyChange = useCallback(
-        event => {
-            setBuy(event.target.value);
-            setIsDirty(true);
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            favorite: result.ticker.is_favorite,
+            buy: result.ticker.buy || 0,
+            gain: result.ticker.gain || 0,
+            loss: result.ticker.loss || 0,
+            graph: result.ticker.show_graph,
         },
-        [setBuy, setIsDirty]
-    );
+    });
 
-    const handleGainChange = useCallback(
-        event => {
-            setGain(event.target.value);
-            setIsDirty(true);
+    const onSubmit = useCallback(
+        async data => {
+            let response = await api.put(`/user_ticker/tickers/${result.ticker.id}`, {
+                ticker_info: {
+                    show_graph: data.graph,
+                    is_favorite: data.favorite,
+                    buy: data.buy,
+                    gain: data.gain,
+                    loss: data.loss,
+                },
+            });
+
+            if (response.status === 200) {
+                dispatch(tickerSliceActions.updateTickers());
+                toast.success(`Updated Ticker ${result.symbol.symbol}`);
+            } else {
+                toast.error('Error updating ticker');
+            }
         },
-        [setGain, setIsDirty]
+        [dispatch, result]
     );
-
-    const handleLossChange = useCallback(
-        event => {
-            setLoss(event.target.value);
-            setIsDirty(true);
-        },
-        [setLoss, setIsDirty]
-    );
-
-    const handleFavorite = useCallback(async () => {
-        setFavorite(prev => !prev);
-        setIsDirty(true);
-    }, [setFavorite, setIsDirty]);
-
-    const handleSave = useCallback(async () => {
-        let response = await api.put(`/user_ticker/tickers/`, {
-            ticker_id: result.ticker.id,
-            ticker_info: {
-                is_favorite: favorite,
-                buy: buy,
-                gain: gain,
-                loss: loss,
-            },
-        });
-
-        if (response.status === 200) {
-            dispatch(tickerSliceActions.updateTickers());
-            toast.success(`Updated Ticker ${result.symbol.symbol}`);
-            setIsDirty(false);
-        } else {
-            toast.error('Error updating ticker');
-        }
-    }, [buy, dispatch, favorite, gain, loss, result]);
 
     const handleDelete = useCallback(async () => {
-        await api.delete(`/user_ticker/tickers/`, {
+        const response = await api.delete(`/user_ticker/tickers/`, {
             params: {
                 ticker_id: result.ticker.id,
             },
@@ -83,79 +74,128 @@ const UserTicker = ({ result }) => {
         }
 
         dispatch(tickerSliceActions.updateTickers());
-    }, [result.ticker.id, dispatch]);
+    }, [result.ticker.id, result.symbol, dispatch]);
 
     return (
-        <div
-            className={`group relative w-full rounded-sm border-gray-400 bg-white bg-opacity-90 px-4 py-2 shadow-sm shadow-gray-600`}
-        >
-            <div className="flex-col">
-                <div className="flex h-full w-full items-center justify-center pt-1">
-                    <div className="flex-grow self-center">
-                        <h5 className="text-lg group-hover:font-semibold">
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="relative w-[500px] rounded-lg border border-gray-300 bg-white p-6 shadow-md">
+                    <div className="mb-6 flex items-center justify-between">
+                        <h5 className="text-xl font-semibold">
                             {result.symbol.symbol + ':' + result.symbol.exchange}
                         </h5>
+                        <div className="flex items-center space-x-4">
+                            <FormField
+                                control={form.control}
+                                name="favorite"
+                                render={({ field }) => (
+                                    <FormItem className="flex items-center space-x-2">
+                                        <FormControl>
+                                            <Checkbox
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                        <FormLabel className="text-sm">Favorite</FormLabel>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="graph"
+                                render={({ field }) => (
+                                    <FormItem className="flex items-center space-x-2">
+                                        <FormControl>
+                                            <Checkbox
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                        <FormLabel className="text-sm">Show Graph</FormLabel>
+                                    </FormItem>
+                                )}
+                            />
+                            <button
+                                onClick={handleDelete}
+                                className="rounded-full text-gray-500 hover:bg-gray-100 hover:text-red-500 focus:outline-none"
+                            >
+                                <DeleteIcon className="h-6 w-6" />
+                            </button>
+                        </div>
                     </div>
-                    <div className="z-20 flex-shrink-0 self-center">
-                        <button onClick={handleFavorite}>
-                            {favorite ? (
-                                <div className="text-5xl text-yellow-500 hover:text-yellow-300">
-                                    ★
-                                </div>
-                            ) : (
-                                <div className="transform text-5xl text-gray-500 transition-all duration-100 hover:text-yellow-500">
-                                    ☆
-                                </div>
-                            )}
-                        </button>
-                    </div>
-                    <div className="flex-shrink-0 self-center pl-3">
-                        <button
-                            onClick={handleDelete}
-                            className="m-0 my-0 h-8 w-8   transform rounded-full border-none text-gray-800  hover:text-red-800 focus:border-none"
-                        >
-                            <DeleteIcon></DeleteIcon>
-                        </button>
-                    </div>
-                </div>
 
-                <div
-                    className={`w-full transform items-start transition-all duration-500 ${
-                        favorite ? 'flex' : 'hidden'
-                    }`}
-                >
-                    <div className="m-auto box-border flex w-full space-x-2">
-                        <InconTextInput
-                            icon={<AttachMoneySharpIcon />}
-                            placeholder="Buy"
-                            value={buy}
-                            onChange={handleBuyChange}
-                        />
-                        <InconTextInput
-                            icon={<AddIcon />}
-                            placeholder="Gain"
-                            value={gain}
-                            onChange={handleGainChange}
-                        />
-                        <InconTextInput
-                            icon={<RemoveIcon />}
-                            placeholder="Loss"
-                            value={loss}
-                            onChange={handleLossChange}
-                        />
+                    <div
+                        className={`transition-all duration-500 ${
+                            form.watch('favorite') ? 'block' : 'hidden'
+                        }`}
+                    >
+                        <div className="grid grid-cols-3 gap-4">
+                            <FormField
+                                control={form.control}
+                                name="buy"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="ml-2 text-sm">Buy</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                placeholder="Buy"
+                                                icon={<AttachMoneySharpIcon className="h-4 w-4" />}
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="gain"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="ml-2 text-sm">Gain</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                placeholder="Gain"
+                                                icon={<AddIcon className="h-4 w-4" />}
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="loss"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="ml-2 text-sm">Loss</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                placeholder="Loss"
+                                                icon={<RemoveIcon className="h-4 w-4" />}
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="mt-6 flex justify-end">
+                        <Button
+                            type="submit"
+                            disabled={!form.formState.isDirty}
+                            className="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700 focus:outline-none"
+                        >
+                            <SaveIcon className="mr-2 h-4 w-4" /> Save
+                        </Button>
                     </div>
                 </div>
-            </div>
-            <div className="mt-4 flex w-full flex-row items-end justify-end">
-                <button
-                    onClick={handleSave}
-                    disabled={!isDirty}
-                    className="relative left-4 scale-[0.8] transform cursor-pointer rounded-md border-none bg-green-600 px-4 py-2  text-white   hover:bg-green-700 hover:text-white focus:border-none"
-                >
-                    <SaveIcon></SaveIcon> Save
-                </button>
-            </div>
-        </div>
+            </form>
+        </Form>
     );
 };
 

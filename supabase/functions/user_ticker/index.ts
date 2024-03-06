@@ -22,6 +22,21 @@ app.use(preFlightMiddleware);
 app.use(AuthMiddleware);
 app.locals.db = dbClient;
 
+app.put(
+    "/user_ticker/tickers/:ticker_id/",
+    async (
+        req: Request,
+        res: Response,
+    ) => {
+        const user = req.user!;
+        const db = req.app.locals.db;
+        const ticker_id = req.params.ticker_id;
+        const {ticker_info} = req.body;
+        await update_user_ticker(user.id, ticker_id, ticker_info, db);
+        res.status(200).json({ message: "Ticker updated" }).end();
+    },
+);
+
 app.get(
     "/user_ticker/tickers/",
     async (
@@ -41,6 +56,8 @@ app.get(
         res.status(200).json(tickers).end();
     },
 );
+
+
 
 app.post(
     "/user_ticker/tickers/",
@@ -77,19 +94,6 @@ app.delete(
     },
 );
 
-app.put(
-    "/user_ticker/tickers/",
-    async (
-        req: Request,
-        res: Response,
-    ) => {
-        const user = req.user!;
-        const db = req.app.locals.db;
-        const { ticker_id, ticker_info } = req.body;
-        await update_user_ticker(user.id, ticker_id, ticker_info, db);
-        res.status(200).json({ message: "Ticker updated" }).end();
-    },
-);
 
 app.get(
     "/user_ticker/tickers/search/",

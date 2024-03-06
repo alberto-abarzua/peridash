@@ -7,32 +7,61 @@ import Autoplay from 'embla-carousel-autoplay';
 
 const Dashboard = () => {
     let tickerData = useSelector(state => state.ticker.userTickers);
-    console.log('tickerData', tickerData);
+
     tickerData = tickerData.filter(
         ticker => ticker.symbol.price_data !== null && ticker.symbol.eod_data !== null
     );
-    console.log('tickerData', tickerData);
 
-    let favorite_tickers = tickerData.filter(ticker => ticker.ticker.is_favorite);
-    let not_favorite_tickers = tickerData.filter(ticker => !ticker.ticker.is_favorite);
+    if (tickerData.length === 0) {
+        return <div>Loading...</div>;
+    }
+
+    let big_tickers = tickerData.filter(ticker => ticker.ticker.show_graph);
+    let small_tickers = tickerData.filter(ticker => !ticker.ticker.show_graph);
+    let big_tickers_favorite = big_tickers.filter(ticker => ticker.ticker.is_favorite);
+    let small_tickers_favorite = small_tickers.filter(ticker => ticker.ticker.is_favorite);
+    //remove the favorite items from the main list
+    big_tickers = big_tickers.filter(ticker => !ticker.ticker.is_favorite);
+    small_tickers = small_tickers.filter(ticker => !ticker.ticker.is_favorite);
 
     const chunkArray = (arr, size) =>
         Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
             arr.slice(i * size, i * size + size)
         );
 
-    const favorite_tickers_slides = chunkArray(favorite_tickers, 4);
-    const not_favorite_tickers_slides = chunkArray(not_favorite_tickers, 12);
+    const big_ticker_slides = chunkArray(big_tickers, 4);
+    const small_ticker_slides = chunkArray(small_tickers, 12);
+    const big_tickers_favorite_slides = chunkArray(big_tickers_favorite, 2);
+    const small_tickers_favorite_slides = chunkArray(small_tickers_favorite, 6);
 
     return (
-        <div className="grid grid-cols-12 gap-3 px-4">
+        <div className="mt-10 grid grid-cols-12 grid-rows-12 gap-3 px-4">
+            <div className="col-span-12 row-span-4 lg:col-span-7">
+                <Carousel
+                    className="col-span-12 row-span-8 lg:col-span-7"
+                    loop={true}
+                    plugins={[Autoplay({ palyOnInit: true, delay: 8000 })]}
+                >
+                    <CarouselContent>
+                        {big_tickers_favorite_slides.map((slide, slideIndex) => (
+                            <CarouselItem key={slideIndex}>
+                                <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+                                    {slide.map((ticker, index) => (
+                                        <TickerContainerBig key={index} ticker_data={ticker} />
+                                    ))}
+                                </div>
+                            </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                </Carousel>
+            </div>
             <Carousel
-                className="col-span-12 lg:col-span-7"
+                className="col-span-12 row-span-8 lg:col-span-7"
                 loop={true}
                 plugins={[Autoplay({ palyOnInit: true, delay: 8000 })]}
             >
                 <CarouselContent>
-                    {favorite_tickers_slides.map((slide, slideIndex) => (
+                    {big_ticker_slides.map((slide, slideIndex) => (
                         <CarouselItem key={slideIndex}>
                             <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
                                 {slide.map((ticker, index) => (
@@ -44,9 +73,28 @@ const Dashboard = () => {
                 </CarouselContent>
             </Carousel>
 
+            <div className="col-span-12 row-span-4 lg:col-span-7">
+                <Carousel
+                    className="col-span-12 row-span-8 lg:col-span-7"
+                    loop={true}
+                    plugins={[Autoplay({ palyOnInit: true, delay: 8000 })]}
+                >
+                    <CarouselContent>
+                        {small_tickers_favorite_slides.map((slide, slideIndex) => (
+                            <CarouselItem key={slideIndex}>
+                                <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+                                    {slide.map((ticker, index) => (
+                                        <TickerContainerSmall key={index} ticker_data={ticker} />
+                                    ))}
+                                </div>
+                            </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                </Carousel>
+            </div>
             <Carousel className="col-span-12 lg:col-span-5" loop={true}>
                 <CarouselContent>
-                    {not_favorite_tickers_slides.map((slide, slideIndex) => (
+                    {small_ticker_slides.map((slide, slideIndex) => (
                         <CarouselItem key={slideIndex}>
                             <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
                                 {slide.map((ticker, index) => (

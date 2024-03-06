@@ -49,10 +49,11 @@ export const symbol = peridashSchema.table('symbol', {
 export const ticker = peridashSchema.table('ticker', {
   id: uuid('id').defaultRandom().primaryKey(),
   is_favorite: boolean('is_favorite').default(false),
+  show_graph: boolean('show_graph').default(false), 
   symbol_id: uuid('symbol_id'),
-  buy: doublePrecision('buy'),
-  gain: doublePrecision('gain'),
-  loss: doublePrecision('loss'),
+  buy: doublePrecision('buy').default(0),
+  gain: doublePrecision('gain').default(0),
+  loss: doublePrecision('loss').default(0),
 });
 
 export const tickerRelations = relations(ticker, ({one,many}) => ({

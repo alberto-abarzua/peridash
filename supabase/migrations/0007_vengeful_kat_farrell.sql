@@ -1,0 +1,1 @@
+ALTER TABLE "peridash"."ticker" ADD COLUMN "show_graph" boolean DEFAULT false;

@@ -50,6 +50,20 @@
       "when": 1708892551882,
       "tag": "0006_talented_dragon_lord",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1709749846833,
+      "tag": "0007_vengeful_kat_farrell",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1709750874008,
+      "tag": "0008_safe_tyger_tiger",
+      "breakpoints": true
     }
   ]
 }
