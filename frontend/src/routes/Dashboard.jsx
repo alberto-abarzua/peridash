@@ -53,6 +53,7 @@ const Dashboard = () => {
                     ))}
                 </CarouselContent>
             </Carousel>
+
             <Carousel
                 className="col-span-12 row-span-8 lg:col-span-7"
                 loop={true}
