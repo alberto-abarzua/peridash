@@ -80,7 +80,7 @@ const Dashboard = () => {
                 <CarouselContent>
                     {small_tickers_favorite_slides.map((slide, slideIndex) => (
                         <CarouselItem key={slideIndex}>
-                            <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+                            <div className="grid grid-cols-1 gap-2 rounded-md border border-yellow-500/20  lg:grid-cols-2">
                                 {slide.map((ticker, index) => (
                                     <TickerContainerSmall key={index} ticker_data={ticker} />
                                 ))}
