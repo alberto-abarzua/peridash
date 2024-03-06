@@ -15,10 +15,12 @@ const UserTickers = () => {
             </div>
 
             <ScrollArea className="flex h-[800px] w-full flex-col items-center justify-center gap-5">
-                {userTickers &&
-                    userTickers.map(result => (
-                        <UserTicker key={result.ticker.id} result={result} />
-                    ))}
+                <div className="flex w-full flex-col items-center justify-center gap-5">
+                    {userTickers &&
+                        userTickers.map(result => (
+                            <UserTicker key={result.ticker.id} result={result} />
+                        ))}
+                </div>
                 <ScrollBar />
             </ScrollArea>
         </div>
