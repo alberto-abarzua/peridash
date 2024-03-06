@@ -9,9 +9,11 @@ const UserTickers = () => {
     const userTickers = useSelector(state => state.ticker.userTickers);
     const [value, setValue] = useState('');
 
-    const filteredTickers = userTickers.filter(result =>
-        result.symbol.symbol.toLowerCase().includes(value.toLowerCase())
-    );
+    const filteredTickers = userTickers.filter(result => {
+        const name = `${result.symbol.symbol}:${result.symbol.exchange}`;
+
+        return name.toLowerCase().includes(value.toLowerCase());
+    });
 
     return (
         <div className="flex w-full flex-col gap-10 rounded-md border border-gray-500 bg-gray-700 bg-opacity-85 px-2 py-10 shadow-sm shadow-gray-600 lg:px-10">
