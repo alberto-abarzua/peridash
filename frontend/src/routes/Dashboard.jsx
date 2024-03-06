@@ -29,7 +29,7 @@ const Dashboard = () => {
             <Carousel
                 className="col-span-12 lg:col-span-7"
                 loop={true}
-                plugins={[Autoplay({ palyOnInit: true, delay: 3000 })]}
+                plugins={[Autoplay({ palyOnInit: true, delay: 8000 })]}
             >
                 <CarouselContent>
                     {favorite_tickers_slides.map((slide, slideIndex) => (
