@@ -86,9 +86,9 @@ const UserTicker = ({ result }) => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="relative w-[500px] rounded-lg border border-gray-300 bg-white p-6 shadow-md">
-                    <div className="mb-6 flex items-center justify-between">
-                        <h5 className="text-xl font-semibold">
+                <div className="relative w-full  rounded-lg border border-gray-300 bg-white p-6 shadow-md lg:w-[500px]">
+                    <div className="mb-6 flex items-center justify-between gap-x-4">
+                        <h5 className=" text-md font-semibold lg:text-xl">
                             {result.symbol.symbol + ':' + result.symbol.exchange}
                         </h5>
                         <div className="flex items-center space-x-4">
