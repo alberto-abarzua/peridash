@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import SymbolSearchResult from './SymbolSearchResult';
 import { useDispatch } from 'react-redux';
 import { tickerSliceActions } from '@/redux/tickerSlice';
+import { ScrollArea } from '../ui/scroll-area';
 
 const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -85,17 +86,21 @@ const SearchBar = () => {
                     isModalOpen ? 'block' : 'hidden'
                 }`}
             >
-                {searchResults.map((result, index) => (
-                    <SymbolSearchResult
-                        result={result}
-                        key={index}
-                        onClick={handleSearchResultClick}
-                    />
-                ))}
-
-                <div className="absolute -top-0 right-1" onClick={() => handleModalClose()}>
+                <div className="absolute right-1 top-1" onClick={() => handleModalClose()}>
                     <CloseIcon className="scale-110 transform cursor-pointer  text-white  hover:text-black" />
                 </div>
+                <h1 className="text-3xl font-semibold text-white">Search Results</h1>
+                <ScrollArea className="my-3 h-[800px] w-full rounded-md border border-gray-300 px-10 py-4 shadow-lg">
+                    <div className="flex w-full flex-col gap-y-3 px-10">
+                        {searchResults.map((result, index) => (
+                            <SymbolSearchResult
+                                result={result}
+                                key={index}
+                                onClick={handleSearchResultClick}
+                            />
+                        ))}
+                    </div>
+                </ScrollArea>
             </div>
         </div>
     );

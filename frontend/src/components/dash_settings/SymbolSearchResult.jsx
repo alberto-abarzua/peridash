@@ -9,14 +9,14 @@ const SymbolSearchResult = ({ result, onClick }) => {
 
     return (
         <div
-            className={`w-full rounded-lg border border-gray-400 px-4 py-2 lg:w-[700px]  ${
+            className={`w-full rounded-lg bg-opacity-60 px-4  py-2 shadow-lg drop-shadow-lg lg:w-[700px]  ${
                 isBasicPlan
-                    ? 'bg-gray-600 text-white '
+                    ? 'bg-emerald-400 text-white '
                     : 'pointer-events-none cursor-not-allowed bg-red-200 text-gray-800 '
-            } m-auto max-w-4xl transform cursor-pointer hover:translate-x-4 hover:bg-gray-700 `}
+            } m-auto max-w-4xl transform cursor-pointer hover:translate-x-4 `}
             onClick={thisOnClick}
         >
-            <h6 className="-underline-offset-1 text-2xl font-semibold underline">
+            <h6 className="-underline-offset-1 text-xl font-semibold underline underline-offset-4 ">
                 {result.symbol} - {result.instrument_name}
             </h6>
             <div className="mt-2 flex justify-between">
