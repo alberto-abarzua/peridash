@@ -74,6 +74,11 @@ const TickerContainerBig = ({ ticker_data }) => {
     maxHighValue += maxHighValue * 0.03;
 
     const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+            padding: 0,
+        },
         scales: {
             y: {
                 min: minHighValue,
@@ -147,11 +152,7 @@ const TickerContainerBig = ({ ticker_data }) => {
         <div className="w-full rounded bg-darker-600 p-0 text-white">
             <TickerCoreInfo ticker_data={ticker_data}></TickerCoreInfo>
             <div className="m-0 flex h-[200px] w-full  justify-center p-0">
-                <Line
-                    className=" m-0 scale-[1.08] transform p-0"
-                    data={chartData}
-                    options={options}
-                />
+                <Line className=" m-0 p-0" data={chartData} options={options} />
             </div>
         </div>
     );
