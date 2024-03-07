@@ -144,10 +144,14 @@ const TickerContainerBig = ({ ticker_data }) => {
     };
 
     return (
-        <div className=" h-full">
-            <div className="rounded bg-darker-600 p-0 text-white ">
-                <TickerCoreInfo ticker_data={ticker_data}></TickerCoreInfo>
-                <Line className="m-0 p-0" data={chartData} options={options} />
+        <div className="w-full rounded bg-darker-600 p-0 text-white">
+            <TickerCoreInfo ticker_data={ticker_data}></TickerCoreInfo>
+            <div className="m-0 flex h-[200px] w-full  justify-center p-0">
+                <Line
+                    className=" m-0 scale-[1.08] transform p-0"
+                    data={chartData}
+                    options={options}
+                />
             </div>
         </div>
     );
