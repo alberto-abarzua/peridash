@@ -19,7 +19,7 @@ s = Service("/usr/lib/chromium-browser/chromedriver")
 driver = webdriver.Chrome(chrome_options, service=s)
 
 # Open your website
-driver.get("https://www.peridash.com/")
+driver.get("https://www.peridash.com/login/")
 
 # Find the username and password fields and fill them out
 username = driver.find_element(By.NAME, "email")

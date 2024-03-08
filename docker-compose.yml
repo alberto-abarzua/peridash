@@ -8,6 +8,7 @@ services:
       - ./frontend/src:/app/src
       - ./frontend/index.html:/app/index.html
       - ./frontend/package.json:/app/package.json
+      - ./frontend/public/:/app/public/
       - ./frontend/package-lock.json:/app/package-lock.json
       - ./frontend/tailwind.config.js:/app/tailwind.config.js
       - ./frontend/components.json:/app/components.json
