@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userSliceActions } from '@/redux/userSlice';
 import { tickerSliceActions } from '@/redux/tickerSlice';
 import supabase from '@/utils/supabase/client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 
 const formSchema = z.object({
     email: z.string().email(),
@@ -30,9 +30,6 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
-    if (user.session) {
-        navigate('/live/dashboard');
-    }
 
     const [loading, setLoading] = useState(false);
 
@@ -63,6 +60,10 @@ const LoginForm = () => {
         setLoading(false);
         navigate('/live/dashboard');
     };
+    console.log(user);
+    if (user.session) {
+        return <Navigate to="/live/dashboard" />;
+    }
 
     return (
         <Form {...form}>

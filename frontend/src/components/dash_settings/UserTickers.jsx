@@ -10,7 +10,6 @@ const UserTickers = () => {
     const [value, setValue] = useState('');
 
     const filteredTickers = userTickers.filter(result => {
-        console.log(result.symbol);
         const name = `${result.symbol.symbol}:${result.symbol.exchange}`;
 
         return name.toLowerCase().includes(value.toLowerCase());
