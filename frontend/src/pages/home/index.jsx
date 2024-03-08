@@ -1,4 +1,3 @@
-import { ChevronRightIcon } from '@heroicons/react/20/solid';
 const Home = () => {
     return (
         <div className="relative isolate h-full overflow-hidden bg-gray-900">

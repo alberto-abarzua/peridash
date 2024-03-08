@@ -3,7 +3,7 @@ import { useRouteError } from 'react-router-dom';
 export default function ErrorPage() {
     const error = useRouteError();
     console.error(error);
-    console.log("he")
+    console.log('he');
 
     return (
         <div id="error-page" className="flex h-screen w-full items-center justify-center ">
