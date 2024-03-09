@@ -27,7 +27,7 @@ api.interceptors.response.use(
     },
     error => {
         if (error.response && error.response.status === 401) {
-            store.dispatch(userSliceActions.logout());
+            // store.dispatch(userSliceActions.logout());
             return;
         }
         store.dispatch(userSliceActions.updateSession());
