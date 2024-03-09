@@ -29,8 +29,9 @@ export function* refreshSessionSaga() {
             yield put(userSliceActions.setUserSession(session));
 
             if (session) {
-                const timeUntilExpiration =
-                    new Date(session.expires_at).getTime() - new Date().getTime();
+                const expiresAt = session.expires_at;
+                const currentTime = Math.floor(Date.now() / 1000);
+                const timeUntilExpiration = expiresAt - currentTime;
 
                 if (timeUntilExpiration > 200) {
                     yield delay(timeUntilExpiration * 1000 * 0.8);
