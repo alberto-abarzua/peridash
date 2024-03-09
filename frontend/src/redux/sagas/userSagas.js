@@ -32,9 +32,9 @@ export function* refreshSessionSaga() {
                 const timeUntilExpiration = session.expires_in;
                 console.log('Time until expiration:', timeUntilExpiration);
 
-                if (timeUntilExpiration > 300) {
-                    console.log('Refreshing session in 10% of time until expiration');  
-                    yield delay(timeUntilExpiration * 1000 * 0.1);
+                if (timeUntilExpiration > 200) {
+                    console.log('Refreshing session in 80% of time until expiration');
+                    yield delay(timeUntilExpiration * 1000 * 0.8);
                     console.log('Refreshing session now');
                 }
 
