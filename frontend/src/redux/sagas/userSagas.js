@@ -43,6 +43,7 @@ export function* refreshSessionSaga() {
                     console.error('Session refresh error:', refreshError);
                     yield put(userSliceActions.logout());
                 } else {
+                    console.log('Session refreshed:', refreshedSession);
                     yield put(userSliceActions.setUserSession(refreshedSession));
                 }
             } else {
