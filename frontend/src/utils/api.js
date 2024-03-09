@@ -2,6 +2,7 @@ import axios from 'axios';
 const baseUrl = import.meta.env.VITE_SUPABASE_URL + '/functions/v1/';
 import store from '@/redux/store';
 import { userSliceActions } from '@/redux/slices/userSlice';
+import supabase from './supabase/client';
 
 const api = axios.create({
     baseURL: baseUrl,
@@ -27,7 +28,18 @@ api.interceptors.response.use(
     },
     error => {
         if (error.response && error.response.status === 401) {
-            store.dispatch(userSliceActions.logout());
+            const {
+                data: { session: refreshedSession },
+                error: refreshError,
+            } = supabase.auth.refreshSession();
+
+            if (refreshError) {
+                console.error('Session refresh error:', refreshError);
+                store.dispatch(userSliceActions.logout());
+                return;
+            }
+            store.dispatch(userSliceActions.setUserSession(refreshedSession));
+
             return;
         }
         return Promise.reject(error);

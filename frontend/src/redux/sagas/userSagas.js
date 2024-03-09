@@ -25,13 +25,15 @@ export function* refreshSessionSaga() {
             const {
                 data: { session },
             } = yield call([supabase.auth, supabase.auth.getSession]);
+
             yield put(userSliceActions.setUserSession(session));
 
             if (session) {
-                const timeUntilExpiration = session.expires_in;
+                const timeUntilExpiration =
+                    new Date(session.expires_at).getTime() - new Date().getTime();
 
                 if (timeUntilExpiration > 200) {
-                    yield delay(timeUntilExpiration * 1000 * 0.8);
+                    yield delay(timeUntilExpiration * 1000 * 0.6);
                 }
 
                 const {
