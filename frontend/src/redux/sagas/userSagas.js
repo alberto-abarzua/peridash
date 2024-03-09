@@ -31,7 +31,7 @@ export function* refreshSessionSaga() {
                 const timeUntilExpiration = session.expires_in;
 
                 if (timeUntilExpiration > 300) {
-                    yield delay((timeUntilExpiration - 300) * 1000); // Wait until 5 minutes before expiration
+                    yield delay(timeUntilExpiration * 1000 * 0.1);
                 }
 
                 const {
