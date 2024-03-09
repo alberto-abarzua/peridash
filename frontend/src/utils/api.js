@@ -28,6 +28,7 @@ api.interceptors.response.use(
     },
     error => {
         if (error.response && error.response.status === 401) {
+            console.error('Unauthorized request:', error);
             const {
                 data: { session: refreshedSession },
                 error: refreshError,

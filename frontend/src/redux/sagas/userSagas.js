@@ -33,7 +33,7 @@ export function* refreshSessionSaga() {
                     new Date(session.expires_at).getTime() - new Date().getTime();
 
                 if (timeUntilExpiration > 200) {
-                    yield delay(timeUntilExpiration * 1000 * 0.6);
+                    yield delay(timeUntilExpiration * 1000 * 0.8);
                 }
 
                 const {
