@@ -14,22 +14,21 @@ export const transporter = createTransport({
 export const html_template = (tickerData: NotificationInfo[]) => {
     const tickers = tickerData
         .map(
-            (ticker) =>{
-            
-           return `
+            (ticker) => {
+                return `
     <div class="ticker">
       <div class="ticker-name">${ticker.symbol} (${ticker.exchange})</div>
       <div class="ticker-details">
-        <p>Current Price: ${ticker.current_price}</p>
+        <p>Current Price: ${ticker.current_price.toFixed(2)}</p>
         <p>Buy Price: ${ticker.set_prices.buy}</p>
         <p>Gain Price: ${ticker.set_prices.gain}</p>
         <p>Loss Price: ${ticker.set_prices.loss}</p>
         <p>Trigger Reason: <span class="ticker-reason">${ticker.reason}</span></p>
-        <p>Percentage Difference: ${ticker.price_diff}%</p>
+        <p>Percentage Difference: ${ticker.price_diff.toFixed(2)}%</p>
       </div>
     </div>
   `;
-            } ,
+            },
         )
         .join("");
 

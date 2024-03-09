@@ -66,7 +66,7 @@ export interface StockValue {
     high: string;
     low: string;
     open: string;
-    previous_close:string;
+    previous_close: string;
     volume: string;
 }
 
@@ -372,11 +372,11 @@ export const getUserNotificationInfo = async (
         let reason = null;
 
         if (current_price >= user_ticker.ticker.gain! && user_ticker.ticker.gain !== 0) {
-          reason = "gain"; // price were to go above the gain price
+            reason = "gain"; // price were to go above the gain price
         } else if (current_price <= user_ticker.ticker.loss! && user_ticker.ticker.loss !== 0) {
-          reason = "loss"; // price were to go below the loss price
+            reason = "loss"; // price were to go below the loss price
         } else if (current_price <= user_ticker.ticker.buy! && user_ticker.ticker.buy !== 0) {
-          reason = "buy"; // price were to go below the buy price
+            reason = "buy"; // price were to go below the buy price
         }
 
         let last_diff = last_notification_info.previous_price -
