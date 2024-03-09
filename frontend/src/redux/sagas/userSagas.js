@@ -52,7 +52,8 @@ export function* refreshSessionSaga() {
                 }
             } else {
                 yield put(userSliceActions.logout());
-                return;
+                yield delay(1000);
+                continue;
             }
         } catch (error) {
             console.error('Error refreshing session:', error);
