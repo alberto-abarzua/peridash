@@ -27,15 +27,11 @@ export function* refreshSessionSaga() {
             } = yield call([supabase.auth, supabase.auth.getSession]);
             yield put(userSliceActions.setUserSession(session));
 
-            console.log('Session:', session);
             if (session) {
                 const timeUntilExpiration = session.expires_in;
-                console.log('Time until expiration:', timeUntilExpiration);
 
                 if (timeUntilExpiration > 200) {
-                    console.log('Refreshing session in 80% of time until expiration');
                     yield delay(timeUntilExpiration * 1000 * 0.8);
-                    console.log('Refreshing session now');
                 }
 
                 const {
@@ -47,12 +43,11 @@ export function* refreshSessionSaga() {
                     console.error('Session refresh error:', refreshError);
                     yield put(userSliceActions.logout());
                 } else {
-                    console.log('Session refreshed:', refreshedSession);
                     yield put(userSliceActions.setUserSession(refreshedSession));
                 }
             } else {
                 yield put(userSliceActions.logout());
-                yield delay(1000);
+                yield delay(5000);
                 continue;
             }
         } catch (error) {
