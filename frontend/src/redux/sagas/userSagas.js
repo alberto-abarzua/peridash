@@ -46,14 +46,13 @@ export function* refreshSessionSaga() {
                     yield put(userSliceActions.setUserSession(refreshedSession));
                 }
             } else {
-                yield put(userSliceActions.logout());
                 yield delay(5000);
                 continue;
             }
         } catch (error) {
             console.error('Error refreshing session:', error);
-            yield put(userSliceActions.logout());
-            return;
+            yield delay(5000);
+            continue;
         }
     }
 }
