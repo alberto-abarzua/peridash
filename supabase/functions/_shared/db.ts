@@ -61,13 +61,13 @@ export interface StockData {
 }
 
 export interface StockValue {
-    close: number;
+    close: string;
     datetime: string;
-    high: number;
-    low: number;
-    open: number;
-    previous_close: number;
-    volume: number;
+    high: string;
+    low: string;
+    open: string;
+    previous_close:string;
+    volume: string;
 }
 
 //  DB Client
@@ -367,16 +367,16 @@ export const getUserNotificationInfo = async (
         }
         const price_data = user_ticker.symbol.price_data as StockData;
 
-        const current_price = price_data.values[0].close;
+        const current_price = parseFloat(price_data.values[0].close);
 
         let reason = null;
 
-        if (current_price <= user_ticker.ticker.buy!) {
-            reason = "buy";
-        } else if (current_price >= user_ticker.ticker.gain!) {
-            reason = "gain";
-        } else if (current_price <= user_ticker.ticker.loss!) {
-            reason = "loss";
+        if (current_price >= user_ticker.ticker.gain! && user_ticker.ticker.gain !== 0) {
+          reason = "gain"; // price were to go above the gain price
+        } else if (current_price <= user_ticker.ticker.loss! && user_ticker.ticker.loss !== 0) {
+          reason = "loss"; // price were to go below the loss price
+        } else if (current_price <= user_ticker.ticker.buy! && user_ticker.ticker.buy !== 0) {
+          reason = "buy"; // price were to go below the buy price
         }
 
         let last_diff = last_notification_info.previous_price -
