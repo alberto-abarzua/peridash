@@ -131,11 +131,7 @@ const UserTicker = ({ result }) => {
                         </div>
                     </div>
 
-                    <div
-                        className={`transition-all duration-500 ${
-                            form.watch('favorite') ? 'block' : 'hidden'
-                        }`}
-                    >
+                    <div className={`transition-all duration-500 `}>
                         <div className="grid grid-cols-3 gap-4">
                             <FormField
                                 control={form.control}
