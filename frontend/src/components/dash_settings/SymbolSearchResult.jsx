@@ -4,6 +4,7 @@ const SymbolSearchResult = ({ result, onClick }) => {
     const isBasicPlan =
         result.access.plan.toLowerCase() === 'basic' || result.access.plan.toLowerCase() === 'grow';
     let thisOnClick = () => {
+        console.log('clicked');
         onClick(result.symbol, result.exchange, result.mic_code);
     };
 

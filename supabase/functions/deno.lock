@@ -3,7 +3,6 @@
   "packages": {
     "specifiers": {
       "npm:@supabase/supabase-js": "npm:@supabase/supabase-js@2.39.7",
-      "npm:@supabase/supabase-js@2.39.6": "npm:@supabase/supabase-js@2.39.6",
       "npm:@supabase/supabase-js@2.39.7": "npm:@supabase/supabase-js@2.39.7",
       "npm:@types/express@4.17.21": "npm:@types/express@4.17.21",
       "npm:axios@1.6.7": "npm:axios@1.6.7",
@@ -49,17 +48,6 @@
         "integrity": "sha512-OpLoDRjFwClwc2cjTJZG8XviTiQH4Ik8sCiMK5v7et0MDu2QlXjCAW3ljxJB5+z/KazdMOTnySi+hysxWUPu3w==",
         "dependencies": {
           "@supabase/node-fetch": "@supabase/node-fetch@2.6.15"
-        }
-      },
-      "@supabase/supabase-js@2.39.6": {
-        "integrity": "sha512-HlflDzem0+l3KYYTqHV0UsqkDooV9my5UcBCV2zvvTrl77UtW97uKTZWn9lSWMuiy+ZvRLsiuG+WTiBuKMQl0Q==",
-        "dependencies": {
-          "@supabase/functions-js": "@supabase/functions-js@2.1.5",
-          "@supabase/gotrue-js": "@supabase/gotrue-js@2.62.2",
-          "@supabase/node-fetch": "@supabase/node-fetch@2.6.15",
-          "@supabase/postgrest-js": "@supabase/postgrest-js@1.9.2",
-          "@supabase/realtime-js": "@supabase/realtime-js@2.9.3",
-          "@supabase/storage-js": "@supabase/storage-js@2.5.5"
         }
       },
       "@supabase/supabase-js@2.39.7": {
@@ -627,12 +615,5 @@
     "https://deno.land/x/axiod@0.26.2/mod.ts": "1175ec90a040d764b9940753f8d8e3f37a2328a0536eed48e411a8f1a3e9e5cb",
     "https://deno.land/x/axiod@0.26.2/mods/url-join.ts": "c925b2dd0bd490093d084bd4c74a9502260e014d5e760a4951b3e7c8ab3ca43f",
     "https://deno.land/x/url_join@1.0.0/mod.ts": "d3c7007e3ab15594e54d5b90dce623b3e274a726e0cdf57858e7ecab77a0166c"
-  },
-  "workspace": {
-    "dependencies": [
-      "npm:@supabase/supabase-js@2.39.6",
-      "npm:drizzle-orm@0.29.1",
-      "npm:postgres@3.4.3"
-    ]
   }
 }

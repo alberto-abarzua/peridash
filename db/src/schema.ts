@@ -54,7 +54,10 @@ export const ticker = peridashSchema.table('ticker', {
   buy: doublePrecision('buy').default(0),
   gain: doublePrecision('gain').default(0),
   loss: doublePrecision('loss').default(0),
+  last_notification_info: json('last_notification_info').default({last_sent: new Date(0),reason: '',previous_price:0}),    // here reason can be 'buy', 'gain', 'loss
+
 });
+
 
 export const tickerRelations = relations(ticker, ({one,many}) => ({
     symbol: one(symbol, {
@@ -74,6 +77,7 @@ export const tickerSettings = peridashSchema.table('ticker_settings', {
   user_id: uuid('user_id').references(()=>users.id),
   plot_range: integer('plot_range').default(7),
   carousel_time: integer('carousel_time').default(8),
+  notification_emails: json('notification_emails').default([]),
 
 });
 

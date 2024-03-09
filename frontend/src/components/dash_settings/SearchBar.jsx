@@ -44,11 +44,16 @@ const SearchBar = () => {
         setSearchResults([]);
         setSearchTerm('');
         setIsModalOpen(false);
-        let response = await api.post('/user_ticker/tickers/', {
-            ticker_info: { symbol, exchange, mic_code },
-        });
-        if (response.status === 200) {
-            dispatch(tickerSliceActions.updateTickers());
+        try {
+            let response = await api.post('/user_ticker/tickers/', {
+                ticker_info: { symbol, exchange, mic_code },
+            });
+            console.log(response);
+            if (response.status === 200) {
+                dispatch(tickerSliceActions.updateTickers());
+            }
+        } catch (e) {
+            console.log(e);
         }
     };
 

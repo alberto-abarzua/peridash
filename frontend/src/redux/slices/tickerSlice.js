@@ -4,6 +4,7 @@ export const tickerSlice = createSlice({
     name: 'ticker',
     initialState: {
         userTickers: [],
+        nonFilteredTickers: [],
         loading: true,
         userSettings: { plot_range: 7, carousel_time: 8 },
         lastUpdated: null,
@@ -16,6 +17,7 @@ export const tickerSlice = createSlice({
         setUserTickers: (state, action) => {
             const { tickers, userSettings } = action.payload;
             let tickerData = tickers;
+            state.nonFilteredTickers = tickerData;
             const { plot_range } = userSettings;
             state.userSettings = userSettings;
             state.loading = false;

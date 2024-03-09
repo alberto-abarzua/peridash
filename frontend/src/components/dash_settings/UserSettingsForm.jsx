@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
     Form,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -29,22 +30,28 @@ const formSchema = z.object({
         .refine(value => value > 0 && value < 30, {
             message: 'Carousel time must be between 1 and 30 seconds',
         }),
+    notification_email: z.string().min(4),
 });
 
 const UserSettingsForm = () => {
     const dispatch = useDispatch();
     const { userSettings } = useSelector(state => state.ticker);
+    console.log('userSettings:', userSettings);
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             plot_range: userSettings.plot_range.toString(),
             carousel_time: userSettings.carousel_time.toString(),
+            notification_email: userSettings.notification_emails[0] || '',
         },
     });
 
     const onSubmit = async data => {
+        const { notification_email, ...rest } = data;
         try {
-            await api.put('/user_ticker/settings/', { new_settings: { ...data } });
+            await api.put('/user_ticker/settings/', {
+                new_settings: { ...rest, notification_emails: notification_email.split(',') },
+            });
             toast.success('User settings updated');
             dispatch(tickerSliceActions.updateTickers());
         } catch (error) {
@@ -84,6 +91,23 @@ const UserSettingsForm = () => {
                                         value={field.value.toString()}
                                     />
                                 </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="notification_email"
+                        render={({ field }) => (
+                            <FormItem className="w-fit">
+                                <FormLabel className="text-white">Notification Email</FormLabel>
+                                <FormControl>
+                                    <Input type="text" {...field} value={field.value.toString()} />
+                                </FormControl>
+                                <FormDescription className="text-gray-300">
+                                    Can be multiple emails separated by commas
+                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}

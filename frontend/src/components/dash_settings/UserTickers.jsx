@@ -6,7 +6,8 @@ import { useSelector } from 'react-redux';
 import { Command, CommandInput } from '@/components/ui/command';
 
 const UserTickers = () => {
-    const userTickers = useSelector(state => state.ticker.userTickers);
+    const userTickers = useSelector(state => state.ticker.nonFilteredTickers);
+    console.log(userTickers);
     const [value, setValue] = useState('');
 
     const filteredTickers = userTickers.filter(result => {

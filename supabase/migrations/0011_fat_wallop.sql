@@ -1,0 +1,2 @@
+ALTER TABLE "peridash"."ticker" ADD COLUMN "last_notification_info" json DEFAULT '{"last_sent":"1970-01-01T00:00:00.000Z","reason":""}'::json;--> statement-breakpoint
+ALTER TABLE "peridash"."ticker_settings" ADD COLUMN "notification_emails" json DEFAULT '[]'::json;

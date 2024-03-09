@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, ne, or } from "drizzle-orm";
 
 import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
@@ -17,6 +17,27 @@ export type TickerSettings = typeof tickerSettings.$inferSelect;
 export type TickerSettingsToTicker = typeof tickerSettingsToTicker.$inferSelect;
 export type NewTickerSettingsToTicker = typeof tickerSettingsToTicker.$inferInsert;
 export type NewTicker = typeof ticker.$inferInsert;
+
+export type NotificationInfo = {
+    emails_to: string[];
+    last_sent: Date;
+    reason: string;
+    price_diff: number;
+    current_price: number;
+    set_prices: {
+        buy: number;
+        gain: number;
+        loss: number;
+    };
+    symbol: string;
+    exchange: string;
+};
+
+export type LastNotificationInfo = {
+    last_sent: Date;
+    reason: string;
+    previous_price: number;
+};
 
 export type TickerWithSettings = {
     ticker: Ticker;
@@ -82,7 +103,6 @@ export const get_or_create_user_ticker_settings = async (
         const new_settings: NewTickerSettings = {
             user_id,
             plot_range: 7,
-            stats_range: 7,
         };
         await db.insert(tickerSettings).values(new_settings);
     }
@@ -177,6 +197,31 @@ export const get_user_list_of_tickers = async (
     return tickers as TickerWithSettings[];
 };
 
+// we need get_user_list_of_notifiable_tickers (ones where either buy, gain or loss is ne 0)
+
+export const get_user_list_of_notifiable_tickers = async (
+    user_id: string,
+    db: PostgresJsDatabase,
+): Promise<TickerWithSettings[]> => {
+    const settings = await get_or_create_user_ticker_settings(user_id, db);
+    const tickers = await db.select().from(tickerSettingsToTicker)
+        .leftJoin(ticker, eq(tickerSettingsToTicker.ticker_id, ticker.id)).leftJoin(
+            symbol,
+            eq(ticker.symbol_id, symbol.id),
+        )
+        .where(
+            and(
+                eq(tickerSettingsToTicker.ticker_settings_id, settings.id),
+                or(
+                    ne(ticker.buy, 0),
+                    ne(ticker.gain, 0),
+                    ne(ticker.loss, 0),
+                ),
+            ),
+        );
+    return tickers as TickerWithSettings[];
+};
+
 // =========================--
 //      Delete
 // =========================--
@@ -229,6 +274,13 @@ export const update_user_ticker = async (
     const found_ticker = user_tickers.find((ticker) => ticker.ticker.id === ticker_id);
     if (!found_ticker) {
         throw new Error("Ticker not found");
+    }
+    // if new ticker info has a different value on buy, gain or loss, we need to clear the last_notification_info
+    if (
+        new_ticker_info.buy !== found_ticker.ticker.buy ||
+        new_ticker_info.gain !== found_ticker.ticker.gain || new_ticker_info.loss !== found_ticker.ticker.loss
+    ) {
+        new_ticker_info.last_notification_info = { last_sent: new Date(), reason: "", previous_price: 0 };
     }
     await db.update(ticker).set(new_ticker_info).where(eq(ticker.id, ticker_id)).execute();
 };
@@ -289,4 +341,104 @@ export const update_eod = async (
         ).execute();
     });
     return true;
+};
+
+// =========================--
+//     Notifications
+//     - Email
+// ===========================
+//
+
+// get the notificationInfo for the user
+//
+export const getUserNotificationInfo = async (
+    user_id: string,
+    db: PostgresJsDatabase,
+): Promise<NotificationInfo[]> => {
+    const user_tickers = await get_user_list_of_notifiable_tickers(user_id, db);
+    // get the users ticker settigns
+    const { notification_emails } = await get_or_create_user_ticker_settings(user_id, db);
+
+    const notifications: NotificationInfo[] = [];
+    user_tickers.forEach((user_ticker) => {
+        const last_notification_info = user_ticker.ticker.last_notification_info as LastNotificationInfo;
+        if (user_ticker.symbol.price_data === null) {
+            return;
+        }
+        const price_data = user_ticker.symbol.price_data as StockData;
+
+        const current_price = price_data.values[0].close;
+
+        let reason = null;
+
+        if (current_price <= user_ticker.ticker.buy!) {
+            reason = "buy";
+        } else if (current_price >= user_ticker.ticker.gain!) {
+            reason = "gain";
+        } else if (current_price <= user_ticker.ticker.loss!) {
+            reason = "loss";
+        }
+
+        let last_diff = last_notification_info.previous_price -
+            user_ticker.ticker[reason as "buy" | "gain" | "loss"]!;
+        let current_diff = current_price - user_ticker.ticker[reason as "buy" | "gain" | "loss"]!;
+        last_diff = (last_diff / last_notification_info.previous_price) * 100;
+
+        current_diff = (current_diff / current_price) * 100;
+
+        if (reason === last_notification_info.reason) {
+            if (Math.abs(last_diff - current_diff) < 1) {
+                return;
+            }
+        }
+        if (!reason) {
+            return;
+        }
+
+        const new_notification_info: NotificationInfo = {
+            emails_to: notification_emails as string[],
+            last_sent: last_notification_info.last_sent,
+            reason: reason!,
+            current_price: current_price,
+            price_diff: current_diff,
+            set_prices: {
+                buy: user_ticker.ticker.buy!,
+                gain: user_ticker.ticker.gain!,
+                loss: user_ticker.ticker.loss!,
+            },
+            symbol: user_ticker.symbol.symbol!,
+            exchange: user_ticker.symbol.exchange!,
+        };
+
+        // update the last notification info
+        const new_notification_info_last: LastNotificationInfo = {
+            last_sent: new Date(),
+            reason: reason!,
+            previous_price: current_price,
+        };
+
+        db.update(ticker).set({ last_notification_info: new_notification_info_last }).where(
+            eq(ticker.id, user_ticker.ticker.id),
+        ).execute();
+
+        notifications.push(new_notification_info);
+    });
+    return notifications;
+};
+
+export const getNotificationInfo = async (
+    db: PostgresJsDatabase,
+): Promise<NotificationInfo[][]> => {
+    // get all the users
+    // for each user get the notification info
+    // return the notifications
+    const db_users = await db.select().from(users);
+
+    const notifications: NotificationInfo[][] = [];
+    for (const user of db_users) {
+        const user_id = user.supabase_user_id;
+        const user_notifications = await getUserNotificationInfo(user_id!, db);
+        notifications.push(user_notifications);
+    }
+    return notifications;
 };

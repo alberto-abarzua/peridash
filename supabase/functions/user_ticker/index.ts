@@ -121,6 +121,7 @@ app.put(
         const user = req.user!;
         const db = req.app.locals.db;
         const { new_settings } = req.body;
+        // pop notification_eamail
         await update_user_ticker_settings(user.id, new_settings, db);
         if (new_settings.plot_range < 1 || new_settings.plot_range > 30) {
             res.status(400).json({ error: "Invalid plot range" }).end();

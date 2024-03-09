@@ -4,7 +4,8 @@ import express from "express";
 import { symbol } from "../_shared/schema/schema.ts";
 
 import { Request, Response } from "expressTypes";
-import { get_or_create_symbol, StockData, update_eod } from "../_shared/db.ts";
+import { get_or_create_symbol, getNotificationInfo, StockData, update_eod } from "../_shared/db.ts";
+import { sendEmail } from "../_shared/mail_utils.ts";
 import { AdminAuthMiddleware, preFlightMiddleware } from "../_shared/express_utils.ts";
 import { Symbol } from "../_shared/db.ts";
 
@@ -52,6 +53,7 @@ app.get("/update_prices/", AdminAuthMiddleware, async (req: Request, res: Respon
     const start = datetime_start.toISOString();
     const end = datetime_end.toISOString();
 
+    console.log(Deno.env.get("TWELVEDATA_API_KEY"));
     let { data } = await axios.get("https://api.twelvedata.com/time_series", {
         params: {
             symbol: symbolsArray.join(","),
@@ -62,6 +64,7 @@ app.get("/update_prices/", AdminAuthMiddleware, async (req: Request, res: Respon
             apikey: Deno.env.get("TWELVEDATA_API_KEY") || "",
         },
     });
+    console.log(data);
 
     if (symbolsArray.length === 1) {
         data = [data];
@@ -93,6 +96,9 @@ app.get("/update_prices/", AdminAuthMiddleware, async (req: Request, res: Respon
     });
 
     await update_eod(db);
+
+    const notificationInfo = await getNotificationInfo(db);
+    await sendEmail(notificationInfo);
     return res.status(200).json({ msg: "Prices updated!" });
 });
 
