@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 
 import SymbolSearchResult from './SymbolSearchResult';
 import { useDispatch } from 'react-redux';
-import { tickerSliceActions } from '@/redux/tickerSlice';
+import { tickerSliceActions } from '@/redux/slices/tickerSlice';
 import { ScrollArea } from '../ui/scroll-area';
 
 const SearchBar = () => {

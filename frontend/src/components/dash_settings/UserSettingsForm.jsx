@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import api from '@/utils/api';
 import { useDispatch, useSelector } from 'react-redux';
-import { tickerSliceActions } from '@/redux/tickerSlice';
+import { tickerSliceActions } from '@/redux/slices/tickerSlice';
 import { toast } from 'sonner';
 
 const formSchema = z.object({

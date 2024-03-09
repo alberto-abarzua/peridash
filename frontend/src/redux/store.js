@@ -2,10 +2,10 @@ import rootSaga from '@/redux/sagas';
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 
-import userSliceReducer from './userSlice';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-import tickerSliceReducer from './tickerSlice';
+import tickerSliceReducer from '@/redux/slices/tickerSlice';
+import userSliceReducer from '@/redux/slices/userSlice';
 const persistConfig = {
     key: 'root',
     storage,

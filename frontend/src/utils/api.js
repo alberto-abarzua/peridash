@@ -1,7 +1,7 @@
 import axios from 'axios';
 const baseUrl = import.meta.env.VITE_SUPABASE_URL + '/functions/v1/';
 import store from '@/redux/store';
-import { userSliceActions } from '@/redux/userSlice';
+import { userSliceActions } from '@/redux/slices/userSlice';
 
 const api = axios.create({
     baseURL: baseUrl,
@@ -27,10 +27,9 @@ api.interceptors.response.use(
     },
     error => {
         if (error.response && error.response.status === 401) {
-            // store.dispatch(userSliceActions.logout());
+            store.dispatch(userSliceActions.logout());
             return;
         }
-        store.dispatch(userSliceActions.updateSession());
         return Promise.reject(error);
     }
 );

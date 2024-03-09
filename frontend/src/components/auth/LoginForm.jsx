@@ -16,8 +16,8 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { userSliceActions } from '@/redux/userSlice';
-import { tickerSliceActions } from '@/redux/tickerSlice';
+import { userSliceActions } from '@/redux/slices/userSlice';
+import { tickerSliceActions } from '@/redux/slices/tickerSlice';
 import supabase from '@/utils/supabase/client';
 import { useNavigate, Navigate } from 'react-router-dom';
 
@@ -60,7 +60,6 @@ const LoginForm = () => {
         setLoading(false);
         navigate('/live/dashboard');
     };
-    console.log(user);
     if (user.session) {
         return <Navigate to="/live/dashboard" />;
     }

@@ -7,7 +7,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useSelector, useDispatch } from 'react-redux';
-import { userSliceActions } from '@/redux/userSlice';
+import { userSliceActions } from '@/redux/slices/userSlice';
 
 import { UserCircleIcon, ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline';
 const UserInfoCard = () => {

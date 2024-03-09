@@ -6,7 +6,7 @@ import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
 import { useDispatch } from 'react-redux';
 
 import { Link } from 'react-router-dom';
-import { userSliceActions } from '@/redux/userSlice';
+import { userSliceActions } from '@/redux/slices/userSlice';
 import { useState, useRef } from 'react';
 function SideNavBar() {
     const [isVisible, setIsVisible] = useState(false);

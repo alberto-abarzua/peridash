@@ -7,7 +7,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { toast } from 'sonner';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { tickerSliceActions } from '@/redux/tickerSlice';
+import { tickerSliceActions } from '@/redux/slices/tickerSlice';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
