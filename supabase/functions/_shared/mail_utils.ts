@@ -106,6 +106,11 @@ export const sendEmail = async (notificationInfo: NotificationInfo[][]) => {
         }
         const html = html_template(tickerData);
         console.log("Sending email to: ", tickerData[0]);
+        if (tickerData[0].emails_to.length === 0) {
+            console.log("No email to send to");
+            continue;
+        }
+
         await sendEmailUser(tickerData[0].emails_to, "Peridash - Notifications", html);
     }
 };
