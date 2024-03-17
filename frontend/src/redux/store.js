@@ -38,7 +38,9 @@ const store = configureStore({
         }).prepend(sagaMiddleware),
 });
 
-export const persistor = persistStore(store);
+export const persistor = persistStore(store, null, () => {
+    store.dispatch({ type: 'REHYDRATION_COMPLETE' });
+});
 
 sagaMiddleware.run(rootSaga);
 
